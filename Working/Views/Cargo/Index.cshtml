@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Dominio.Entidades.Cargo>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<a href="~/Cargo/Cadastrar">Cadastrar</a>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>Permissao</th>
+        <th></th>
+    </tr>
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Nome</td>
+            <td>@i.Permissao</td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn" onclick="location.href='/cargo/remover/@i.Id'">X</button>
+                    <button class="btn" onclick="location.href='/cargo/alterar/@i.Id'">A</button>
+                </div>
+            </td>
+        </tr>
+    }
+</table>

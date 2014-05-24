@@ -1,0 +1,12 @@
+﻿@model Dominio.Entidades.Cargo
+
+@{
+    ViewBag.Title = "Alterar";
+}
+
+<h2>Alterar</h2>
+<form method="post">
+    <input name="Nome" type="text" value="@Model.Nome"/>
+    <input name="Permissao" type="number" value="@Model.Permissao" />
+    <input type="submit" />
+</form>

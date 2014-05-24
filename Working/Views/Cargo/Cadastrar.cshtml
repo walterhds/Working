@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Cadastrar";
+}
+<div class="form-working pull-left col-md-9">
+    <div class="titulo1 col-sm-10">
+        <h2>Cadastrar Cargo</h2>
+    </div>
+
+    <form role="form" method="post" class="form-horizontal col-sm-10" style="padding-top: 10px;">
+        <div class="form-group">
+            <label for="Nome" class="col-sm-2 control-label">Nome:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" name="Nome" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Permissao" class="col-sm-2 control-label">Permissão:</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="Permissao" required>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-success" type="submit">
+            <span class="glyphicon glyphicon-floppy-saved"></span>
+            Cadastrar
+        </button>
+    </form>
+</div>
+<div class="pull-right col-md-3">
+    <div class="alert alert-success">
+        <span class="glyphicon glyphicon-tag"></span>
+        <h4>Descrição das permissões</h4>
+        <h5><b>Permissão 0: </b>Apenas leitura, sem inserção ou alteração.</h5>
+        <h5><b>Permissão 1: </b>Abertura de job e leitura.</h5>
+        <h5><b>Permissão 2: </b>Alteração de job e leitura.</h5>
+        <h5><b>Permissão 3: </b>Definição de equipe alteração de job e leitura.</h5>
+        <h5><b>Permissão 4: </b>Acesso à área financeira.</h5>
+        <h5><b>Permissão 5: </b>Administrador.</h5>
+    </div>
+</div>

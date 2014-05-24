@@ -1,0 +1,129 @@
+﻿@using System.Collections
+@using Dominio.Entidades
+@using NHibernate.Linq
+@using NHibernate.Util
+@using Percistencia.Ado
+@model Working.ViewsModels.DadosFuncionario
+
+@{
+    ViewBag.Title = "Alterar";
+}
+
+<div class="form-working col-md-9">
+    <ol class="breadcrumb">
+        <li><a href="~/Home/Index">Home</a></li>
+        <li><a href="~/Funcionario/Index">Equipe</a></li>
+        <li class="active">Alterar</li>
+    </ol>
+    <div class="titulo1">
+        <h1>Alterar</h1>
+    </div>
+    <form role="form" method="post" class="form-horizontal" style="padding-top: 10px;">
+        <div class="form-group">
+            <label for="Nome" class="col-sm-2 control-label">Nome:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" name="Nome" value="@Model.Funcionario.Nome" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Telefone" class="col-sm-2 control-label">Telefone:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" name="Telefone" value="@Model.Funcionario.Telefone" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Cargo" class="col-sm-2 control-label">Cargo:</label>
+            <div class="col-sm-10">
+                <select name="Cargo" class="form-control" required>
+                    @foreach (var i in Model.ListaCargo)
+                    {
+                        if (Model.Funcionario.Cargo.Nome == i.Nome)
+                        {
+                        <option selected value="@i.Id">@i.Nome</option>
+                        }
+                        else
+                        {
+                        <option value="@i.Id">@i.Nome</option>       
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Situacao" class="col-sm-2 control-label">Situação:</label>
+            <div class="col-sm-10">
+                <select name="Situacao" class="form-control" required>
+                    @{
+                        if (Model.Funcionario.Situacao.GetHashCode() == 0)
+                        {
+                        <option value="Ativo" selected>Ativo</option>
+                        }
+                        else
+                        {
+                        <option value="Ativo">Ativo</option>    
+                        }
+                        if (Model.Funcionario.Situacao.GetHashCode() == 1)
+                        {
+                        <option value="Ferias" selected>Férias</option>
+                        }
+                        else
+                        {
+                        <option value="Ferias">Férias</option>
+                        }
+                        if (Model.Funcionario.Situacao.GetHashCode() == 2)
+                        {
+                        <option value="LicencaMaternidade" selected>Licença Maternidade</option>
+                        }
+                        else
+                        {
+                        <option value="LicencaMaternidade">Licença Maternidade</option>
+                        }
+                        if (Model.Funcionario.Situacao.GetHashCode() == 3)
+                        {
+                        <option value="LicencaPaternidade" selected>Licença Paternidade</option>
+                        }
+                        else
+                        {
+                        <option value="LicencaPaternidade">Licença Paternidade</option>
+                        }
+                        if (Model.Funcionario.Situacao.GetHashCode() == 4)
+                        {
+                        <option value="Desligado" selected>Desligado</option>
+                        }
+                        else
+                        {
+                        <option value="Desligado">Desligado</option>
+                        }
+                        if (Model.Funcionario.Situacao.GetHashCode() == 5)
+                        {
+                        <option value="AtestadoMedico" selected>Atestado Médico</option>
+                        }
+                        else
+                        {
+                        <option value="AtestadoMedico">Atestado Médico</option>
+                        }   
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="titulo2">
+            <h2>Acesso ao sistema</h2>
+        </div>
+        <div class="form-group" style="padding-top: 10px;">
+            <label for="Login" class="col-sm-2 control-label">Login:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="Login" value="@Model.Funcionario.Login" required/>    
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Senha"class="col-sm-2 control-label">Senha:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="password" name="Senha" autocomplete="off" required/>    
+            </div>
+        </div>
+        <button class="btn btn-success" type="submit">
+            <span class="glyphicon glyphicon-floppy-saved"></span>
+            Alterar
+        </button>
+    </form>
+</div>

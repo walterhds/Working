@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Logon";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <meta charset="utf-8">
+        @*<meta http-equiv="X-UA-Compatible" content="IE=edge">*@
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+        <title>Working - Login</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="~/Bootstrap/css/bootstrap.css" rel="stylesheet" />
+        <link href="~/Bootstrap/css/signin.css" rel="stylesheet" />
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+
+<body>
+
+    <div class="container">
+        <div class="container" style="background-color:rgba(255,255,255, 0.5); height:500px;width:450px; box-shadow: 0 0 10px darkgrey;">
+                <form class="form-signin" role="form" method="POST" >
+                    <img src="~/Images/logo.png" style="width:350px;"/>
+                    <input name="login" type="text" class="form-control" placeholder="Usuário" required autofocus>
+                    <input name="senha" type="password" class="form-control" placeholder="Senha" required>
+                    <label class="checkbox">
+                        <input type="checkbox" value="remember-me">
+                        Lembre-me
+                    </label>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" style="color:black;">Entrar</button>
+                </form>
+        </div>
+    </div>
+    <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    @Scripts.Render("~/bundles/jquery")
+</body>
+</html>
+

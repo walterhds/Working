@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Colaboradores Desligados";
+}
+
+<div class="form-working col-md-9">
+    <ol class="breadcrumb">
+        <li><a href="~/Home/Index">Home</a></li>
+        <li><a href="~/Funcionario/Index">Equipe</a></li>
+        <li class="active">Desligados</li>
+    </ol>
+    <div class="titulo1">
+        <h1>Desligados</h1>
+    </div>
+    <div style="padding-top: 10px;padding-bottom: 10px;">
+        <button class="btn btn-success" onclick="location.href='/funcionario/cadastrar'"><span class="glyphicon glyphicon-plus"></span>Cadastrar</button>
+    </div>
+    <table class="table table-bordered table-hover">
+    <tr>
+        <th>Nome</th>
+        <th>Permissao</th>
+        <th></th>
+    </tr>
+    @foreach (var i in Model)
+    {
+        if (i.Situacao.GetHashCode() == Percistencia.Ado.SituacaoHelper.GetValueFromDescription<Dominio.Entidades.Situacao>("Desligado").GetHashCode())
+        {
+            <tr>
+                <td>@i.Nome</td>
+                <td>@i.Cargo.Nome</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-success" onclick="location.href='/funcionario/TornarAtivo/@i.Id'">Tornar Ativo</button>
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+</table>
+</div>

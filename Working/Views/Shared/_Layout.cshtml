@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Bootstrap/css/bootstrap.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="modal fade" id="CadastrarJob">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Novo Job</h4>
+                </div>
+                <div class="modal-body form-working">
+                    <form role="form" method="POST" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="Cliente" class="control-label col-sm-2">Cliente:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="Cliente" id="ClienteCadastro" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Briefing" class="control-label col-sm-2">Briefing:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="Briefing" id="BriefingCadastro" style="resize: none;" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Pecas" class="control-label col-sm-2">Peças:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="Pecas" id="PecasCadastro" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Descricao" class="control-label col-sm-2">Descrição:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="Descricao" id="DescricaoCadastro" style="resize: none;" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Funcionario" class="control-label col-sm-2">Colaborador:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="Funcionario" id="FuncionarioCadastro" style="resize: none;" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="">
+                                    <label for="DataCriacao" class="control-label col-sm-2">Criação:</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control datepicker" name="DataCriacao" id="DataCriacaoCadastro" required />
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <label for="DataEstimativa" class="control-label col-sm-2">Estimativa:</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control datepicker" name="DataEstimativa" id="DataEstimativaCadastro" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div>
+                                    <label for="DataEntrega" class="control-label col-sm-2">Entrega:</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control datepicker" name="DataEntrega" id="DataEntregaCadastro" required />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="HorasNecessarias" class="control-label col-sm-2">Horas:</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" name="HorasNecessarias" id="HorasNecessariasCadastro" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Situacao" class="control-label col-sm-2">Situação:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="Situacao" id="SituacaoCadastro" required />
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success" id="CadastrarJob">
+                                <span class="glyphicon glyphicon-floppy-saved"></span>
+                                Cadastrar
+                            </button>
+                            <button type="button" class="btn btn-danger" id="CancelarJob" data-dismiss="modal">
+                                <span class=" glyphicon glyphicon-remove"></span>
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="geral">
+        <header>
+            <div class="nav navbar-fixed-top navbar-working" role="navigation">
+                <div class="container">
+                    <a href="~/Home/Index">
+                        <img class="img-circle img-thumbnail pull-left navbar-img-logo" src="~/Images/logosimples.png" /></a>
+                    <div class="collapse navbar-collapse navbar-usuario pull-left">
+                        <ul class="nav navbar-nav">
+                            <li><a href="~/Home/Index" id="home">
+                                <span class="glyphicon glyphicon-user"></span>
+                                @HttpContext.Current.User.Identity.Name
+                            </a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <a onclick="location.href='Login/Logout'" class="pull-right" style="padding-left: 10px; cursor: pointer;">
+                            <span class="glyphicon glyphicon-off"></span>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" class="pull-right" style="padding-left: 10px;">
+                            <span class="glyphicon glyphicon-cog"></span>
+                        </a>
+                    </div>
+                    <div class="new-job pull-right col-sm-1" style="padding-top: 10px;">
+                        <button class="btn btn-warning btn-lg navbar-btn-new" data-toggle="modal" data-target="#CadastrarJob">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <span>Novo Job</span>
+                    </div>
+                    <div class="collapse navbar-collapse pull-right">
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="navbar">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                    Cadastros
+                                        <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="~/Funcionario/Cadastrar">Funcionário</a></li>
+                                    <li><a href="~/Cargo/Cadastrar">Cargo</a></li>
+                                    <li><a href="~/Cliente/Cadastrar">Cliente</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav nav-pills nav-stacked pull-left nav-left">
+                <li>
+                    <a href="~/Funcionario/Index">
+                        <span class="glyphicon glyphicon-tower glyphicon-working"></span>
+                        Equipe
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-folder-open glyphicon-working"></span>
+                        Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-comment glyphicon-working"></span>
+                        Room
+                    </a>
+                </li>
+                <li>
+                    <a href="~/Compromisso/Index">
+                        <span class="glyphicon glyphicon-list-alt glyphicon-working"></span>
+                        Agenda
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-time glyphicon-working"></span>
+                        Disponibilidade
+                    </a>
+                </li>
+                <li>
+                    <a href="~/Cliente/Index">
+                        <span class="glyphicon glyphicon-star glyphicon-working"></span>
+                        Clientes
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-file glyphicon-working"></span>
+                        Relatórios
+                    </a>
+                </li>
+            </ul>
+        </header>
+        <div class="container" style="padding-bottom: 10px;">
+            @RenderSection("featured", required: false)
+            <section>
+                @RenderBody()
+            </section>
+        </div>
+        <footer class="footer">
+            <div class="container">
+                <div class="pull-left">
+                    <img src="~/Images/logo.png" style="height: 80px;" />
+                    <p>&copy; @DateTime.Now.Year - Todos os direitos reservados.</p>
+                </div>
+            </div>
+        </footer>
+
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+        <script src="~/Bootstrap/js/bootstrap.js"></script>
+        <script src="~/Scripts/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+        <script>
+            $(".draggable").draggable();
+
+            $('.datepicker').datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior'
+            });
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+﻿@using Microsoft.Ajax.Utilities
+@model IEnumerable<Dominio.Entidades.Funcionario>
+
+@{
+    ViewBag.Title = "Equipe";
+}
+
+<div class="form-working col-md-9">
+    <div class="titulo1">
+        <h1>Equipe</h1>
+    </div>
+
+    <div style="padding-top: 10px; padding-bottom: 10px;">
+        <button class="btn btn-success" onclick="location.href='/funcionario/cadastrar'">
+            <span class="glyphicon glyphicon-plus"></span>
+            Cadastrar
+        </button>
+        <button class="btn btn-danger" onclick="location.href='/Funcionario/ListarDesligados'">
+            <span class="glyphicon glyphicon-eye-close"></span>
+            Desligados
+        </button>
+    </div>
+
+    <table class="table table-bordered table-hover table-working" id="situacaoTabela">
+        <tr>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Situação</th>
+            <th>Operações</th>
+        </tr>
+
+        @foreach (var i in Model)
+        {
+            if (i.Situacao.GetHashCode() != Percistencia.Ado.SituacaoHelper.GetValueFromDescription<Dominio.Entidades.Situacao>("Desligado").GetHashCode())
+            {
+            <tr id="@i.Id">
+                <td>@i.Nome</td>
+                <td class="col-md-3">@i.Cargo.Nome</td>
+                <td class="col-md-3">
+                    <span id="situacaoSpan">@Percistencia.Ado.SituacaoHelper.GetDescription(i.Situacao)</span>
+                    <div class="btn-group btn-group-xs pull-right">
+                        <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" id="listaSituacao">
+                            <li><a onclick="AlterarSituacao(@i.Id,$(this).text());">Ativo</a></li>
+                            <li><a onclick="AlterarSituacao(@i.Id,$(this).text());">Férias</a></li>
+                            <li><a onclick="AlterarSituacao(@i.Id,$(this).text());">Licença Maternidade</a></li>
+                            <li><a onclick="AlterarSituacao(@i.Id,$(this).text());">Licença Paternidade</a></li>
+                            <li><a onclick="AlterarSituacao(@i.Id,$(this).text());">Desligado</a></li>
+                            <li><a onclick="AlterarSituacao(@i.Id,$(this).text());">Atestado Médico</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td class="col-md-1" style="text-align: center">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" onclick="location.href='/funcionario/alterar/@i.Id'"><span class="glyphicon glyphicon-pencil"></span>
+                            Alterar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            }
+        }
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        function AlterarSituacao(id, situacao) {
+            $.ajax({
+                url: '/Funcionario/AlterarSituacao',
+                data: {
+                    id: id,
+                    situacao: situacao
+                },
+                type: 'post',
+                success: function (response, status, xhr) {
+                    if (situacao != "Desligado") {
+                        $("#situacaoSpan").text(situacao);
+                    } else {
+                        var tb = document.getElementById("situacaoTabela");
+                        tb.deleteRow(document.getElementById(id));
+                    }
+                },
+                error: function (xhr, status, response) { alert('Erro no processamento: ' + response); }
+            });
+        }
+    </script>
+}
+
+

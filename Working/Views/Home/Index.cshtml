@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Dominio.Entidades.Compromisso>
+@{
+    ViewBag.Title = "Home";
+}
+<div class="modal fade" id="NovoCompromisso">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Novo Compromisso</h4>
+            </div>
+            <div class="modal-body form-working">
+                <form role="form" method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="Data" class="control-label col-sm-2">Data:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control datepicker" name="Data" id="Data" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Hora" class="control-label col-sm-2">Hora:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="Hora" class="form-control" required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" title="Digite o horario: HH:MM" id="Hora" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Descricao" class="control-label col-sm-2">Descrição:</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" name="Descricao" id="Descricao" required></textarea>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" id="Salvar">
+                        <span class="glyphicon glyphicon-floppy-saved"></span>
+                        Cadastrar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="Cancelar" data-dismiss="modal">
+                        <span class=" glyphicon glyphicon-remove"></span>
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AlterarCompromisso">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Alterar Compromisso</h4>
+                </div>
+                <div class="modal-body form-working">
+                    <form role="form" method="post" class="form-horizontal">
+                        <input hidden="" id="id" />
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="Data" class="control-label col-sm-2">Data:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control datepicker" name="Data" id="DataAlterar" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Hora" class="control-label col-sm-2">Hora:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="Hora" class="form-control" required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" title="Digite o horario: HH:MM" id="HoraAlterar" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="Descricao" class="control-label col-sm-2">Descrição:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="Descricao" id="DescricaoAlterar" required></textarea>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success" id="SalvarAlterar" onclick="Alterar($('#id').val(),$('#DataAlterar').val(),$('#HoraAlterar').val(),$('#DescricaoAlterar').val())">
+                                <span class="glyphicon glyphicon-floppy-saved"></span>
+                                Alterar
+                            </button>
+                            <button type="button" class="btn btn-danger" id="CancelarAlterar" data-dismiss="modal">
+                                <span class=" glyphicon glyphicon-remove"></span>
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-default col-md-4 pull-right">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-list-alt pull-left"></span>
+        Agenda
+    </div>
+    <table class="table table-condensed table-striped table-bordered" id="Compromissos">
+        @foreach (var i in Model.OrderBy(e => e.Data).ThenBy(e => e.Hora).Take(5))
+        {
+            <tr class="@i.Id">
+                <th class="glyphicon-compromisso"><a onclick="PopularModal(@i.Id);" id="@i.Id" title="Alterar" data-toggle="modal" data-target="#AlterarCompromisso" class="glyphicon glyphicon-pencil pull-left" style="font-size: 11px; padding-top: 5px; width: 15px;"></a>
+                    @i.Data.Day.ToString("D2")/@i.Data.ToString("MMMM")
+                    <button type="button" class="close" onclick="DeletaCompromisso(@i.Id)" aria-hidden="true">&times;</button>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <small class="glyphicon glyphicon-time pull-right"><span style="font-family: helvetica">
+                        <strong>@i.Hora</strong>
+                    </span></small>
+                    @i.Descricao
+                </td>
+            </tr>
+        }
+    </table>
+    <button class="btn btn-primary pull-right" type="button" data-toggle="modal" data-target="#NovoCompromisso">
+        <span class="glyphicon glyphicon-plus"></span>
+        Novo Compromisso
+    </button>
+</div>
+<div class="panel-default col-md-7 pull-right">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-folder-open pull-left"></span>
+        Meus Jobs
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th>Cliente</th>
+            <th>Job</th>
+            <th>Estimativa</th>
+            <th>Situação</th>
+        </tr>
+        <tr>
+            <td>Ihard</td>
+            <td>Site</td>
+            <td>10/04/2014</td>
+            <td>Finalizando</td>
+        </tr>
+        <tr>
+            <td>Ihard</td>
+            <td>Site</td>
+            <td>10/04/2014</td>
+            <td>Finalizando</td>
+        </tr>
+        <tr>
+            <td>Ihard</td>
+            <td>Site</td>
+            <td>10/04/2014</td>
+            <td>Finalizando</td>
+        </tr>
+        <tr>
+            <td>Ihard</td>
+            <td>Site</td>
+            <td>10/04/2014</td>
+            <td>Finalizando</td>
+        </tr>
+        <tr>
+            <td>Ihard</td>
+            <td>Site</td>
+            <td>10/04/2014</td>
+            <td>Finalizando</td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/Scripts/compromisso.js"></script>
+}

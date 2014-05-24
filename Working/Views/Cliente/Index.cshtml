@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Dominio.Entidades.Cliente>
+
+@{
+    ViewBag.Title = "Clientes";
+}
+<div class="form-working col-md-9">
+    <div class="titulo1">
+        <h1>Clientes</h1>
+    </div>
+    <div style="padding-top: 10px;padding-bottom: 10px;">
+        <button class="btn btn-success" onclick="location.href='/cliente/cadastrar'">
+            <span class="glyphicon glyphicon-plus"></span>
+            Cadastrar
+        </button>
+    </div>
+    
+    <table class="table table-bordered table-hover table-working">
+    <tr>
+        <th>Nome</th>
+        <th>Contato</th>
+        <th>Telefone</th>
+        <th>Celular</th>
+        <th>Email</th>
+        <th>Operações</th>
+    </tr>
+    
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Nome</td>
+            <td>@i.Contato</td>
+            <td>@i.Telefone</td>
+            <td>@i.Celular</td>
+            <td>@i.Email</td>
+            <td class="col-md-1" style="text-align: center;">
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" onclick="location.href='/cliente/alterar/@i.Id'">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        Alterar
+                    </button>
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+</div>

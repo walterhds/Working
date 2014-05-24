@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Dominio.Entidades.Cargo>
+
+@{
+    ViewBag.Title = "Cadastrar Funcionário";
+}
+
+<div class="form-working">
+    <ol class="breadcrumb col-md-7">
+        <li><a href="~/Home/Index">Home</a></li>
+        <li><a href="~/Funcionario/Index">Equipe</a></li>
+        <li class="active">Cadastrar</li>
+    </ol>
+    <div class="titulo1 col-md-7">
+        <h1>Cadastrar Funcionário</h1>
+    </div>
+
+    <form role="form" method="post" class="form-horizontal col-md-6" style="padding-top: 10px;">
+        <div class="form-group">
+            <label for="Nome" class="col-sm-3 text-right control-label">Nome:</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="text" name="Nome" required autofocus/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Telefone" class="col-sm-3 text-right control-label">Telefone:</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="text" name="Telefone" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Celular" class="col-sm-3 text-right control-label">Celular:</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="text" name="Celular" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Endereco" class="col-sm-3 text-right control-label">Endereço:</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="text" name="Endereco" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Cpf" class="col-sm-3 text-right control-label">CPF:</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="text" name="Cpf" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Email" class="col-sm-3 text-right control-label">Email:</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="email" name="Email" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Cargo" class="col-sm-3 text-right control-label">Cargo:</label>
+            <div class="col-sm-9">
+                <select class="form-control" name="Cargo" required>
+                    @foreach (var i in Model)
+                    {
+                        <option value="@i.Id">@i.Nome</option>       
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-3 text-right">
+                <span class="glyphicon glyphicon-question-sign help" title="Carga horária diária"></span>
+                <label for="QuantidadeHora" class="control-label">Jornada:</label>
+            </div>
+            <div class="col-sm-9">
+                <input class="form-control" type="text" name="QuantidadeHora" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Situacao" class="col-sm-3 text-right control-label">Situação:</label>
+            <div class="col-sm-9">
+                <select class="form-control" name="Situacao" required>
+                    <option value="Ativo">Ativo</option>
+                    <option value="Ferias">Férias</option>
+                    <option value="LicencaMaternidade">Licença Maternidade</option>
+                    <option value="LicencaPaternidade">Licença Paternidade</option>
+                    <option value="Desligado">Desligado</option>
+                    <option value="AtestadoMedico">Atestado Médico</option>
+                </select>
+            </div>
+        </div>
+        <div class="titulo2">
+            <h2>Acesso ao sistema</h2>
+        </div>
+        <div class="form-group" style="padding-top: 10px;">
+            <label for="Login" class="col-sm-3 control-label text-right">Login:</label>
+            <div class="col-sm-9">
+                <input class="form-control" autocomplete="off" type="text" name="Login" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Senha" class="col-sm-3 text-right control-label">Senha:</label>
+            <div class="col-sm-9">
+                <input class="form-control" type="password" name="Senha" required />
+            </div>
+        </div>
+        <button class="btn btn-success" type="submit">
+            <span class="glyphicon glyphicon-floppy-saved"></span>
+            Cadastrar
+        </button>
+    </form>
+</div>

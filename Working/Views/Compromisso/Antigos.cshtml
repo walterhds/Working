@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Compromissos Antigos";
+}
+
+<div class="form-working col-md-9">
+    <ol class="breadcrumb">
+        <li><a href="~/Home/Index">Home</a></li>
+        <li><a href="~/Compromisso/Index">Agenda</a></li>
+        <li class="active">Antigos</li>
+    </ol>
+
+    <div class="titulo1">
+        <h1>Compromissos Antigos</h1>
+    </div>
+    
+    <div style="padding-top:10px;"></div>
+
+    <table class="table table-bordered table-hover table-working">
+        <tr>
+            <th>Data</th>
+            <th>Compromisso</th>
+            <th>Horário</th>
+        </tr>
+
+        @foreach (var i in Model)
+        {
+            if (i.Situacao == 1)
+            {
+                <tr>
+                    <td>@i.Data.Day.ToString("D2")/@i.Data.ToString("MMMM")</td>
+                    <td>@i.Descricao</td>
+                    <td>@i.Hora</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
