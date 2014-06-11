@@ -30,6 +30,7 @@ namespace Percistencia.Ado.Mapping
                 m.Fetch(FetchKind.Join);
                 m.Cascade(Cascade.None);
             });
+            this.Property(p=>p.DataCriacao,m=>m.Column("DATA_CRIACAO"));
             this.Property(p=>p.DataEstimativa,m=>m.Column("DATA_ESTIMATIVA"));
             this.Property(p=>p.DataEntrega,m=>m.Column("DATA_ENTREGA"));
             this.Property(p=>p.HorasNecessarias,m=>m.Column("HORAS_NECESSARIAS"));
@@ -40,6 +41,7 @@ namespace Percistencia.Ado.Mapping
                 m.Fetch(FetchKind.Join);
                 m.Cascade(Cascade.None);
             });
+            this.Property(p=>p.Situacao,m=>m.Column("SITUACAO"));
         }
     }
 }

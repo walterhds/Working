@@ -15,9 +15,9 @@ namespace Dominio.Servicos
             _cargoRepositorio = cargoRepositorio;
         }
 
-        public void Cadastrar(Cargo cargo)
+        public bool Cadastrar(Cargo cargo)
         {
-            _cargoRepositorio.Cadastrar(cargo);
+            return _cargoRepositorio.Cadastrar(cargo);
         }
 
         public IList<Cargo> Listar(Expression<Func<Cargo, bool>> filtro)

@@ -6,6 +6,7 @@ using Dominio.Servicos;
 using System;
 using System.Web.Mvc;
 using Percistencia.Ado;
+using Working.Models;
 using Working.ViewsModels;
 
 namespace Working.Controllers
@@ -94,6 +95,21 @@ namespace Working.Controllers
             funcionario.Situacao = sit;
             _funcionarioService.Cadastrar(funcionario);
             return null;
+        }
+
+        public JsonResult ListarFuncionarioJson()
+        {
+            var funcionario = _funcionarioService.Listar(e => true);
+            var lista = new List<Objeto>();
+            foreach (var i in funcionario)
+            {
+                lista.Add(new Objeto
+                {
+                    id = i.Id,
+                    nome = i.Nome
+                });
+            }
+            return Json(lista, JsonRequestBehavior.AllowGet);
         }
     }
 }

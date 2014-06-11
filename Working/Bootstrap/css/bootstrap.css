@@ -128,6 +128,11 @@
     border-bottom-color: gold;
 }
 
+.datepicker {
+    background-color: white !important;
+    cursor: pointer !important;
+}
+
 .footer {
     background-color: #f3f3f3;
     border-top-width: 5px;

@@ -15,9 +15,9 @@ namespace Dominio.Servicos
             _funcionarioRepositorio = funcionarioRepositorio;
         }
 
-        public void Cadastrar(Funcionario funcionario)
+        public bool Cadastrar(Funcionario funcionario)
         {
-            _funcionarioRepositorio.Cadastrar(funcionario);
+            return _funcionarioRepositorio.Cadastrar(funcionario);
         }
 
         public IList<Funcionario> Listar(Expression<Func<Funcionario, bool>> filtro)

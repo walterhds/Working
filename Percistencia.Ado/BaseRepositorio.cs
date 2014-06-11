@@ -19,17 +19,19 @@ namespace Percistencia.Ado
         protected ISession Sessao { get; set; }
 
         //Cadastrar ou alterar
-        public void Cadastrar(T entidade)
+        public bool Cadastrar(T entidade)
         {
             this.Sessao.BeginTransaction();
             try
             {
                 this.Sessao.Merge(entidade);
                 this.Sessao.Transaction.Commit();
+                return true;
             }
             catch (Exception e)
             {
                 this.Sessao.Transaction.Rollback();
+                return false;
             }
         }
 

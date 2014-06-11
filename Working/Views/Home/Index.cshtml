@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Dominio.Entidades.Compromisso>
+﻿@model Working.ViewsModels.DadosIndex
 @{
     ViewBag.Title = "Home";
 }
@@ -6,7 +6,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <button type="button" class="close" onclick="document.getElementById('Cancelar').click();" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Novo Compromisso</h4>
             </div>
             <div class="modal-body form-working">
@@ -14,13 +14,13 @@
                     <div class="form-group">
                         <label for="Data" class="control-label col-sm-2">Data:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control datepicker" name="Data" id="Data" required />
+                            <input type="text" class="form-control datepicker" name="Data" id="Data" readonly="readonly" required />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="Hora" class="control-label col-sm-2">Hora:</label>
                         <div class="col-sm-10">
-                            <input type="text" name="Hora" class="form-control" required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" title="Digite o horario: HH:MM" id="Hora" />
+                            <input type="text" name="Hora" class="form-control" required title="Digite o horario: HH:MM" id="Hora" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -58,13 +58,13 @@
                             <div class="form-group">
                                 <label for="Data" class="control-label col-sm-2">Data:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control datepicker" name="Data" id="DataAlterar" required />
+                                    <input type="text" class="form-control datepicker" name="Data" id="DataAlterar" readonly="readonly" required/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="Hora" class="control-label col-sm-2">Hora:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="Hora" class="form-control" required pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" title="Digite o horario: HH:MM" id="HoraAlterar" />
+                                    <input type="text" name="Hora" class="form-control" required title="Digite o horario: HH:MM" id="HoraAlterar" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -95,7 +95,7 @@
         Agenda
     </div>
     <table class="table table-condensed table-striped table-bordered" id="Compromissos">
-        @foreach (var i in Model.OrderBy(e => e.Data).ThenBy(e => e.Hora).Take(5))
+        @foreach (var i in Model.Compromissos.OrderBy(e => e.Data).ThenBy(e => e.Hora).Take(5))
         {
             <tr class="@i.Id">
                 <th class="glyphicon-compromisso"><a onclick="PopularModal(@i.Id);" id="@i.Id" title="Alterar" data-toggle="modal" data-target="#AlterarCompromisso" class="glyphicon glyphicon-pencil pull-left" style="font-size: 11px; padding-top: 5px; width: 15px;"></a>
@@ -123,43 +123,24 @@
         <span class="glyphicon glyphicon-folder-open pull-left"></span>
         Meus Jobs
     </div>
-    <table class="table table-bordered">
-        <tr>
-            <th>Cliente</th>
-            <th>Job</th>
-            <th>Estimativa</th>
-            <th>Situação</th>
-        </tr>
-        <tr>
-            <td>Ihard</td>
-            <td>Site</td>
-            <td>10/04/2014</td>
-            <td>Finalizando</td>
-        </tr>
-        <tr>
-            <td>Ihard</td>
-            <td>Site</td>
-            <td>10/04/2014</td>
-            <td>Finalizando</td>
-        </tr>
-        <tr>
-            <td>Ihard</td>
-            <td>Site</td>
-            <td>10/04/2014</td>
-            <td>Finalizando</td>
-        </tr>
-        <tr>
-            <td>Ihard</td>
-            <td>Site</td>
-            <td>10/04/2014</td>
-            <td>Finalizando</td>
-        </tr>
-        <tr>
-            <td>Ihard</td>
-            <td>Site</td>
-            <td>10/04/2014</td>
-            <td>Finalizando</td>
-        </tr>
+    <table class="table table-bordered" id="TabelaJobs">
+        <tbody>
+            <tr>
+                <th>Cliente</th>
+                <th>Job</th>
+                <th>Estimativa</th>
+                <th>Situação</th>
+            </tr>
+            @foreach (var i in Model.Jobs.OrderBy(e => e.DataEstimativa))
+            {
+                <tr>
+                    <td>@i.Cliente.Nome</td>
+                    <td>@i.DataCriacao.Day.ToString("D2")/@i.DataCriacao.ToString("MMMM")</td>
+                    <td>@i.DataEstimativa.Day.ToString("D2")/@i.DataEstimativa.ToString("MMMM")</td>
+                    <td>@i.Situacao</td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 

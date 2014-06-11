@@ -76,7 +76,7 @@
                     situacao: situacao
                 },
                 type: 'post',
-                success: function (response, status, xhr) {
+                success: function () {
                     if (situacao != "Desligado") {
                         $("#situacaoSpan").text(situacao);
                     } else {

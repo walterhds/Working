@@ -18,7 +18,7 @@
         <div class="form-group">
             <label for="Nome" class="col-sm-3 text-right control-label">Nome:</label>
             <div class="col-sm-9">
-                <input class="form-control" type="text" name="Nome" required autofocus/>
+                <input class="form-control" type="text" title="Deu certo!" name="Nome" required autofocus />
             </div>
         </div>
         <div class="form-group">
@@ -105,3 +105,9 @@
         </button>
     </form>
 </div>
+
+@section Scripts{
+    <script>
+        $("input[required]").tooltip();
+    </script>
+}

@@ -7,8 +7,7 @@ function Cadastrar(date, hour, description) {
             descricao: description
         },
         type: 'post',
-        success: function (response, status, xhr) {
-            alert('Cadastro realizado!');
+        success: function () {
             location.reload();
         },
         error: function (xhr, status, response) { alert('Erro no processamento: ' + response); }
@@ -43,7 +42,7 @@ function PopularModal(id) {
             $("#DescricaoAlterar").val(lista.conteudo);
             $("#id").val(id);
         },
-        error: function (xhr, status, reponse) { alert("BUGO"); }
+        error: function () { alert("BUGO"); }
     });
 }
 
@@ -57,8 +56,7 @@ function Alterar(id, date, hour, description) {
             descricao: description
         },
         type: 'post',
-        success: function (response, status, xhr) {
-            alert('Alteração realizada!');
+        success: function () {
             location.reload();
         },
         error: function (xhr, status, response) { alert('Erro no processamento: ' + response); }
@@ -79,7 +77,7 @@ function DeletaCompromisso(id) {
             id: id
         },
         type: 'post',
-        success: function (response, status, xhr) {
+        success: function () {
             location.reload();
         },
         error: function (xhr, status, response) { alert('Erro no processamento: ' + response); }
@@ -94,6 +92,6 @@ function ConfirmarCompromisso(id) {
         },
         type: 'post',
         success: function () { location.reload(); },
-        error: function (xhr, status, response) { alert('Erro no processamento: ' + response) }
+        error: function (xhr, status, response) { alert('Erro no processamento: ' + response); }
     });
 }

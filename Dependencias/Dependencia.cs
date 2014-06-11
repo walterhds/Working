@@ -30,12 +30,14 @@ namespace Dependencias
             _container.Register(Component.For<FuncionarioService>().ImplementedBy<FuncionarioService>());
             _container.Register(Component.For<ClienteService>().ImplementedBy<ClienteService>());
             _container.Register(Component.For<CompromissoService>().ImplementedBy<CompromissoService>());
+            _container.Register(Component.For<JobService>().ImplementedBy<JobService>());
 
             //Repositorios
             _container.Register(Component.For<ICargoRepositorio>().ImplementedBy<CargoRepositorio>());
             _container.Register(Component.For<IFuncionarioRepositorio>().ImplementedBy<FuncionarioRepositorio>());
             _container.Register(Component.For<IClienteRepositorio>().ImplementedBy<ClienteRepositorio>());
             _container.Register(Component.For<ICompromissoRepositorio>().ImplementedBy<CompromissoRepositorio>());
+            _container.Register(Component.For<IJobRepositorio>().ImplementedBy<JobRepositorio>());
         }
 
         public static T Resolver<T>()

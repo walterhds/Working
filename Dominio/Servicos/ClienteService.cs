@@ -18,9 +18,9 @@ namespace Dominio.Servicos
             _clienteRepositorio = clienteRepositorio;
         }
 
-        public void Cadastrar(Cliente cliente)
+        public bool Cadastrar(Cliente cliente)
         {
-            _clienteRepositorio.Cadastrar(cliente);
+            return _clienteRepositorio.Cadastrar(cliente);
         }
 
         public void Remover(Cliente cliente)

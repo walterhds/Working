@@ -13,9 +13,11 @@ namespace Dominio.Entidades
         public virtual string Pecas { get; set; }
         public virtual string Descricao { get; set; }
         public virtual Funcionario Funcionario { get; set; }
+        public virtual DateTime DataCriacao { get; set; }
         public virtual DateTime DataEstimativa { get; set; }
         public virtual DateTime DataEntrega { get; set; }
         public virtual string HorasNecessarias { get; set; }
         public virtual Cliente Cliente { get; set; }
+        public virtual string Situacao { get; set; }
     }
 }

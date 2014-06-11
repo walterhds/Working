@@ -18,9 +18,9 @@ namespace Dominio.Servicos
             _jobRepositorio = jobRepositorio;
         }
 
-        public void Cadastrar(Job job)
+        public bool Cadastrar(Job job)
         {
-            _jobRepositorio.Cadastrar(job);
+            return _jobRepositorio.Cadastrar(job);
         }
 
         public IList<Job> Listar(Expression<Func<Job, bool>>  filtro)

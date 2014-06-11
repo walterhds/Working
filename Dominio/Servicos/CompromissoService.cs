@@ -18,9 +18,9 @@ namespace Dominio.Servicos
             _compromissoRepositorio = compromissoRepositorio;
         }
 
-        public void Cadastrar(Compromisso compromisso)
+        public bool Cadastrar(Compromisso compromisso)
         {
-            _compromissoRepositorio.Cadastrar(compromisso);
+            return _compromissoRepositorio.Cadastrar(compromisso);
         }
 
         public IList<Compromisso> Listar(Expression<Func<Compromisso, bool>> filtro)

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Drawing
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,6 +7,8 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width" />
     <link href="~/Bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -14,7 +17,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <button type="button" class="close" id="FecharCadastroJob" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Novo Job</h4>
                 </div>
                 <div class="modal-body form-working">
@@ -23,7 +26,8 @@
                             <div class="form-group">
                                 <label for="Cliente" class="control-label col-sm-2">Cliente:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="Cliente" id="ClienteCadastro" required />
+                                    <select class="selectpicker show-tick form-control" name="Cliente" id="ClienteCadastro" data-live-search="true" required autofocus>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -47,20 +51,21 @@
                             <div class="form-group">
                                 <label for="Funcionario" class="control-label col-sm-2">Colaborador:</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="Funcionario" id="FuncionarioCadastro" style="resize: none;" required />
+                                    <select class="selectpicker show-tick form-control" name="Funcionario" id="FuncionarioCadastro" data-live-search="true" required>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="">
                                     <label for="DataCriacao" class="control-label col-sm-2">Criação:</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control datepicker" name="DataCriacao" id="DataCriacaoCadastro" required />
+                                        <input type="text" class="form-control datepicker" name="DataCriacao" id="DataCriacaoCadastro" readonly="readonly" required />
                                     </div>
                                 </div>
                                 <div class="">
                                     <label for="DataEstimativa" class="control-label col-sm-2">Estimativa:</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control datepicker" name="DataEstimativa" id="DataEstimativaCadastro" required />
+                                        <input type="text" class="form-control datepicker" name="DataEstimativa" id="DataEstimativaCadastro" readonly="readonly" required />
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +73,7 @@
                                 <div>
                                     <label for="DataEntrega" class="control-label col-sm-2">Entrega:</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control datepicker" name="DataEntrega" id="DataEntregaCadastro" required />
+                                        <input type="text" class="form-control datepicker" name="DataEntrega" id="DataEntregaCadastro" readonly="readonly" required />
                                     </div>
                                 </div>
                                 <div>
@@ -84,7 +89,7 @@
                                     <input type="text" class="form-control" name="Situacao" id="SituacaoCadastro" required />
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-success" id="CadastrarJob">
+                            <button type="button" class="btn btn-success" id="SalvarJob">
                                 <span class="glyphicon glyphicon-floppy-saved"></span>
                                 Cadastrar
                             </button>
@@ -211,9 +216,16 @@
         <script src="~/Bootstrap/js/bootstrap.js"></script>
         <script src="~/Scripts/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+        <script src="~/Scripts/jquery.mask.min.js"></script>
+        <script src="~/Scripts/bootstrap-select.js"></script>
         <script>
             $(".draggable").draggable();
+            $(".selectpicker").selectpicker({
+                size: 6
+            });
+            $("#HorasNecessariasCadastro").mask('000:W0', { placeholder: '___:__', translation: { 'W': { pattern: /[0-5]/, optional: false } } });
+            $("#Hora").mask('99:99', { placeholder: '__:__', translation: { 'Z': { pattern: /[0-2]/ }, 'X': { pattern: /[0-3]/ }, 'W': { pattern: /[0-5]/, optional: false } } });
+            $("#HoraAlterar").mask('ZX:W0', { placeholder: '__:__', translation: { 'Z': { pattern: /[0-2]/ }, 'X': { pattern: /[0-3]/ }, 'W': { pattern: /[0-5]/, optional: false } } });
 
             $('.datepicker').datepicker({
                 dateFormat: 'dd/mm/yy',
@@ -223,8 +235,123 @@
                 monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
                 monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
                 nextText: 'Próximo',
-                prevText: 'Anterior'
+                prevText: 'Anterior',
+                minDate: 0
             });
+
+            window.onload = function () {
+                var itens;
+                $.get('/Cliente/ListarClienteJson/', function (data) {
+                    $.each(data, function (i, res) {
+                        if (res.nome == 'null') {
+                            $('#ClienteCadastro').empty();
+                            $('.selectpicker').selectpicker('refresh');
+                        } else {
+                            itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
+                        }
+                    });
+                    $('#ClienteCadastro').html(itens);
+                    $('.selectpicker').removeAttr('disabled');
+                    $('.selectpicker').selectpicker('refresh');
+                    ListarFuncionario();
+                });
+            };
+
+            function ListarFuncionario() {
+                var itens;
+                $.get('/Funcionario/ListarFuncionarioJson/', function (data) {
+                    $.each(data, function (i, res) {
+                        if (res.nome == 'null') {
+                            $('#FuncionarioCadastro').empty();
+                            $('.selectpicker').selectpicker('refresh');
+                        } else {
+                            itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
+                        }
+                    });
+                    $('#FuncionarioCadastro').html(itens);
+                    $('.selectpicker').removeAttr('disabled');
+                    $('.selectpicker').selectpicker('refresh');
+                });
+            };
+
+            function CadastrarJob(cliente, briefing, pecas, descricao, funcionario, dataCriacao, dataEstimativa, dataEntrega, horasNecessarias, situacao) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Job/CadastrarAjax/',
+                    data: {
+                        cliente: cliente,
+                        briefing: briefing,
+                        pecas: pecas,
+                        descricao: descricao,
+                        funcionario: funcionario,
+                        dataCriacao: dataCriacao,
+                        dataEstimativa: dataEstimativa,
+                        dataEntrega: dataEntrega,
+                        horasNecessarias: horasNecessarias,
+                        situacao: situacao
+                    },
+                    success: function() { AtualizaJobs(); },
+                    error: function () { alert("DEU ERRADO"); }
+               });
+            }
+
+            $('#SalvarJob').click(function () {
+                var cliente = $('#ClienteCadastro').val();
+                var briefing = $('#BriefingCadastro').val();
+                var pecas = $('#PecasCadastro').val();
+                var descricao = $('#DescricaoCadastro').val();
+                var funcionario = $('#FuncionarioCadastro').val();
+                var dataCriacao = $('#DataCriacaoCadastro').val();
+                var dataEstimativa = $('#DataEstimativaCadastro').val();
+                var dataEntrega = $('#DataEntregaCadastro').val();
+                var horasNecessarias = $('#HorasNecessariasCadastro').val();
+                var situacao = $('#SituacaoCadastro').val();
+
+                CadastrarJob(cliente, briefing, pecas, descricao, funcionario, dataCriacao, dataEstimativa, dataEntrega, horasNecessarias, situacao);
+            });
+
+            $('#CancelarJob').click(function () {
+                $('#ClienteCadastro').val(null);
+                $('#BriefingCadastro').val(null);
+                $('#PecasCadastro').val(null);
+                $('#DescricaoCadastro').val(null);
+                $('#FuncionarioCadastro').val(null);
+                $('#DataCriacaoCadastro').val(null);
+                $('#DataEstimativaCadastro').val(null);
+                $('#DataEntregaCadastro').val(null);
+                $('#HorasNecessariasCadastro').val(null);
+                $('#SituacaoCadastro').val(null);
+            });
+
+            $('#FecharCadastroJob').click(function () {
+                document.getElementById("CancelarJob").click();
+            });
+
+            function DeletarTabelaJobs() {
+                var numeroLinhas = $("#TabelaJobs >tbody >tr").length;
+                for (var i = 1; i < numeroLinhas; i++) {
+                    document.getElementById("TabelaJobs").deleteRow(1);
+                }
+            }
+
+            function PreencherTabelaJobs() {
+                var itens;
+                $.get("/Job/ListarJobsJson/", function (data) {
+                    itens += "<table class='table table-bordered' id='TabelaJobs'><tbody><tr><th>Cliente</th><th>Job</th><th>Estimativa</th><th>Situação</th></tr>";
+                    $.each(data, function (i, res) {
+                        if (res != null) {
+                            itens += "<tr><td>" + res.nome + "</td><td>" + res.DataCriacao + "</td><td>" + res.DataEstimativa + "</td><td>"+res.Situacao+"</td></tr></tbody></table>";
+                        }
+                    });
+                    document.getElementById("TabelaJobs").innerHTML = itens;
+                });
+            }
+
+            function AtualizaJobs() {
+                DeletarTabelaJobs();
+                PreencherTabelaJobs();
+                document.getElementById("CancelarJob").click();
+            }
         </script>
     </div>
 </body>

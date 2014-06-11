@@ -7,6 +7,7 @@ using Dependencias;
 using Dominio.Entidades;
 using Dominio.Servicos;
 using Microsoft.Ajax.Utilities;
+using Working.Models;
 
 namespace Working.Controllers
 {
@@ -39,6 +40,17 @@ namespace Working.Controllers
             cliente.Permissao = 0;
             _clienteService.Cadastrar(cliente);
             return RedirectToAction("Index");
+        }
+
+        public JsonResult ListarClienteJson()
+        {
+            var cliente = _clienteService.Listar(e => true);
+            var lista = new List<Objeto>();
+            foreach (var i in cliente)
+            {
+                lista.Add(new Objeto { id = i.Id, nome = i.Nome });
+            }
+            return Json(lista, JsonRequestBehavior.AllowGet);
         }
     }
 }
