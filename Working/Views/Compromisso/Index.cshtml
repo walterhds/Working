@@ -101,7 +101,8 @@
             <span class="glyphicon glyphicon-plus"></span>
             Cadastrar
         </button>
-        <button class="btn btn-danger" onclick="location.href='/Compromisso/Antigos'"><span class="glyphicon glyphicon-search"></span>
+        <button class="btn btn-danger" onclick="location.href='/Compromisso/Antigos'">
+            <span class="glyphicon glyphicon-search"></span>
             Antigos
         </button>
     </div>
@@ -115,10 +116,8 @@
             <th style="border-color: transparent !important; background-color: transparent !important;"></th>
         </tr>
 
-        @foreach (var i in Model.OrderBy(e => e.Data).ThenBy(e => e.Hora))
+        @foreach (var i in Model.OrderBy(e => e.Data).ThenBy(e => e.Hora).Where(e => e.Situacao == 0))
         {
-            if (i.Situacao == 0)
-            {
             <tr>
                 <td>@i.Data.Day.ToString("D2")/@i.Data.ToString("MMMM")</td>
                 <td>@i.Descricao</td>
@@ -133,11 +132,10 @@
                 <td style="border-color: transparent !important; background-color: transparent !important;">
                     @if (DateTime.Now > i.Hora.AsDateTime() && DateTime.Now > i.Data)
                     {
-                    <span class="glyphicon glyphicon-exclamation-sign" style="color: red;"></span>
+                        <span class="glyphicon glyphicon-exclamation-sign" style="color: red;"></span>
                     }
                 </td>
             </tr>
-            }
         }
     </table>
 </div>

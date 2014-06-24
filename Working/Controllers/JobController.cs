@@ -31,7 +31,7 @@ namespace Working.Controllers
         }
 
         public void CadastrarAjax(int cliente, string briefing, string pecas, string descricao, int funcionario,
-            DateTime dataCriacao, DateTime dataEstimativa, DateTime dataEntrega, string horasNecessarias,
+            string dataCriacao, string dataEstimativa, string dataEntrega, string horasNecessarias,
             string situacao)
         {
             var job = new Job();
@@ -41,9 +41,9 @@ namespace Working.Controllers
             job.Briefing = briefing;
             job.Pecas = pecas;
             job.Descricao = descricao;
-            job.DataCriacao = dataCriacao;
-            job.DataEstimativa = dataEstimativa;
-            job.DataEntrega = dataEntrega;
+            job.DataCriacao = Convert.ToDateTime(dataCriacao);
+            job.DataEstimativa = Convert.ToDateTime(dataEstimativa);
+            job.DataEntrega = Convert.ToDateTime(dataEntrega);
             job.HorasNecessarias = horasNecessarias;
             job.Situacao = situacao;
             _jobService.Cadastrar(job);
@@ -51,7 +51,11 @@ namespace Working.Controllers
 
         public JsonResult ListarJobsJson()
         {
-            var job = _jobService.Listar(e => true).OrderBy(e => e.DataEstimativa);
+            var job =
+                _jobService.Listar(e => true)
+                    .OrderByDescending(e => e.DataEstimativa)
+                    .ThenByDescending(e => e.DataCriacao)
+                    .ThenByDescending(e=>e.Id);
             var lista = new List<Objeto>();
             foreach (var i in job)
             {
@@ -62,6 +66,26 @@ namespace Working.Controllers
                     DataEstimativa = i.DataEstimativa.Day.ToString("D2") + "/" + i.DataEstimativa.ToString("MMMM"),
                     Situacao = i.Situacao
                 });
+            }
+            return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ListarJobsFuncionario(int fid, string dataInicio, string dataFim)
+        {
+            var funcionario = _funcionarioService.ObterPorId(fid);
+            var jobs = _jobService.Listar(e=>e.Funcionario==funcionario);
+            var lista = new List<Job>();
+            foreach (var i in jobs)
+            {
+                if (i.DataEstimativa >= Convert.ToDateTime(dataInicio) && i.DataCriacao <= Convert.ToDateTime(dataFim))
+                {
+                    lista.Add(new Job
+                    {
+                        HorasNecessarias = i.HorasNecessarias,
+                        DataCriacao = i.DataCriacao,
+                        DataEstimativa = i.DataEstimativa
+                    });
+                }
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
         }

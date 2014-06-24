@@ -37,7 +37,7 @@
                 <td>@i.Nome</td>
                 <td class="col-md-3">@i.Cargo.Nome</td>
                 <td class="col-md-3">
-                    <span id="situacaoSpan">@Percistencia.Ado.SituacaoHelper.GetDescription(i.Situacao)</span>
+                    <span id="@(i.Id+"Span")">@Percistencia.Ado.SituacaoHelper.GetDescription(i.Situacao)</span>
                     <div class="btn-group btn-group-xs pull-right">
                         <button type="button" class="btn btn-default dropdown-toggle pull-right" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-pencil"></span>
@@ -78,7 +78,7 @@
                 type: 'post',
                 success: function () {
                     if (situacao != "Desligado") {
-                        $("#situacaoSpan").text(situacao);
+                        $("#"+id+"Span").text(situacao);
                     } else {
                         var tb = document.getElementById("situacaoTabela");
                         tb.deleteRow(document.getElementById(id));
