@@ -43,21 +43,30 @@
     <Compile Include="Entidades\Cliente.cs" />
     <Compile Include="Entidades\Compromisso.cs" />
     <Compile Include="Entidades\EntidadeBase.cs" />
+    <Compile Include="Entidades\Fornecedor.cs" />
     <Compile Include="Entidades\Funcionario.cs" />
     <Compile Include="Entidades\Job.cs" />
+    <Compile Include="Entidades\Peca.cs" />
     <Compile Include="Entidades\Situacao.cs" />
+    <Compile Include="Entidades\SituacaoJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\IBaseRepositorio.cs" />
     <Compile Include="Repositorios\ICargoRepositorio.cs" />
     <Compile Include="Repositorios\IClienteRepositorio.cs" />
     <Compile Include="Repositorios\ICompromissoRepositorio.cs" />
+    <Compile Include="Repositorios\IFornecedorRepositorio.cs" />
     <Compile Include="Repositorios\IFuncionarioRepositorio.cs" />
     <Compile Include="Repositorios\IJobRepositorio.cs" />
+    <Compile Include="Repositorios\IPecaRepositorio.cs" />
+    <Compile Include="Repositorios\ISituacaoJobRepositorio.cs" />
     <Compile Include="Servicos\CargoService.cs" />
     <Compile Include="Servicos\ClienteService.cs" />
     <Compile Include="Servicos\CompromissoService.cs" />
+    <Compile Include="Servicos\FornecedorService.cs" />
     <Compile Include="Servicos\FuncionarioService.cs" />
     <Compile Include="Servicos\JobService.cs" />
+    <Compile Include="Servicos\PecaService.cs" />
+    <Compile Include="Servicos\SituacaoJobService.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

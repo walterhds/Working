@@ -10,7 +10,6 @@ namespace Dominio.Entidades
     public class Job : EntidadeBase
     {
         public virtual string Briefing { get; set; }
-        public virtual string Pecas { get; set; }
         public virtual string Descricao { get; set; }
         public virtual Funcionario Funcionario { get; set; }
         public virtual DateTime DataCriacao { get; set; }
@@ -18,6 +17,8 @@ namespace Dominio.Entidades
         public virtual DateTime DataEntrega { get; set; }
         public virtual string HorasNecessarias { get; set; }
         public virtual Cliente Cliente { get; set; }
-        public virtual string Situacao { get; set; }
+        public virtual SituacaoJob Situacao { get; set; }
+        public virtual IList<Peca> Peca { get; set; } 
+        public virtual IList<Fornecedor> Fornecedor { get; set; } 
     }
 }

@@ -10,6 +10,7 @@ using Dependencias;
 using Dominio.Entidades;
 using Dominio.Servicos;
 using Microsoft.Ajax.Utilities;
+using Working.Models;
 using Working.ViewsModels;
 
 namespace Working.Controllers
@@ -17,10 +18,12 @@ namespace Working.Controllers
     public class CompromissoController : Controller
     {
         private readonly CompromissoService _compromissoService;
+        private readonly FuncionarioService _funcionarioService;
 
         public CompromissoController()
         {
             _compromissoService = Dependencia.Resolver<CompromissoService>();
+            _funcionarioService = Dependencia.Resolver<FuncionarioService>();
         }
 
         public ActionResult Index()
@@ -42,6 +45,7 @@ namespace Working.Controllers
             compromisso.Hora = hora;
             compromisso.Descricao = descricao;
             compromisso.DataRegistro = DateTime.Now;
+            compromisso.UltimoFuncionario = _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
             _compromissoService.Cadastrar(compromisso);
             return null;
         }
@@ -55,10 +59,13 @@ namespace Working.Controllers
         public JsonResult AlterarAjax(int id, string data, string hora, string descricao)
         {
             var compromisso = _compromissoService.ObterPorId(id);
+            var funcionario =
+                _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
             compromisso.Data = Convert.ToDateTime(data);
             compromisso.Hora = hora;
             compromisso.Descricao = descricao;
             compromisso.DataRegistro = DateTime.Now;
+            compromisso.UltimoFuncionario = _funcionarioService.ObterPorLogin((string)System.Web.HttpContext.Current.Session["usuario"]);
             _compromissoService.Cadastrar(compromisso);
             return null;
         }
@@ -77,8 +84,34 @@ namespace Working.Controllers
         {
             var compromisso = _compromissoService.ObterPorId(id);
             compromisso.Situacao = 1;
+            compromisso.UltimoFuncionario = _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
+            compromisso.DataRegistro = DateTime.Now;
             _compromissoService.Cadastrar(compromisso);
             return null;
+        }
+
+        public JsonResult ListarCompromissosJson()
+        {
+            var compromisso =
+                _compromissoService.Listar(e => true)
+                    .OrderBy(e=>e.Data)
+                    .ThenBy(e => e.Hora)
+                    .Where(e => e.Situacao == 0)
+                    .Take(5);
+
+            var lista = new List<Objeto>();
+            foreach (var i in compromisso)
+            {
+                lista.Add(new Objeto
+                {
+                    id = i.Id,
+                    Data = i.Data.Day.ToString("D2") + "/" + i.Data.ToString("MMMM"),
+                    Hora = i.Hora,
+                    Descricao = i.Descricao,
+                    Alterado = _funcionarioService.ObterPorId(i.UltimoFuncionario.Id).Nome
+                });
+            }
+            return Json(lista, JsonRequestBehavior.AllowGet);
         }
     }
 }

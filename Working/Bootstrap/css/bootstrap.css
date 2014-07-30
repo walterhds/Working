@@ -64,12 +64,13 @@
     padding-top: 25px;
 }
 
-.new-job {
+.new-job{
     color: transparent;
+    font-size: 12px !important;
     height: 55px !important;
 }
 
-.new-job:hover {
+.new-job:hover{
     color: grey;
 }
 
@@ -84,6 +85,16 @@
 
 .glyphicon-compromisso:hover > a{
     color: black !important;
+}
+
+.glyphicon-compromisso:hover > .alteracao{
+    color: grey !important;
+}
+
+.alteracao {
+    font-family: helvetica;
+    color: transparent;
+    font-size: 9px;
 }
 
 .glyphicon-working {
@@ -106,6 +117,12 @@
     color: grey;
     font-size: 10px;
     font-family: helvetica;
+}
+
+.info {
+    font-family: helvetica;
+    font-size: 12px;
+    text-align: center;
 }
 
 .table-working th{
@@ -6503,6 +6520,13 @@ button.close {
     .modal-header .close {
         margin-top: -2px;
     }
+
+.modal-subheader {
+    min-height: 15px;
+    padding: 5px;
+    border-bottom: 1px solid gold;
+    background-color: #f3f3f3;
+}
 
 .modal-title {
     margin: 0;

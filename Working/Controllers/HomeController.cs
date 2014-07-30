@@ -14,11 +14,13 @@ namespace Working.Controllers
         private readonly CompromissoService _compromissoService;
         private DadosIndex _dadosIndex;
         private readonly JobService _jobService;
+        private readonly FuncionarioService _funcionarioService;
 
         public HomeController()
         {
             _compromissoService = Dependencia.Resolver<CompromissoService>();
             _jobService = Dependencia.Resolver<JobService>();
+            _funcionarioService = Dependencia.Resolver<FuncionarioService>();
         }
 
         public ActionResult Index()
@@ -27,6 +29,7 @@ namespace Working.Controllers
             {
                 Compromissos = _compromissoService.Listar(e => true),
                 Jobs = _jobService.Listar(e => true),
+                Funcionario = _funcionarioService.ObterPorLogin((string)System.Web.HttpContext.Current.Session["usuario"])
             };
             return View(_dadosIndex);
         }

@@ -35,11 +35,13 @@ namespace Working.Controllers
             if (funcionario != null && funcionario.Senha == form["senha"])
             {
                 System.Web.Security.FormsAuthentication.SetAuthCookie(funcionario.Nome, false);
+                Session.Add("usuario", funcionario.Login);
                 return RedirectToAction("Index", "Home");
             }
             else if ((cliente != null && cliente.Senha == form["senha"]))
             {
                 System.Web.Security.FormsAuthentication.SetAuthCookie(cliente.Nome, false);
+                Session.Add("usuario", cliente.Login);
                 return RedirectToAction("Index", "Home");
             }
             return View();
@@ -47,6 +49,7 @@ namespace Working.Controllers
 
         public ActionResult Logout()
         {
+            Session["usuario"] = null;
             FormsAuthentication.SignOut();
             return RedirectToAction("Logon", "Login");
         }

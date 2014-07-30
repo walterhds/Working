@@ -1,4 +1,6 @@
-﻿@model Working.ViewsModels.DadosIndex
+﻿@using Dominio.Entidades
+@using NHibernate.Context
+@model Working.ViewsModels.DadosIndex
 @{
     ViewBag.Title = "Home";
 }
@@ -29,7 +31,7 @@
                             <textarea class="form-control" name="Descricao" id="Descricao" required></textarea>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-success" id="Salvar">
+                    <button type="button" class="btn btn-success" id="SalvarAjax">
                         <span class="glyphicon glyphicon-floppy-saved"></span>
                         Cadastrar
                     </button>
@@ -73,7 +75,7 @@
                                     <textarea class="form-control" name="Descricao" id="DescricaoAlterar" required></textarea>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-success" id="SalvarAlterar" onclick="Alterar($('#id').val(),$('#DataAlterar').val(),$('#HoraAlterar').val(),$('#DescricaoAlterar').val())">
+                            <button type="button" class="btn btn-success" id="SalvarAlterar" onclick="AlterarAjax($('#id').val(),$('#DataAlterar').val(),$('#HoraAlterar').val(),$('#DescricaoAlterar').val())">
                                 <span class="glyphicon glyphicon-floppy-saved"></span>
                                 Alterar
                             </button>
@@ -100,7 +102,8 @@
             <tr class="@i.Id">
                 <th class="glyphicon-compromisso"><a onclick="PopularModal(@i.Id);" id="@i.Id" title="Alterar" data-toggle="modal" data-target="#AlterarCompromisso" class="glyphicon glyphicon-pencil pull-left" style="font-size: 11px; padding-top: 5px; width: 15px;"></a>
                     @i.Data.Day.ToString("D2")/@i.Data.ToString("MMMM")
-                    <button type="button" class="close" onclick="DeletaCompromisso(@i.Id)" aria-hidden="true">&times;</button>
+                    <span class="alteracao">Última alteração feita por: @i.UltimoFuncionario.Nome</span>
+                    <button type="button" class="close" onclick="ConfirmarCompromissoAjax(@i.Id,@Model.Funcionario.Id)" title="Confirmar" aria-hidden="true"><span class="glyphicon glyphicon-ok" style="color: green; font-size: 15px; padding-top: 5px; width: 15px;"></span></button>
                 </th>
             </tr>
             <tr>
@@ -137,7 +140,7 @@
                     <td>@i.Cliente.Nome</td>
                     <td>@i.DataCriacao.Day.ToString("D2")/@i.DataCriacao.ToString("MMMM")</td>
                     <td>@i.DataEstimativa.Day.ToString("D2")/@i.DataEstimativa.ToString("MMMM")</td>
-                    <td>@i.Situacao</td>
+                    <td>@i.Situacao.Descricao</td>
                 </tr>
             }
         </tbody>

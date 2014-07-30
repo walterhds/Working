@@ -14,6 +14,145 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    <div class="modal fade" id="CadastrarSituacaoJob">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="FecharCadastroSituacaoJob" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Nova Situação</h4>
+                </div>
+                <div class="modal-body form-working">
+                    <form role="form" method="POST" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="DescricaoSituacaoJob" class="control-label col-sm-2">Descrição:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="DescricaoSituacaoJob" id="DescricaoSituacaoJob" required />
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success" id="SalvarSituacaoJob" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-floppy-saved"></span>
+                            Cadastrar                                                                      
+                        </button>
+                        <button type="button" class="btn btn-danger" id="CancelarSituacaoJob" data-dismiss="modal">
+                            <span class=" glyphicon glyphicon-remove"></span>
+                            Cancelar                                                                       
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="CadastrarFornecedor">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="FecharCadastroFornecedor" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Novo Fornecedor</h4>
+                </div>
+                <span id="VoltarFornecedor" style="color: transparent !important; font-size: 1px !important;"></span>
+                <div class="modal-body form-working">
+                    <form role="form" method="POST" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="FornecedoresBuscar" class="control-label col-sm-2">Pesquisar:</label>
+                            <div class="col-sm-10">
+                                <select class="selectpicker form-control" name="FornecedoresBuscar" id="FornecedoresBuscar" data-header="Resultados Encontrados" data-live-search="true" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="NomeFornecedor" class="control-label col-sm-2">Nome:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="NomeFornecedor" id="NomeFornecedor" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="TelefoneFornecedor" class="control-label col-sm-2">Telefone:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="TelefoneFornecedor" id="TelefoneFornecedor" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ContatoFornecedor" class="control-label col-sm-2">Contato:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="ContatoFornecedor" id="ContatoFornecedor" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="CelularFornecedor" class="control-label col-sm-2">Celular:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="CelularFornecedor" id="CelularFornecedor" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="EmailFornecedor" class="control-label col-sm-2">Email:</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" name="EmailFornecedor" id="EmailFornecedor" required />
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success" id="SalvarFornecedor" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-floppy-saved"></span>
+                            Cadastrar                                                                      
+                        </button>
+                        <button type="button" class="btn btn-danger" id="CancelarFornecedor" data-dismiss="modal">
+                            <span class=" glyphicon glyphicon-remove"></span>
+                            Cancelar                                                                       
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="CadastrarPeca">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="FecharCadastroPeca" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Nova Peça</h4>
+                </div>
+                <span id="Voltar" style="color: transparent !important; font-size: 1px !important;"></span>
+                <div class="modal-body form-working">
+                    <form role="form" method="POST" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="PecasBuscar" class="control-label col-sm-2">Pesquisar:</label>
+                            <div class="col-sm-10">
+                                <select class="selectpicker form-control" name="PecasBuscar" id="PecasBuscar" data-header="Resultados encontrados" data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="DescricaoPeca" class="control-label col-sm-2">Descrição:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="DescricaoPeca" id="DescricaoPeca" style="resize: none;" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="FornecedoresPecas" class="control-label col-sm-3">Fornecedores:</label>
+                            <div class="col-sm-7">
+                                <select class="selectpicker show-tick form-control" multiple name="FornecedoresPecas" id="FornecedoresPecas" data-live-search="true" required>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" id="AdicionarFornecedorPeca" class="btn btn-info" data-dismiss="modal" data-toggle="modal" data-target="#CadastrarFornecedor">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success" id="SalvarPeca" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-floppy-saved"></span>
+                            Cadastrar                                                                      
+                        </button>
+                        <button type="button" class="btn btn-danger" id="CancelarPeca" data-dismiss="modal">
+                            <span class=" glyphicon glyphicon-remove"></span>
+                            Cancelar                                                                       
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="CadastrarJob">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -41,9 +180,27 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="Fornecedores" class="control-label col-sm-2" style="margin-left: -10px;">Fornecedores:</label>
+                                <div class="col-sm-8" style="padding-left: 30px;">
+                                    <select class="selectpicker show-tick form-control" multiple name="Fornecedores" id="FornecedoresCadastro" data-live-search="true" required>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" id="AdicionarFornecedor" class="btn btn-info" data-dismiss="modal" data-toggle="modal" data-target="#CadastrarFornecedor">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="Pecas" class="control-label col-sm-2">Peças:</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="Pecas" id="PecasCadastro" required />
+                                <div class="col-sm-8">
+                                    <select class="selectpicker show-tick form-control" multiple name="Pecas" id="PecasCadastro" data-live-search="true" required>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" id="AdicionarPeca" class="btn btn-info" data-dismiss="modal" data-toggle="modal" data-target="#CadastrarPeca">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -59,7 +216,7 @@
                                 <div class="">
                                     <label for="DataCriacao" class="control-label col-sm-2">Criação:</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control datepicker" name="DataCriacao" id="DataCriacaoCadastro" onchange="document.getElementById('HorasNecessariasCadastro').focus()" readonly="readonly" required />
+                                        <input type="text" class="form-control" name="DataCriacao" id="DataCriacaoCadastro" value="@DateTime.Today.ToShortDateString()" readonly="readonly" required />
                                     </div>
                                 </div>
                                 <div>
@@ -70,30 +227,34 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="DataEstimativa" class="control-label col-sm-2">Estimativa:</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control datepicker" name="DataEstimativa" id="DataEstimativaCadastro" onchange="document.getElementById('FuncionarioCadastro').focus()" readonly="readonly" required />
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="Funcionario" class="control-label col-sm-2">Colaborador:</label>
                                 <div class="col-sm-10">
                                     <select class="selectpicker show-tick form-control" name="Funcionario" id="FuncionarioCadastro" data-live-search="true" required>
                                     </select>
                                 </div>
+                                <div class="info text-center">
+                                    <span id="Info"></span>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <div class="">
-                                    <label for="DataEstimativa" class="control-label col-sm-2">Estimativa:</label>
-                                    <div class="col-sm-3">
-                                        <input type="text" class="form-control datepicker" name="DataEstimativa" id="DataEstimativaCadastro" onchange="document.getElementById('DataEntregaCadastro').focus(),document.getElementById('DataEntregaCadastro').enter()" readonly="readonly" required />
+                                <div>
+                                    <label for="SituacaoCadastro" class="control-label col-sm-2">Situação:</label>
+                                    <div class="col-sm-5">
+                                        <select class="selectpicker show-tick form-control" name="SituacaoCadastro" id="SituacaoCadastro" data-live-search="true" required>
+                                        </select>
                                     </div>
                                 </div>
                                 <div>
                                     <label for="DataEntrega" class="control-label col-sm-2">Entrega:</label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control datepicker" name="DataEntrega" id="DataEntregaCadastro" onchange="document.getElementById('SituacaoCadastro').focus()" readonly="readonly" required />
+                                        <input type="text" class="form-control datepicker" name="DataEntrega" id="DataEntregaCadastro" readonly="readonly" required />
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="Situacao" class="control-label col-sm-2">Situação:</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="Situacao" id="SituacaoCadastro" required />
                                 </div>
                             </div>
                             <button type="button" class="btn btn-success" id="SalvarJob" data-dismiss="modal">
@@ -104,8 +265,24 @@
                                 <span class=" glyphicon glyphicon-remove"></span>
                                 Cancelar                                                                       
                             </button>
+                            <hr />
                         </div>
                     </form>
+                    <button type="button" class="btn btn-sm btn-info" id="ExibirComentarios">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        Exibir Comentários
+                    </button>
+                    <div class="modal-subheader">
+                        <h5 class="modal-title" style="font-weight: bold;">Comentários</h5>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-success" id="NovoComentario">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Comentar
+                    </button>
+                    <div class="form-working">
+                        <form role="form" method="POST" class="form-horizontal" id="FormComentario">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -125,7 +302,7 @@
                         </ul>
                     </div>
                     <div>
-                        <a onclick="location.href='Login/Logout'" class="pull-right" style="padding-left: 10px; cursor: pointer;">
+                        <a onclick="location.href='/Login/Logout'" class="pull-right" style="padding-left: 10px; cursor: pointer;">
                             <span class="glyphicon glyphicon-off"></span>
                         </a>
                     </div>
@@ -135,10 +312,10 @@
                         </a>
                     </div>
                     <div class="new-job pull-right col-sm-1" style="padding-top: 10px;">
-                        <button class="btn btn-warning btn-lg navbar-btn-new" data-toggle="modal" data-target="#CadastrarJob">
+                        <button id="NovoJob" class="btn btn-warning btn-lg navbar-btn-new" data-toggle="modal" data-target="#CadastrarJob">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
-                        <span>Novo Job</span>
+                        <p>Novo Job</p>
                     </div>
                     <div class="collapse navbar-collapse pull-right">
                         <ul class="nav navbar-nav">
@@ -152,6 +329,9 @@
                                     <li><a href="~/Funcionario/Cadastrar">Funcionário</a></li>
                                     <li><a href="~/Cargo/Cadastrar">Cargo</a></li>
                                     <li><a href="~/Cliente/Cadastrar">Cliente</a></li>
+                                    <li><a href="#CadastrarPeca" data-toggle="modal" id="LinkPeca">Peça</a></li>
+                                    <li><a href="#CadastrarFornecedor" data-toggle="modal">Fornecedor</a></li>
+                                    <li><a href="#CadastrarSituacaoJob" data-toggle="modal">Situação</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -248,12 +428,164 @@
                 minDate: 0
             });
 
-            $("#BriefingCadastro").keyup(function() {
+            $('#CadastrarPeca').on('hidden.bs.modal', function (e) {
+                $('#Voltar').text('0');
+                if ($('#Voltar').text() == '2') {
+                    $('#Voltar').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            $('#CadastrarFornecedor').on('hidden.bs.modal', function (e) {
+                $('#VoltarFornecedor').text('0');
+                if ($('#VoltarFornecedor').text() == '1') {
+                    $('#VoltarFornecedor').text('0');
+                    document.getElementById('LinkPeca').click();
+                } else if ($('#VoltarFornecedor').text() == '3') {
+                    $('#VoltarFornecedor').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            function CadastrarSituacaoJob(descricao) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/SituacaoJob/CadastrarAjax',
+                    data: {
+                        descricao: descricao
+                    },
+                    success: function () {
+                        $('#CancelarSituacaoJob').click();
+                        ListarSituacaoJob();
+                    },
+                    error: function (xhr, status, response) { alert(response); }
+                });
+            }
+
+            $('#SalvarSituacaoJob').click(function () {
+                var descricao = $('#DescricaoSituacaoJob').val();
+                CadastrarSituacaoJob(descricao);
+            });
+
+            $('#CancelarSituacaoJob').click(function () {
+                $('#DescricaoSituacaoJob').val('');
+            });
+
+            $('#FecharCadastroSituacaoJob').click(function () {
+                $('#CancelarSituacaoJob').click();
+            });
+
+            function CadastrarFornecedor(nome, telefone, contato, celular, email) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Fornecedor/CadastrarAjax',
+                    data: {
+                        nome: nome,
+                        telefone: telefone,
+                        contato: contato,
+                        celular: celular,
+                        email: email,
+                    },
+                    success: function () {
+                        $('#CancelarFornecedor').click();
+                        ListarFornecedores();
+                    },
+                    error: function (xhr, status, response) { alert(response); }
+                });
+            }
+
+            $('#SalvarFornecedor').click(function () {
+                var nome = $('#NomeFornecedor').val();
+                var telefone = $('#TelefoneFornecedor').val();
+                var contato = $('#ContatoFornecedor').val();
+                var celular = $('#CelularFornecedor').val();
+                var email = $('#EmailFornecedor').val();
+                CadastrarFornecedor(nome, telefone, contato, celular, email);
+                if ($('#VoltarFornecedor').text() == '1') {
+                    $('#VoltarFornecedor').text('0');
+                    document.getElementById('LinkPeca').click();
+                } else if ($('#VoltarFornecedor').text() == '3') {
+                    $('#VoltarFornecedor').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            $('#CancelarFornecedor').click(function () {
+                $('#NomeFornecedor').val('');
+                $('#TelefoneFornecedor').val('');
+                $('#ContatoFornecedor').val('');
+                $('#CelularFornecedor').val('');
+                $('#EmailFornecedor').val('');
+                if ($('#VoltarFornecedor').text() == '1') {
+                    $('#VoltarFornecedor').text('0');
+                    document.getElementById('LinkPeca').click();
+                } else if ($('#VoltarFornecedor').text() == '3') {
+                    $('#VoltarFornecedor').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            $('#FecharCadastroFornecedor').click(function () {
+                $('#CancelarFornecedor').click();
+                if ($('#VoltarFornecedor').text() == '1') {
+                    $('#VoltarFornecedor').text('0');
+                    document.getElementById('LinkPeca').click();
+                } else if ($('#VoltarFornecedor').text() == '3') {
+                    $('#VoltarFornecedor').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            function CadastrarPeca(descricao, fornecedores) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Peca/CadastrarAjax/',
+                    data: {
+                        descricao: descricao,
+                        fornecedores: fornecedores
+                    },
+                    success: function () {
+                        $('#DescricaoPeca').val('');
+                        ListarPecas();
+                    },
+                    error: function (xhr, status, response) { alert(response); }
+                });
+            }
+
+            $('#SalvarPeca').click(function () {
+                var descricao = $('#DescricaoPeca').val();
+                var fornecedores = $('#FornecedoresPecas').val().toString();
+                CadastrarPeca(descricao, fornecedores);
+                if ($('#Voltar').text() == '2') {
+                    $('#Voltar').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            $('#CancelarPeca').click(function () {
+                $('#DescricaoPeca').val('');
+                if ($('#Voltar').text() == '2') {
+                    $('#Voltar').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            $('#FecharCadastroPeca').click(function () {
+                $('#DescricaoPeca').val('');
+                if ($('#Voltar').text() == '2') {
+                    $('#Voltar').text('0');
+                    $('#NovoJob').click();
+                }
+            });
+
+            $("#BriefingCadastro").keyup(function () {
                 var quant = 5000;
                 var total = document.getElementById("BriefingCadastro").value.length;
 
-                if (total <= quant) {
-                    $("#CaracterBriefing").text(quant-total + " caracteres restantes");
+                if (total == 0) {
+                    $('#CaracterBriefing').text('5000 caracteres');
+                } else if (total < quant) {
+                    $("#CaracterBriefing").text(quant - total + " caracteres restantes");
                 } else {
                     document.getElementById('BriefingCadastro').value = document.getElementById("BriefingCadastro").value.substr(0, quant);
                 }
@@ -263,38 +595,135 @@
                 var quant = 5000;
                 var total = document.getElementById("DescricaoCadastro").value.length;
 
-                if (total <= quant) {
+                if (total == 0) {
+                    $('#CaracterDescricao').text('5000 caracteres');
+                } else if (total < quant) {
                     $("#CaracterDescricao").text(quant - total + " caracteres restantes");
                 } else {
                     document.getElementById('DescricaoCadastro').value = document.getElementById("DescricaoCadastro").value.substr(0, quant);
                 }
             });
 
-            $("#DataCriacaoCadastro").change(function () {
-                var test = $(this).datepicker('getDate');
-                var testm = new Date(test.getTime());
-                testm.setDate(testm.getDate());
-
-                $("#DataEstimativaCadastro").datepicker("option", "minDate", testm);
+            $('#FornecedoresCadastro').change(function () {
+                ListarPecas($('#FornecedoresCadastro').val().toString());
             });
 
-            //$("#FuncionarioCadastro").change(function() {
-            //    var dataInicio = $("#DataCriacaoCadastro").datepicker('getDate');
-            //    var dataFim = $("#DataEstimativaCadastro").datepicker('getDate');
-            //    var funcionario = $("#FuncionarioCadastro").val();
-            //    $.ajax({
-            //        type: 'POST',
-            //        url:'/Job/ListarJobsFuncionario/',
-            //        data: {
-            //            fid: funcionario,
-            //            dataInicio: dataInicio,
-            //            dataFim: dataFim
-            //        },
-            //        success: function() {
-            //            $.each();
-            //        }
-            //    });
-            //});
+            function diferencaDias(data1, data2) {
+                var dif =
+                    Date.UTC(data1.getYear(), data1.getMonth(), data1.getDate(), 0, 0, 0)
+                        - Date.UTC(data2.getYear(), data2.getMonth(), data2.getDate(), 0, 0, 0);
+                return Math.abs((dif / 1000 / 60 / 60 / 24));
+            }
+
+            $('#HorasNecessariasCadastro').blur(function () {
+                var horas;
+                var hora;
+                var minuto;
+                try {
+                    horas = $('#HorasNecessariasCadastro').val().split(':');
+                    hora = horas[0];
+                    if (horas[1].length == 1) {
+                        minuto = horas[1] + 0;
+                    } else {
+                        minuto = horas[1];
+                    }
+                    horas = hora + ":" + minuto;
+                    $('#HorasNecessariasCadastro').val(horas);
+                } catch (e) {
+                    horas = 0 + $('#HorasNecessariasCadastro').val() + ":00";
+                    $('#HorasNecessariasCadastro').val(horas);
+                    return;
+                }
+            });
+
+            $('#DataEstimativaCadastro').change(function () {
+                verificaFuncionario();
+            });
+
+            $('#FuncionarioCadastro').change(function () {
+                verificaFuncionario();
+            });
+
+            function verificaFuncionario() {
+                var dias;
+                var difDias;
+                var horas;
+                var hrsNecessarias;
+                var horasFinais;
+                var horasAcumuladas = 0;
+                var minutos;
+                var dataCriacao = $('#DataCriacaoCadastro').val().split("/");
+                var dia = dataCriacao[0];
+                var mes = dataCriacao[1];
+                var ano = dataCriacao[2];
+                var dtCriacao = new Date(ano, --mes, dia);
+                var dataEstimativa = $('#DataEstimativaCadastro').val().split("/");
+                dia = dataEstimativa[0];
+                mes = dataEstimativa[1];
+                ano = dataEstimativa[2];
+                dataEstimativa = new Date(ano, --mes, dia);
+                var quantidadeHora = 0;
+                $.get('/Job/ListarJobsFuncionario/', { fid: $('#FuncionarioCadastro').val(), dataInicio: dataCriacao + '', dataFim: $('#DataEstimativaCadastro').val() + '' }, function (data) {
+                    $.each(data, function (i, res) {
+                        if (res.horasNecessarias != 'null') {
+                            var dtEstimativa = new Date(res.DataEstimativa);
+
+                            if (dtEstimativa > dataEstimativa) {
+                                difDias = diferencaDias(dataEstimativa, dtCriacao);
+                            } else {
+                                difDias = diferencaDias(dtEstimativa, dtCriacao);
+                            }
+
+                            dias = diferencaDias(dtEstimativa, new Date(res.DataCriacao));
+                            hrsNecessarias = res.HorasNecessarias.split(":");
+                            horas = parseInt(hrsNecessarias[0]) / dias;
+                            if (parseInt(hrsNecessarias[1]) != 0) {
+                                minutos = parseInt(hrsNecessarias[1]) / dias;
+                            } else {
+                                minutos = parseInt(hrsNecessarias[1]);
+                            }
+                            if (horas.toString().indexOf('.') >= 0) {
+                                var horasSplit = horas.toString().split(".");
+                                horas = parseInt(horasSplit[0]) + (((parseInt(horasSplit[1].substr(0, 2)) / 100) * 60) / 100);
+                            }
+                            if (minutos.toString().indexOf('.') >= 0) {
+                                var minutosSplit = minutos.toString().split(".");
+                                minutos = parseInt(minutosSplit[0]) + (((parseInt(minutosSplit[1].substr(0, 2)) / 100) * 60) / 100);
+                            }
+                            horasFinais = horas + (parseInt(minutos) / 100);
+                            horasAcumuladas += horasFinais * difDias;
+                        }
+
+                        quantidadeHora = parseInt(res.QuantidadeHora) * (diferencaDias(dataEstimativa, dtCriacao));
+                    });
+
+                    var horasNecessarias = $('#HorasNecessariasCadastro').val().split(":");
+                    var hora = horasNecessarias[0];
+                    var minuto = horasNecessarias[1];
+                    horasNecessarias = parseInt(hora) + (minuto / 100);
+
+                    if ((quantidadeHora - horasAcumuladas) < horasNecessarias) {
+                        if (horasAcumuladas == 0) {
+                            $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-success', 'remove');
+                            $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-danger');
+                            $('#Info').text("Horas necessárias muito grande para pouco tempo de trabalho para este colaborador");
+                            $('#Info').css('color', 'red');
+                            return;
+                        } else {
+                            $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-success', 'remove');
+                            $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-danger');
+                            $('#Info').text("Este colaborador não tem disponibilidade neste período!");
+                            $('#Info').css('color', 'red');
+                            return;
+                        }
+                    }
+
+                    $('#Info').text("Colaborador com disponibilidade para este job.");
+                    $('#Info').css('color', 'green');
+                    $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-danger', 'remove');
+                    $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-success');
+                });
+            }
 
             window.onload = function () {
                 var itens;
@@ -328,16 +757,93 @@
                     $('#FuncionarioCadastro').html(itens);
                     $('.selectpicker').removeAttr('disabled');
                     $('.selectpicker').selectpicker('refresh');
+                    ListarFornecedores();
                 });
             };
 
-            function CadastrarJob(cliente, briefing, pecas, descricao, funcionario, dataCriacao, dataEstimativa, dataEntrega, horasNecessarias, situacao) {
+            function ListarFornecedores() {
+                var itens;
+                $.get('/Fornecedor/ListarFornecedoresJson', function (data) {
+                    $.each(data, function (i, res) {
+                        if (res.nome == 'null') {
+                            $('#FornecedoresCadastro').empty();
+                            $('#FornecedoresPecas').empty();
+                            $('.selectpicker').selectpicker('refresh');
+                        } else {
+                            itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
+                        }
+                    });
+                    $('#FornecedoresCadastro').html(itens);
+                    $('#FornecedoresPecas').html(itens);
+                    $('#FornecedoresBuscar').html(itens);
+                    $('#FornecedoresBuscar').children().attr('disabled', 'disabled').css('color', '#505050');
+                    $('.selectpicker').removeAttr('disabled');
+                    $('.selectpicker').selectpicker('refresh');
+                    ListarPecasBuscar();
+                });
+            };
+
+            function ListarPecasBuscar() {
+                var itens;
+                $.get('/Peca/ListarPecasBuscarJson/', function (data) {
+                    $.each(data, function (i, res) {
+                        if (res.Descricao == 'null') {
+                            $('#PecasBuscar').empty();
+                            $('.selectpicker').selectpicker('refresh');
+                        } else {
+                            itens += "<option value='" + res.id + "'>" + res.Descricao + "</option>";
+                        }
+                    });
+                    $('#PecasBuscar').html(itens);
+                    $('#PecasBuscar').children().attr('disabled', 'disabled').css('color', '#505050');
+                    $('.selectpicker').removeAttr('disabled');
+                    $('.selectpicker').selectpicker('refresh');
+                    ListarSituacaoJob();
+                });
+            }
+
+            function ListarSituacaoJob() {
+                var itens;
+                $.get('/SituacaoJob/ListarSituacaoJobJson/', function (data) {
+                    $.each(data, function (i, res) {
+                        if (res.descricao == 'null') {
+                            $('#SituacaoCadastro').empty();
+                            $('.selectpicker').selectpicker('refresh');
+                        } else {
+                            itens += "<option value='" + res.id + "'>" + res.Descricao + "</option>";
+                        }
+                    });
+                    $('#SituacaoCadastro').html(itens);
+                    $('.selectpicker').removeAttr('disabled');
+                    $('.selectpicker').selectpicker('refresh');
+                });
+            }
+
+            function ListarPecas(id) {
+                var itens;
+                $.get('/Peca/ListarPecasJson/' + id, function (data) {
+                    $.each(data, function (i, res) {
+                        if (res.Descricao == 'null') {
+                            $('#PecasCadastro').empty();
+                            $('.selectpicker').selectpicker('refresh');
+                        } else {
+                            itens += "<option value='" + res.id + "'>" + res.Descricao + "</option>";
+                        }
+                    });
+                    $('#PecasCadastro').html(itens);
+                    $('.selectpicker').removeAttr('disabled');
+                    $('.selectpicker').selectpicker('refresh');
+                });
+            }
+
+            function CadastrarJob(cliente, briefing, fornecedores, pecas, descricao, funcionario, dataCriacao, dataEstimativa, dataEntrega, horasNecessarias, situacao) {
                 $.ajax({
                     type: 'POST',
                     url: '/Job/CadastrarAjax/',
                     data: {
                         cliente: cliente,
                         briefing: briefing,
+                        fornecedores: fornecedores,
                         pecas: pecas,
                         descricao: descricao,
                         funcionario: funcionario,
@@ -348,14 +854,17 @@
                         situacao: situacao
                     },
                     success: function () {
+                        Cadastrar($('#DataEstimativaCadastro').val(), "08:00", $('#DescricaoCadastro').val());
                         $('#BriefingCadastro').val("");
-                        $('#PecasCadastro').val("");
+                        ListarFornecedores();
                         $('#DescricaoCadastro').val("");
-                        $('#DataCriacaoCadastro').val("");
                         $('#DataEstimativaCadastro').val("");
                         $('#DataEntregaCadastro').val("");
                         $('#HorasNecessariasCadastro').val("");
                         $('#SituacaoCadastro').val("");
+                        $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-danger', 'remove');
+                        $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-success', 'remove');
+                        $('#FuncionarioCadastro').selectpicker('refresh');
                         AtualizaJobs();
                     },
                     error: function (xhr, status, response) { alert(response); }
@@ -365,7 +874,6 @@
             $("#SalvarJob").click(function () {
                 var cliente = $('#ClienteCadastro').val();
                 var briefing = $('#BriefingCadastro').val();
-                var pecas = $('#PecasCadastro').val();
                 var descricao = $('#DescricaoCadastro').val();
                 var funcionario = $('#FuncionarioCadastro').val();
                 var dataCriacao = $('#DataCriacaoCadastro').val();
@@ -373,25 +881,42 @@
                 var dataEntrega = $('#DataEntregaCadastro').val();
                 var horasNecessarias = $('#HorasNecessariasCadastro').val();
                 var situacao = $('#SituacaoCadastro').val();
+                var fornecedores = $('#FornecedoresCadastro').val().toString();
+                var pecas = $('#PecasCadastro').val().toString();
 
-                CadastrarJob(cliente, briefing, pecas, descricao, funcionario, dataCriacao, dataEstimativa, dataEntrega, horasNecessarias, situacao);
+                CadastrarJob(cliente, briefing, fornecedores, pecas, descricao, funcionario, dataCriacao, dataEstimativa, dataEntrega, horasNecessarias, situacao);
             });
 
             $("#CancelarJob").click(function () {
                 $('#BriefingCadastro').val("");
-                $('#PecasCadastro').val("");
+                ListarFornecedores();
                 $('#DescricaoCadastro').val("");
-                $('#DataCriacaoCadastro').val("");
                 $('#DataEstimativaCadastro').val("");
                 $('#DataEntregaCadastro').val("");
                 $('#HorasNecessariasCadastro').val("");
                 $('#SituacaoCadastro').val("");
                 $("#CaracterBriefing").text("5000 caracteres");
-                $("#CaracterDescricao").text("5000 caracteres");
+                $("#CaracterDes").text("5000 caracteres");
+                $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-danger', 'remove');
+                $('#FuncionarioCadastro').selectpicker('setStyle', 'btn-success', 'remove');
+                $('#FuncionarioCadastro').selectpicker('refresh');
+                $('#Info').text("");
             });
 
             $("#FecharCadastroJob").click(function () {
                 document.getElementById("CancelarJob").click();
+            });
+
+            $('#AdicionarFornecedor').click(function () {
+                $('#VoltarFornecedor').text('3');
+            });
+
+            $('#AdicionarFornecedorPeca').click(function () {
+                $('#VoltarFornecedor').text('1');
+            });
+
+            $('#AdicionarPeca').click(function () {
+                $('#Voltar').text('2');
             });
 
             function DeletarTabelaJobs() {
@@ -415,7 +940,7 @@
                             nome.innerHTML = "<td>" + res.nome + "</td>";
                             dataCriacao.innerHTML = "<td>" + res.DataCriacao + "</td>";
                             dataEstimativa.innerHTML = "<td>" + res.DataEstimativa + "</td>";
-                            situacao.innerHTML = "<td>" + res.Situacao + "</td>";
+                            situacao.innerHTML = "<td>" + res.Situacao.Descricao + "</td>";
 
                             linha.appendChild(nome);
                             linha.appendChild(dataCriacao);
@@ -430,6 +955,52 @@
                 DeletarTabelaJobs();
                 PreencherTabelaJobs();
             }
+
+            function PopularFornecedor(id) {
+                $.ajax({
+                    url: '/Fornecedor/PopularModal/',
+                    data: {
+                        id: id
+                    },
+                    type: 'post',
+                    success: function (lista) {
+                        $('#NomeFornecedor').val(lista.nome);
+                        $('#TelefoneFornecedor').val(lista.Telefone);
+                        $('#ContatoFornecedor').val(lista.Contato);
+                        $('#CelularFornecedor').val(lista.Celular);
+                        $('#EmailFornecedor').val(lista.Email);
+                        $('#PecasFornecedores').selectpicker('val');
+                    }
+                });
+            }
+
+            $('#NovoComentario').click(function() {
+                $('#FormComentario').append('<div><textarea></textarea><div><span></span></div></div>');
+                $('#FormComentario').children('div').addClass('form-group col-sm-12');
+                $('#FormComentario').children('div').css('padding-top', '10px');
+                $('#FormComentario').children('div').children('textarea').attr('name', 'TextareaComentario');
+                $('#FormComentario').children('div').children('textarea').attr('id', 'TextareaComentario');
+                $('#FormComentario').children('div').children('textarea').attr('required', 'required');
+                $('#FormComentario').children('div').children('textarea').css('resize', 'none');
+                $('#FormComentario').children('div').children('textarea').addClass('form-control');
+                $('#FormComentario').children('div').children('div').addClass('caracteres');
+                $('#FormComentario').children('div').children('div').children('span').addClass('pull-right');
+                $('#FormComentario').children('div').children('div').children('span').attr('id', 'CaracterComentario');
+                $('#FormComentario').children('div').children('div').children('span').text('5000 caracteres');
+            });
+
+            $('.form-group').on('keyup', '#TextareaComentario', function () {
+                var quant = 5000;
+                var total = document.getElementById(this).value.length;
+
+                if (total == 0) {
+                    $('#FormComentario').children('div').children('div').children().find('span').text('5000 caracteres');
+                } else if (total < quant) {
+                    $('#FormComentario').children('div').children('div').children().find('span').text(quant - total + " caracteres restantes");
+                } else {
+                    document.getElementById(this).value = document.getElementById(this).value.substr(0, quant);
+                }
+            });
         </script>
     </div>
 </body>

@@ -7,7 +7,7 @@ using Dominio.Entidades;
 
 namespace Dominio.Repositorios
 {
-    public interface IJobRepositorio : IBaseRepositorio<Job>
+    public interface IJobRepositorio :IBaseRepositorio<Job>
     {
     }
 }

@@ -19,6 +19,13 @@ namespace Percistencia.Ado.Mapping
             this.Property(p => p.Hora, m => m.Column("HORA"));
             this.Property(p => p.Descricao, m => m.Column("DESCRICAO"));
             this.Property(p => p.Situacao, m => m.Column("SITUACAO"));
+            this.ManyToOne(p => p.UltimoFuncionario, m =>
+            {
+                m.Column("ID_ALTERADO");
+                m.Lazy(LazyRelation.Proxy);
+                m.Fetch(FetchKind.Join);
+                m.Cascade(Cascade.None);
+            });
         }
     }
 }

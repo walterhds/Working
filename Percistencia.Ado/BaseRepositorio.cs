@@ -11,21 +11,17 @@ namespace Percistencia.Ado
 {
     public abstract class BaseRepositorio<T> : IBaseRepositorio<T> where T : EntidadeBase
     {
-        public BaseRepositorio(ISession sessao)
+        protected ISession Sessao
         {
-            Sessao = sessao;
+            get { return NHibernateHelper.GetCurrentSession(); }
         }
-
-        protected ISession Sessao { get; set; }
 
         //Cadastrar ou alterar
         public bool Cadastrar(T entidade)
         {
-            this.Sessao.BeginTransaction();
             try
             {
                 this.Sessao.Merge(entidade);
-                this.Sessao.Transaction.Commit();
                 return true;
             }
             catch (Exception e)
@@ -47,12 +43,9 @@ namespace Percistencia.Ado
 
         public bool Remover(T entidade)
         {
-            this.Sessao.BeginTransaction();
             try
             {
                 this.Sessao.Delete(entidade);
-                this.Sessao.Transaction.Commit();
-                this.Sessao.Transaction.Dispose();
                 return true;
             }
             catch (Exception e)

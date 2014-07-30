@@ -1,14 +1,17 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Configuration;
+using System.Reflection;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
+using NHibernate.Context;
 using NHibernate.Mapping.ByCode;
+using Configuration = NHibernate.Cfg.Configuration;
 
 namespace Percistencia.Ado
 {
     public static class NHibernateHelper
     {
-        private static string _connection;
         private static ISessionFactory _sessionFactory;
 
         private static ISessionFactory SessionFactory
@@ -17,15 +20,32 @@ namespace Percistencia.Ado
             {
                 if (_sessionFactory == null)
                 {
-                    IniciarSessao();
+                    _sessionFactory = BuildSessionFactory();
                 }
                 return _sessionFactory;
             }
         }
 
-        public static void IniciarSessao()
+        public static ISession GetCurrentSession()
         {
-            _connection = "data source=(local)\\DBWORKFLOW; Initial Catalog=DBworkflow; User Id=sa; Password=3751861";
+            if (!CurrentSessionContext.HasBind(SessionFactory))
+            {
+                CurrentSessionContext.Bind(SessionFactory.OpenSession());
+            }
+
+            return SessionFactory.GetCurrentSession();
+        }
+
+        public static void DisposeSession()
+        {
+            var session = GetCurrentSession();
+            session.Close();
+            session.Dispose();
+        }
+
+        public static ISessionFactory BuildSessionFactory()
+        {
+            //_connection = "data source=(local)\\DBWORKFLOW; Initial Catalog=DBworkflow; User Id=sa; Password=3751861";
 
             var mapper = new ModelMapper();
 
@@ -35,20 +55,40 @@ namespace Percistencia.Ado
 
             var configuration = new Configuration();
 
+            string databaseType = ConfigurationManager.AppSettings["DataBaseType"];
+
             configuration.DataBaseIntegration(c =>
             {
-                c.Dialect<NHibernate.Dialect.MsSql2008Dialect>();
-                c.ConnectionString = _connection;
+                c.Dialect<NHibernate.Dialect.MsSql2000Dialect>();
+                c.ConnectionStringName = "Default";
             });
-
+            
             configuration.AddMapping(mapeamento);
-
-            _sessionFactory = configuration.BuildSessionFactory();
+            configuration.CurrentSessionContext<WebSessionContext>();
+            return configuration.BuildSessionFactory();
         }
 
-        public static ISession AbrirSessao()
+        public static void BeginTransaction()
         {
-            return SessionFactory.OpenSession();
+            GetCurrentSession().BeginTransaction();
+        }
+
+        public static void CommitTransaction()
+        {
+            var session = GetCurrentSession();
+            if (session.Transaction.IsActive)
+            {
+                session.Transaction.Commit();
+            }
+        }
+
+        public static void RollbackTransaction()
+        {
+            var session = GetCurrentSession();
+            if (session.Transaction.IsActive)
+            {
+                session.Transaction.Rollback();
+            }
         }
     }
 }

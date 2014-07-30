@@ -11,8 +11,6 @@ namespace Percistencia.Ado.Repositorio
 {
     public class JobRepositorio : BaseRepositorio<Job>, IJobRepositorio
     {
-        public JobRepositorio(ISession sessao) : base(sessao)
-        {
-        }
+        
     }
 }

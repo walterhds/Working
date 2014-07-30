@@ -12,5 +12,6 @@ namespace Dominio.Entidades
         public virtual string Hora { get; set; }
         public virtual string Descricao { get; set; }
         public virtual int Situacao { get; set; }
+        public virtual Funcionario UltimoFuncionario { get; set; }
     }
 }

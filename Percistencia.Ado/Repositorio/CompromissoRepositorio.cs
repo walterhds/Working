@@ -11,10 +11,6 @@ namespace Percistencia.Ado.Repositorio
 {
     public class CompromissoRepositorio : BaseRepositorio<Compromisso>, ICompromissoRepositorio
     {
-        public CompromissoRepositorio(ISession sessao)
-            : base(sessao)
-        {
-
-        }
+        
     }
 }

@@ -12,12 +12,6 @@ namespace Percistencia.Ado.Repositorio
 {
     public class ClienteRepositorio : BaseRepositorio<Cliente>, IClienteRepositorio
     {
-        public ClienteRepositorio(ISession sessao)
-            : base(sessao)
-        {
-
-        }
-
         public Cliente ObterPorLogin(string login)
         {
             return this.Sessao.Query<Cliente>().FirstOrDefault(e => e.Login == login);

@@ -103,11 +103,14 @@ namespace Working.Controllers
             var lista = new List<Objeto>();
             foreach (var i in funcionario)
             {
-                lista.Add(new Objeto
+                if (i.Situacao != Situacao.Desligado)
                 {
-                    id = i.Id,
-                    nome = i.Nome
-                });
+                    lista.Add(new Objeto
+                    {
+                        id = i.Id,
+                        nome = i.Nome
+                    });
+                }
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
         }

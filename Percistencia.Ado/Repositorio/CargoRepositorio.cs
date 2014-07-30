@@ -6,10 +6,6 @@ namespace Percistencia.Ado.Repositorio
 {
     public class CargoRepositorio : BaseRepositorio<Cargo>, ICargoRepositorio
     {
-        public CargoRepositorio(ISession sessao)
-            : base(sessao)
-        {
-
-        }
+        
     }
 }
