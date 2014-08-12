@@ -19,11 +19,13 @@ namespace Working.Controllers
     {
         private readonly CompromissoService _compromissoService;
         private readonly FuncionarioService _funcionarioService;
+        private readonly JobService _jobService;
 
         public CompromissoController()
         {
             _compromissoService = Dependencia.Resolver<CompromissoService>();
             _funcionarioService = Dependencia.Resolver<FuncionarioService>();
+            _jobService = Dependencia.Resolver<JobService>();
         }
 
         public ActionResult Index()
@@ -38,7 +40,7 @@ namespace Working.Controllers
             return View(lista);
         }
 
-        public JsonResult CadastrarAjax(string data, string hora, string descricao)
+        public JsonResult CadastrarAjax(string data, string hora, string descricao, string idJob)
         {
             var compromisso = new Compromisso();
             compromisso.Data = Convert.ToDateTime(data);
@@ -46,6 +48,10 @@ namespace Working.Controllers
             compromisso.Descricao = descricao;
             compromisso.DataRegistro = DateTime.Now;
             compromisso.UltimoFuncionario = _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
+            if (idJob != null)
+            {
+                compromisso.Job = _jobService.ObterPorId(Convert.ToInt16(idJob));
+            }
             _compromissoService.Cadastrar(compromisso);
             return null;
         }
@@ -56,17 +62,37 @@ namespace Working.Controllers
             _compromissoService.Remover(compromisso);
         }
 
-        public JsonResult AlterarAjax(int id, string data, string hora, string descricao)
+        public JsonResult AlterarAjax(int id, string data, string hora, string descricao, string idJob)
         {
-            var compromisso = _compromissoService.ObterPorId(id);
             var funcionario =
                 _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
-            compromisso.Data = Convert.ToDateTime(data);
-            compromisso.Hora = hora;
-            compromisso.Descricao = descricao;
-            compromisso.DataRegistro = DateTime.Now;
-            compromisso.UltimoFuncionario = _funcionarioService.ObterPorLogin((string)System.Web.HttpContext.Current.Session["usuario"]);
-            _compromissoService.Cadastrar(compromisso);
+
+            if (idJob != null)
+            {
+                var listaCompromisso =
+                    _compromissoService.Listar(e => e.Job == _jobService.ObterPorId(Convert.ToInt16(idJob)));
+
+                foreach (var i in listaCompromisso)
+                {
+                    i.Data = Convert.ToDateTime(data);
+                    i.UltimoFuncionario = funcionario;
+                    i.Descricao = descricao;
+                    i.Hora = hora;
+                    i.DataRegistro = DateTime.Now;
+                    _compromissoService.Cadastrar(i);
+                }
+            }
+            else
+            {
+                var compromisso = _compromissoService.ObterPorId(id);
+
+                compromisso.Data = Convert.ToDateTime(data);
+                compromisso.Hora = hora;
+                compromisso.Descricao = descricao;
+                compromisso.DataRegistro = DateTime.Now;
+                compromisso.UltimoFuncionario = funcionario;
+                _compromissoService.Cadastrar(compromisso);
+            }
             return null;
         }
 
@@ -96,7 +122,7 @@ namespace Working.Controllers
                 _compromissoService.Listar(e => true)
                     .OrderBy(e=>e.Data)
                     .ThenBy(e => e.Hora)
-                    .Where(e => e.Situacao == 0)
+                    .Where(e => e.Situacao == 0 && e.Data>=DateTime.Now.AddDays(-1))
                     .Take(5);
 
             var lista = new List<Objeto>();
@@ -105,7 +131,7 @@ namespace Working.Controllers
                 lista.Add(new Objeto
                 {
                     id = i.Id,
-                    Data = i.Data.Day.ToString("D2") + "/" + i.Data.ToString("MMMM"),
+                    Data = i.Data.Day.ToString("D2") + "/" + i.Data.ToString("MMM"),
                     Hora = i.Hora,
                     Descricao = i.Descricao,
                     Alterado = _funcionarioService.ObterPorId(i.UltimoFuncionario.Id).Nome

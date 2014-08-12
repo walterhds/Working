@@ -1,27 +1,29 @@
-﻿using Dominio.Entidades;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Dominio.Entidades;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 
 namespace Percistencia.Ado.Mapping
 {
-    public class CompromissoMap : ClassMapping<Compromisso>
+    public class TimelineJobMap:ClassMapping<TimelineJob>
     {
-        public CompromissoMap()
+        public TimelineJobMap()
         {
-            this.Table("COMPROMISSO");
-            this.Id(p => p.Id, m =>
+            this.Table("TIMELINE_JOB");
+            this.Id(p=>p.Id, m =>
             {
                 m.Column("ID");
                 m.Generator(Generators.Identity);
             });
-            this.Property(p => p.DataRegistro, m => m.Column("DATAREGISTRO"));
-            this.Property(p => p.Data, m => m.Column("DATA"));
-            this.Property(p => p.Hora, m => m.Column("HORA"));
-            this.Property(p => p.Descricao, m => m.Column("DESCRICAO"));
-            this.Property(p => p.Situacao, m => m.Column("SITUACAO"));
-            this.ManyToOne(p => p.UltimoFuncionario, m =>
+            this.Property(p=>p.DataRegistro,m=>m.Column("DATA_REGISTRO"));
+            this.Property(p=>p.Comentario,m=>m.Column("COMENTARIO"));
+            this.ManyToOne(p=>p.Funcionario, m =>
             {
-                m.Column("ID_ALTERADO");
+                m.Column("ID_FUNCIONARIO");
                 m.Lazy(LazyRelation.Proxy);
                 m.Fetch(FetchKind.Join);
                 m.Cascade(Cascade.None);

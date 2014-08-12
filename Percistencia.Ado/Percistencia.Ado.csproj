@@ -53,8 +53,10 @@
     <Compile Include="Mapping\FornecedorMap.cs" />
     <Compile Include="Mapping\FuncionarioMap.cs" />
     <Compile Include="Mapping\JobMap.cs" />
+    <Compile Include="Mapping\MuralMap.cs" />
     <Compile Include="Mapping\PecaMap.cs" />
     <Compile Include="Mapping\SituacaoJobMap.cs" />
+    <Compile Include="Mapping\TimelineJobMap.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\CargoRepositorio.cs" />
@@ -63,8 +65,10 @@
     <Compile Include="Repositorio\FornecedorRepositorio.cs" />
     <Compile Include="Repositorio\FuncionarioRepositorio.cs" />
     <Compile Include="Repositorio\JobRepositorio.cs" />
+    <Compile Include="Repositorio\MuralRepositorio.cs" />
     <Compile Include="Repositorio\PecaRepositorio.cs" />
     <Compile Include="Repositorio\SituacaoJobRepositorio.cs" />
+    <Compile Include="Repositorio\TimelineJobRepositorio.cs" />
     <Compile Include="SituacaoHelper.cs" />
   </ItemGroup>
   <ItemGroup />

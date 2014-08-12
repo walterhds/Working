@@ -1,0 +1,54 @@
+﻿@model Dominio.Entidades.Cliente
+
+@{
+    ViewBag.Title = "Alterar Cliente";
+}
+
+<div class="form-working">
+    <ol class="breadcrumb col-md-7">
+        <li><a href="~/Home/Index">Home</a></li>
+        <li><a href="~/Cliente/Index">Clientes</a></li>
+        <li class="active">Alterar</li>
+    </ol>
+
+    <div class="titulo1 col-md-7">
+        <h1>Alterar Cliente</h1>
+    </div>
+
+    <form role="form" method="post" class="form-horizontal col-md-6" style="padding-top: 10px;">
+        <div class="form-group">
+            <label for="Nome" class="col-sm-2 control-label">Nome:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" name="Nome" value="@Model.Nome" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Telefone" class="col-sm-2 control-label">Telefone:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" value="@Model.Telefone" name="Telefone" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Contato" class="col-sm-2 control-label">Contato:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" value="@Model.Contato" name="Contato" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Celular" class="col-sm-2 control-label">Celular:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" value="@Model.Celular" name="Celular" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Email" class="col-sm-2 control-label">Email:</label>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" value="@Model.Email" name="Email" required />
+            </div>
+        </div>
+        <button class="btn btn-success" type="submit">
+            <span class="glyphicon glyphicon-floppy-saved"></span>
+            Alterar
+        </button>
+    </form>
+</div>

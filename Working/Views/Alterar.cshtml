@@ -1,0 +1,870 @@
+﻿3@model MVCCerto.NewModels.ConjuntosListasEObj2
+@{
+    var resultado = 0;
+    if (Model.Usuario.Cargo.Descricao.ToLower() == "especialista" && Model.Conducao_Completa.CStatus.ToString().ToLower() == "e")
+    {
+        resultado = int.Parse(@Model.Conducao_Cabecalho.Versao.ToString());
+    }
+    else
+    {
+        resultado = int.Parse(@Model.Conducao_Cabecalho.Versao.ToString()) + 1;
+    }
+
+    var contador = 0;
+    ViewBag.Title = "Nova Versão/Confirmar Padrão";
+    var idaVolta = string.Empty;
+}
+@*<select  class="selectpicker" id="UPS" name="UPS">
+    @foreach (var i in Model.Up)
+    {
+        if (Model.Conducao_Cabecalho.Trecho.SbInicio.Up.sNome_Up == i.sNome_Up)
+        {
+        <option value="@i.Id" selected="selected">@i.sNome_Up</option>
+        }
+        else
+        {
+        <option value="@i.Id" >@i.sNome_Up</option>
+        }
+
+    }
+</select>*@
+
+<h2 class="text-center"><b>@Model.Conducao_Cabecalho.Trecho.Up.sNome_Up</b>  </h2>
+
+
+
+<form method="POST" id="formAlterarConducao">
+    <table class="table table-bordered" style="text-align: center; color: #000">
+
+        <tr>
+            <td>
+                <div class="form-group">
+                    <b class="col-lg-3 text-right">Versão :</b>
+                    <div class="col-lg-5">
+                        <input class="form-control text-center" type="text" value="@resultado" name="Versao" readonly="true" />
+
+                    </div>
+                </div>
+
+            </td>
+            <td>
+                <div class="form-group">
+                    <b class="col-lg-3 text-right">Código :</b>
+                    <div class="col-lg-5">
+
+                        <input required  readonly="true" type="text" class="form-control text-center" id="SCodigoConducao" placeholder="Matrícula" name="SCodigoConducao" value="@Model.Conducao_Cabecalho.SCodigoConducao">
+                        @Html.ValidationMessageFor(model => model.Conducao_Cabecalho.SCodigoConducao)
+                    </div>
+                </div>
+            </td>
+            @if (Model.Conducao_Completa.IdaVolta == "Ida")
+            {
+                <td>
+                    <select class="selectpicker" id="trecho" name="trecho">
+                        <option value="@Model.Conducao_Cabecalho.Trecho.Id">@Model.Conducao_Cabecalho.Trecho.Descricao</option>
+                    </select>
+                </td>
+            }
+            else
+            {
+                var teste = Model.Conducao_Cabecalho.Trecho.Descricao.Split('-');
+                var novaDescricao = teste[1] + "-" + teste[0];
+                <td>
+                    <select class="selectpicker" id="trecho" name="trecho">
+                        <option value="@Model.Conducao_Cabecalho.Trecho.Id">@novaDescricao</option>
+                    </select>
+                </td>
+            }
+
+
+        </tr>
+
+        <tr>
+            @if (@Model.Conducao_Cabecalho.Trecho.KmAberturaInicial2 == 0)
+            {
+                <td>
+                    <h4><b>Km Abertura:</b> @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal1 </h4>
+                </td>
+            }
+            else if ((@Model.Conducao_Cabecalho.Trecho.KmAberturaInicial2 != 0) && (@Model.Conducao_Cabecalho.Trecho.KmAberturaInicial3 == 0))
+            {
+                <td>
+                    <h4><b>Km Abertura:</b>
+                        @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal1  /  @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial2 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal2 </h4>
+                </td>
+            }
+            else if ((@Model.Conducao_Cabecalho.Trecho.KmAberturaInicial3 != 0) && (@Model.Conducao_Cabecalho.Trecho.KmAberturaInicial4 == 0))
+            {
+                <td>
+                    <h4><b>Km Abertura:</b> @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal1  /  @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial2 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal2   /  @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial3 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal3   </h4>
+                </td>
+            }
+            else if ((@Model.Conducao_Cabecalho.Trecho.KmAberturaInicial4 != 0))
+            {
+                <td>
+                    <h4><b>Km Abertura:</b> @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal1  /  @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial2 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal2   /  @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial3 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal3    / @Model.Conducao_Cabecalho.Trecho.KmAberturaInicial4 -  @Model.Conducao_Cabecalho.Trecho.KmAberturaFinal4  </h4>
+                </td>
+            }
+
+
+            @if (@Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial2 == 0)
+            {
+                <td>
+                    <h4><b>Km Fechamento:</b> @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal1  </h4>
+                </td> 
+            }
+            else if ((@Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial2 != 0) && (@Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial3 == 0))
+            {
+                <td>
+                    <h4><b>Km Fechamento:</b> @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal1   /    @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial2 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal2  </h4>
+                </td>
+            }
+            else if ((@Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial3 != 0) && (@Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial4 == 0))
+            {
+                <td>
+                    <h4><b>Km Fechamento:</b> @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal1   /    @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial2 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal2   /   @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial3 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal3  </h4>
+                </td>
+            }
+            else if ((@Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial4 != 0))
+            {
+                    
+                <td>
+                    <h4><b>Km Fechamento:</b> @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial1 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal1   /    @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial2 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal2   /   @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial3 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal3    /    @Model.Conducao_Cabecalho.Trecho.KmFechamentoInicial4 -  @Model.Conducao_Cabecalho.Trecho.KmFechamentoFinal4</h4>
+                </td>
+            }
+            <td>Data Vigência : 
+                        <input type="text" class="form-control datepickerRestricao text-center" name="DVigencia" required value=""><b>Data do @Model.Conducao_Completa.Usuario.Cargo.Descricao : @Model.Conducao_Cabecalho.DVigencia.ToShortDateString()</b>
+            </td>
+        </tr>
+
+        <tr></tr>
+    </table>
+    <br />
+    <div style="text-align: center" class="form-group  ">
+
+        <label class="col-sm-3 col-md-4 control-label"></label>
+        <div class="col-sm-4">
+            <label>Pesquisa de Máquinas e Combinações</label>
+            <select multiple class="selectpicker form-control" aria-readonly="true" data-live-search="true" id="cbx_Maquinas" name="maquinas">
+                @foreach (var bb in Model.Maquinas)
+                {
+                    <option value="@bb.Id ">@bb.Descricao</option>    
+                }
+            </select>
+        </div>
+
+
+
+    </div>
+    <div class="container">
+        <table class="table table-hover table-bordered text-center" id="Grid_Tipo_Lotacao">
+            <tbody>
+                <tr>
+                    <th>Tipo de Lotação</th>
+                    <th>Peso Inicial</th>
+                    <th>Peso Final</th>
+                    <th>Ações</th>
+
+
+                </tr>
+
+                @foreach (var i in Model.EnumerableConducao_Cabecalhos)
+                {
+                    contador++;
+                    string cbxlotacao = "cbx_Tipodelotacao" + contador;
+                    string pesoInicial = "iPeso_Incial" + contador;
+                    string pesoFinal = "iPeso_Final" + contador;
+                        
+                        
+                         
+                    <tr>
+                        <td>
+                            <select class="selectpicker form-control" name="@cbxlotacao" id="@cbxlotacao" >
+                                <option value="@i.Combinacao.Id">@i.Combinacao.SNomeCombinacao</option>
+                            </select>
+
+                        </td>
+                        <td>
+                            <input required class="form-control"type="text" name="@pesoInicial" value="@i.FPesoIncial"/>
+
+                        </td>
+                        <td>
+                            <input required class="form-control"type="text" name="@pesoFinal" value="@i.FPesoFinal"/>
+                        </td>
+                        <td style="text-align: center">
+
+                            <button onclick="pesquisarTipodeLotacao(this.parentNode.parentNode.rowIndex)" class='btn btn-default ' type='button' title='Pesquisar Tipo de Lotação' data-toggle='modal'><i class='glyphicon glyphicon-search'></i></button>
+                            <button onclick="add_Campos()" class='btn btn-primary ' type='button' title='Adicionar Tipo de Lotação' data-toggle='modal'><i class='glyphicon glyphicon-plus'></i></button>
+                            <button onclick='ApagarLinhaTipoLotacao(this.parentNode.parentNode.rowIndex)' id='b' class='btn btn-danger ' type='button' title='Excluir' data-toggle='modal'><i class='glyphicon glyphicon-trash'></i></button>
+                        </td>
+                    </tr>
+                    
+                }
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+
+    @*     <div class="form-group">
+
+            <span class="col-sm-2 control-label">SBs do Trecho</span>
+            <div class="col-sm-10">
+                <select multiple class="selectpicker form-control" id="cbx-sb" name="SB">
+                </select>
+            </div>
+        </div>*@
+
+    <table class="table table-hover table-bordered" style="text-align: center; color: #000" id="GridPadrao_Alterar">
+        <tr>
+            <th class="text-center w120">SB</th>
+            <th class="text-center w20">1</th>
+            <th class="text-center w20">2</th>
+            <th class="text-center w20">3</th>
+            <th class="text-center w20">4</th>
+            <th class="text-center w20">5</th>
+            <th class="text-center w20">6</th>
+            <th class="text-center w20">Km Inicio</th>
+            <th class="text-center " style="width: 340px">Condução</th>
+            <th class="text-center w20">Km Fim</th>
+            <th class="text-center " style="width: 340px">Observação</th>
+            <th class="text-center ">Ações</th>
+
+        </tr>
+
+        @{
+            var contadorAlterar = 1;
+            var sbLocal = "";
+        }
+        @foreach (var ii in Model.Conducao_Completas)
+        {
+            idaVolta = ii.IdaVolta;
+            string td = "td" + contadorAlterar;
+            string statusLocomotiva1 = "sStatus_Loc1" + contadorAlterar;
+            string statusLocomotiva2 = "sStatus_Loc2" + contadorAlterar;
+            string statusLocomotiva3 = "sStatus_Loc3" + contadorAlterar;
+            string statusLocomotiva4 = "sStatus_Loc4" + contadorAlterar;
+            string statusLocomotiva5 = "sStatus_Loc5" + contadorAlterar;
+            string statusLocomotiva6 = "sStatus_Loc6" + contadorAlterar;
+            string kmInicio = "km" + contadorAlterar;
+            string kmFim = "kmfim" + contadorAlterar;
+            string descricao = "descricao" + contadorAlterar;
+            string observacao = "obs" + contadorAlterar;
+            string botaoAdd = "botaoAdicionar" + contadorAlterar;
+            <tr>
+                <td title="@ii.Corpo.KmInicio - @ii.Corpo.KmFim" class="w80" id="@td">
+                    @ii.Corpo.Sb.Descricao
+                </td>
+                @if (@ii.Corpo.sStatus_Loc1 == "L")
+                {
+                    <td class="w80 ">
+
+                        <input  style="background-color: green; color: #000000" type="text" class=" form-control clicarTipoLotacao" name="@statusLocomotiva1" id="@statusLocomotiva1" value="L" />
+                    </td>
+                }
+                else if (@ii.Corpo.sStatus_Loc1 == "I")
+                {
+                    <td class="w80">
+                        <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva1" id="@statusLocomotiva1" value="I" />
+
+                    </td>
+                }
+                else if (@ii.Corpo.sStatus_Loc1 == "D")
+                {
+                    <td class="w80">
+                        <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva1" id="@statusLocomotiva1" value="D" />
+                    </td>
+                }    @if (@ii.Corpo.sStatus_Loc1 == "LD")
+                         {
+                        <td class="w80">
+                            <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva1" id="@statusLocomotiva1" value="LD" />
+                        </td>
+                         }
+                         else if (@ii.Corpo.sStatus_Loc1 == "ID")
+                         {
+                        <td class="w80">
+                            <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva1" id="@statusLocomotiva1" value="ID" />
+                        </td>
+                         }
+                         else if (@ii.Corpo.sStatus_Loc1 == "DD")
+                         {
+                        <td class="w80">
+                            <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva1" id="@statusLocomotiva1" value="DD" />
+                        </td>
+                         }
+                         else if (string.IsNullOrEmpty(ii.Corpo.sStatus_Loc1))
+                         {
+                        <td class="w100">
+                            <input type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva1" id="@statusLocomotiva1" value="" />
+                        </td>
+                         }
+                @if (@ii.Corpo.sStatus_Loc2 == "L")
+                {
+                    <td class="w80">
+
+                        <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva2" id="@statusLocomotiva2" value="L" />
+                    </td>
+                }
+                else if (@ii.Corpo.sStatus_Loc2 == "I")
+                {
+                    <td class="w80">
+                        <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva2" id="@statusLocomotiva2" value="I" />
+
+                    </td>
+                }
+                else if (@ii.Corpo.sStatus_Loc2 == "D")
+                {
+                    <td class="w80">
+                        <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva2" id="@statusLocomotiva2" value="D" />
+                    </td>
+                }    @if (@ii.Corpo.sStatus_Loc2 == "LD")
+                         {
+                        <td class="w80">
+                            <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva2" id="@statusLocomotiva2" value="LD" />
+                        </td>
+                         }
+                         else if (@ii.Corpo.sStatus_Loc2 == "ID")
+                         {
+                        <td class="w80">
+                            <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva2" id="@statusLocomotiva2" value="ID" />
+                        </td>
+                         }
+                         else if (@ii.Corpo.sStatus_Loc2 == "DD")
+                         {
+                        <td class="w80">
+                            <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva2" id="@statusLocomotiva2" value="DD" />
+                        </td>
+                         }
+                         else if (string.IsNullOrEmpty(ii.Corpo.sStatus_Loc2))
+                         {
+                        <td class="w100">
+                            <input type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva2" id="@statusLocomotiva2" value="" />
+                        </td>
+                         }
+                @if (@ii.Corpo.sStatus_Loc3 == "L")
+                {
+                    <td class="w80">
+
+                        <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva3" id="@statusLocomotiva3" value="L" />
+                    </td>
+                }
+                else if (@ii.Corpo.sStatus_Loc3 == "I")
+                {
+                    <td class="w80">
+                        <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva3" id="@statusLocomotiva3" value="I" />
+
+                    </td>
+                }
+                else if (@ii.Corpo.sStatus_Loc3 == "D")
+                {
+                    <td class="w80">
+                        <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva3"  id="@statusLocomotiva3" value="D" />
+                    </td>
+                }    @if (@ii.Corpo.sStatus_Loc3 == "LD")
+                         {
+                        <td class="w80">
+                            <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva3" id="@statusLocomotiva3" value="LD" />
+                        </td>
+                         }
+                         else if (@ii.Corpo.sStatus_Loc3 == "ID")
+                         {
+                        <td class="w80">
+                            <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva3" id="@statusLocomotiva3" value="ID" />
+                        </td>
+                         }
+                         else if (@ii.Corpo.sStatus_Loc3 == "DD")
+                         {
+                        <td class="w80">
+                            <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva3" id="@statusLocomotiva3" value="DD" />
+                        </td>
+                         }
+                         else if (string.IsNullOrEmpty(ii.Corpo.sStatus_Loc3))
+                         {
+                        <td class="w100">
+                            <input type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva3"id="@statusLocomotiva3" value="" />
+                        </td>
+                         } @if (@ii.Corpo.sStatus_Loc4 == "L")
+                           {
+                             <td class="w80">
+
+                                 <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva4"id="@statusLocomotiva4" value="L" />
+                             </td>
+                           }
+                           else if (@ii.Corpo.sStatus_Loc4 == "I")
+                           {
+                             <td class="w80">
+                                 <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva4"id="@statusLocomotiva4" value="I" />
+
+                             </td>
+                           }
+                           else if (@ii.Corpo.sStatus_Loc4 == "D")
+                           {
+                             <td class="w80">
+                                 <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva4"id="@statusLocomotiva4" value="D" />
+                             </td>
+                           }    @if (@ii.Corpo.sStatus_Loc4 == "LD")
+                                {
+                               <td class="w80">
+                                   <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva4"id="@statusLocomotiva4" value="LD" />
+                               </td>
+                                }
+                                else if (@ii.Corpo.sStatus_Loc4 == "ID")
+                                {
+                               <td class="w80">
+                                   <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva4"id="@statusLocomotiva4" value="ID" />
+                               </td>
+                                }
+                                else if (@ii.Corpo.sStatus_Loc4 == "DD")
+                                {
+                               <td class="w80">
+                                   <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva4"id="@statusLocomotiva4" value="DD" />
+                               </td>
+                                }
+                                else if (string.IsNullOrEmpty(ii.Corpo.sStatus_Loc4))
+                                {
+                               <td class="w100">
+                                   <input type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva4"id="@statusLocomotiva4" value="" />
+                               </td>
+                                } @if (@ii.Corpo.sStatus_Loc5 == "L")
+                                  {
+                                    <td class="w80">
+
+                                        <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva5"id="@statusLocomotiva5" value="L" />
+                                    </td>
+                                  }
+                                  else if (@ii.Corpo.sStatus_Loc5 == "I")
+                                  {
+                                    <td class="w80">
+                                        <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva5"id="@statusLocomotiva5" value="I" />
+
+                                    </td>
+                                  }
+                                  else if (@ii.Corpo.sStatus_Loc5 == "D")
+                                  {
+                                    <td class="w80">
+                                        <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva5"id="@statusLocomotiva5" value="D" />
+                                    </td>
+                                  }    @if (@ii.Corpo.sStatus_Loc5 == "LD")
+                                       {
+                                      <td class="w80">
+                                          <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva5"id="@statusLocomotiva5" value="LD" />
+                                      </td>
+                                       }
+                                       else if (@ii.Corpo.sStatus_Loc5 == "ID")
+                                       {
+                                      <td class="w80">
+                                          <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva5" id="@statusLocomotiva5"value="ID" />
+                                      </td>
+                                       }
+                                       else if (@ii.Corpo.sStatus_Loc5 == "DD")
+                                       {
+                                      <td class="w80">
+                                          <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva5"id="@statusLocomotiva5" value="DD" />
+                                      </td>
+                                       }
+                                       else if (string.IsNullOrEmpty(ii.Corpo.sStatus_Loc5))
+                                       {
+                                      <td class="w100">
+                                          <input type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva5"id="@statusLocomotiva5" value="" />
+                                      </td>
+                                       } @if (@ii.Corpo.sStatus_Loc6 == "L")
+                                         {
+                                           <td class="w80">
+
+                                               <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva6" id="@statusLocomotiva6"value="L" />
+                                           </td>
+                                         }
+                                         else if (@ii.Corpo.sStatus_Loc6 == "I")
+                                         {
+                                           <td class="w80">
+                                               <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva6"id="@statusLocomotiva6" value="I" />
+
+                                           </td>
+                                         }
+                                         else if (@ii.Corpo.sStatus_Loc6 == "D")
+                                         {
+                                           <td class="w80">
+                                               <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva6"id="@statusLocomotiva6" value="D" />
+                                           </td>
+                                         }    @if (@ii.Corpo.sStatus_Loc6 == "LD")
+                                              {
+                                             <td class="w80">
+                                                 <input style="background-color: green; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva6" id="@statusLocomotiva6" value="LD" />
+                                             </td>
+                                              }
+                                              else if (@ii.Corpo.sStatus_Loc6 == "ID")
+                                              {
+                                             <td class="w80">
+                                                 <input style="background-color: yellow; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva6" id="@statusLocomotiva6" value="ID" />
+                                             </td>
+                                              }
+                                              else if (@ii.Corpo.sStatus_Loc6 == "DD")
+                                              {
+                                             <td class="w80">
+                                                 <input style="background-color: red; color: #000000" type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva6" id="@statusLocomotiva6"value="DD" />
+                                             </td>
+                                              }
+                                              else if (string.IsNullOrEmpty(ii.Corpo.sStatus_Loc6))
+                                              {
+                                             <td class="w100">
+                                                 <input type="text" class="form-control clicarTipoLotacao" name="@statusLocomotiva6"id="@statusLocomotiva6" value="" />
+                                             </td>
+                                              }
+                <td class="w120">
+                    <input required class="form-control Numerico" type="text" value=" @ii.Corpo.KmInicio.ToString("000.000")" name="@kmInicio" id="@kmInicio" onchange="DesabilitarBotaoSlavar()"/>
+
+                </td>
+                <td class="w300">
+                    <textarea name="@descricao" id="@descricao" class="form-control w300 ">@ii.Corpo.Descricao_Conducao</textarea>
+                </td>
+
+                <td class="w120">
+                    <input required class="form-control Numerico" type="text" value=" @ii.Corpo.KmFim.ToString("000.000")" name="@kmFim" id="@kmFim" onchange="DesabilitarBotaoSlavar()" />
+
+                </td>
+                @if (!string.IsNullOrWhiteSpace(ii.Corpo.sObservacoes) && (ii.Corpo.sObservacoes.ToLower().Contains("atenção") || ii.Corpo.sObservacoes.ToLower().Contains("atencao") || ii.Corpo.sObservacoes.ToLower().Contains("pé de rampa")))
+                {
+                    <td class="w300" style="background: #ea8888">
+                        <textarea  onblur='listarsb_Alterar(this.parentNode.parentNode.rowIndex)'id="@observacao" name="@observacao" class="w300 form-control">@ii.Corpo.sObservacoes</textarea></td>
+                }
+                else
+                {
+                    <td class="w300 ">
+                        <textarea onblur='listarsb_Alterar(this.parentNode.parentNode.rowIndex)' id="@observacao" name="@observacao" class="w300 form-control"></textarea></td>
+                }
+
+                @if (ii.Corpo.Sb.Descricao.Length >= 3 && ii.Corpo.Sb.Descricao == sbLocal)
+                {
+                    <td>
+
+                        <button class='btn btn-default ' id="@botaoAdd" name="@contadorAlterar"type="button" onclick=' Adicionarlinhas(this.parentNode.parentNode.rowIndex) '><i class='glyphicon glyphicon-plus'></i></button>
+                        <button class='btn btn-default ' type='button' onclick='Removerlinhas(this.parentNode.parentNode.rowIndex)'><i class='glyphicon glyphicon-minus'></i></button>
+                    </td>
+                }
+                else if (ii.Corpo.Sb.Descricao.Length >= 3)
+                {
+                    <td>
+                        <button class='btn btn-default 'id="@botaoAdd" name="@contadorAlterar" type='button' onclick=' Adicionarlinhas(this.parentNode.parentNode.rowIndex) '><i class='glyphicon glyphicon-plus'></i></button>
+
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+
+            </tr>
+               
+                sbLocal = ii.Corpo.Sb.Descricao;
+                contadorAlterar++;
+
+
+
+        }
+
+    </table>
+    <input hidden id="IdaVolta" type="text" value="@idaVolta"/>
+    <br />
+    <div class="form-group">
+        <label for="inputPassword1" class="col-lg-1 control-label">Rodapé</label>
+        <div class="col-lg-11">
+            <textarea class="form-control" rows="6" placeholder="Escrever algumas Observações" name="SRodape">@Model.Conducao_Completa.SRodape</textarea>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <div class="text-center">
+        <div class="btn-group">
+            @if (Model.Conducao_Completa.CStatus == 'E')
+            {
+                <button id="VerificarPadrao" class='btn btn-warning ' type="button" title='Confirmar '><i class='glyphicon glyphicon-ok'></i>Verificar padrão</button>
+                <button id="confirmarPadrao" disabled="disabled" type="submit" class='btn btn-success ' title='Confirmar '><i class='glyphicon glyphicon-ok'></i>Salvar</button>
+                <button id="CancelarPadrao" class='btn btn-danger ' type="button" title='Confirmar '><i class='glyphicon glyphicon-remove'></i>Cancelar Padrão </button>
+                <button class="btn btn-default" type="reset" title="Lista" onclick=" window.history.go(-1) "><b>Voltar   </b><i class="glyphicon glyphicon-arrow-left"></i></button>
+
+            }
+            else
+            {
+                <button id="VerificarPadrao" class='btn btn-warning ' type="button" title='Confirmar '><i class='glyphicon glyphicon-ok'></i>Verificar padrão</button>
+                <button id="confirmarPadrao" disabled="disabled" class='btn btn-success ' type="submit" title='Confirmar '><i class='glyphicon glyphicon-ok'></i>Salvar</button>
+                <button class="btn btn-default" type="reset" title="Lista" onclick="window.history.go(-1)"><b>Voltar   </b><i class="glyphicon glyphicon-arrow-left"></i></button>
+
+            }
+
+        </div>
+    </div>
+</form>
+
+
+
+
+@section Scripts{
+    <script> var global;
+        $(document).ready(function () {
+
+            $.validator.addMethod(
+                 "australianDate",
+                 function (value, element) {
+                     // put your own logic here, this is just a (crappy) example
+                     return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+                 },
+                 "Insira a data no formato dd/mm/yyyy."
+             );
+
+
+            $('#formAlterarConducao').validate({
+                // define regras para os campos
+                rules: {
+                    DVigencia: {
+                        australianDate: true
+                    }
+                }
+            });
+            $("#CancelarPadrao").click(function () {
+                CancelarPadrao(@Model.Conducao_Completa.Cabecalho.Id);
+            });
+
+
+            $("#VerificarPadrao").click(function (e) {
+                var teste1 = new Array();
+                var teste2 = new Array();
+                var contadorteste1 = 0;
+                var contadorteste2 = 0;
+                var contador = 1;
+                var linhasGrid = document.getElementById('GridPadrao_Alterar').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+                var strinkminicio = "";
+                var stringkmfim = "";
+
+                for (var i = 1; i < linhasGrid; i++) {
+                    strinkminicio += $("#km" + i).val() + ".";
+                    stringkmfim += $("#kmfim" + i).val() + ".";
+                    //if ($("#km" + i).val() == "") {
+                    //    alert("Preecha o Campo  Km de Inicio");
+                    //    $("#km" + i).focus();
+                    //    return null;
+                    //} else if ($("#kmfim" + i).val() == "") {
+                    //    $("#kmfim" + i).focus();
+                    //    alert("Preecha o Campo  Km de Fim");
+                    //    return null;
+                    //}
+                }
+
+
+                $('#GridPadrao_Alterar tbody tr td').each(
+                    function () {
+                        var teste = $(this).find('input, textarea').val();
+
+                        if (teste != null && teste != "") {
+
+                            var oi = isNumeric(teste);
+                            if (oi == true) {
+                                if (contador == 1) {
+                                    teste1[contadorteste1] = teste;
+                                    contadorteste1++;
+                                    contador++;
+                                } else {
+                                    teste2[contadorteste2] = teste;
+                                    contadorteste2++;
+                                    contador = 1;
+                                }
+
+
+                            }
+
+                        }
+
+
+                    }
+                );
+                var foco = 0;
+                var valoresultado;
+                var linharesultado = 0;
+                var resultado = false;
+                var count = teste1.length;
+                for (var l = 1; l < count; l++) {
+                    if (teste1[l] != teste2[l - 1]) {
+
+                        linharesultado = l;
+                        valoresultado = teste2[l - 1];
+                        resultado = false;
+
+                        break;
+                    } else {
+                        resultado = true;
+                    }
+                }
+                if (resultado == true) {
+                    chamarFuncaoValidarPadrao();
+                } else {
+                    alert("Verifique Quilômetros Faltando !!!");
+                    $('#GridPadrao_Alterar tbody tr td').each(
+                        function () {
+                            var teste = $(this).find('input, textarea').val();
+
+                            if (teste != null && teste != "") {
+
+                                var oi = isNumeric(teste);
+                                if (oi == true) {
+                                    if (teste == valoresultado) {
+                                        $(this).find('input, textarea').focus();
+                                    }
+
+
+                                }
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+
+            });
+        });
+
+             function isNumeric(valor) {
+
+                 var validChar = '0123456789.,';
+                 for (var i = 0; i < valor.length; i++)
+                     if (validChar.indexOf(valor.substr(i, 1)) < 0)
+                         return false;
+                 return true;
+             }
+
+             function DesabilitarBotaoSlavar() {
+                 $("#confirmarPadrao").attr("disabled", "disabled");
+             }
+
+
+             function chamarFuncaoValidarPadrao() {
+
+
+                 var teste1 = new Array();
+                 var teste2 = new Array();
+                 var contadorteste1 = 0;
+                 var contadorteste2 = 0;
+                 var contador = 1;
+                 $('#GridPadrao_Alterar tbody tr td').each(
+                     function () {
+                         var teste = $(this).find('input, textarea').val();
+
+                         if (teste != null && teste != "") {
+
+                             var oi = isNumeric(teste);
+                             if (oi == true) {
+                                 if (contador == 1) {
+                                     teste1[contadorteste1] = teste;
+                                     contadorteste1++;
+                                     contador++;
+                                 } else {
+                                     teste2[contadorteste2] = teste;
+                                     contadorteste2++;
+                                     contador = 1;
+                                 }
+
+
+                             }
+
+                         }
+
+
+                     });
+
+
+                 var stringteste1 = "";
+                 var stringteste2 = "";
+                 var count = teste1.length;
+                 for (var l = 0; l < count; l++) {
+                     stringteste1 += teste1[l] + ".";
+
+                 }
+                 for (var j = 0; j < count; j++) {
+                     stringteste2 += teste2[j] + ".";
+
+                 }
+
+                 $.getJSON("/GetJson/ValidarPadrao/", { id: stringteste1, id2: stringteste2, id3: 2 }, function (r) {
+
+
+                     if (r == "certo") {
+                         alert("Kms Compativeís!");
+                         $("#confirmarPadrao").removeAttr("disabled", "disabled");
+
+                     } else {
+                         alert("Quilômetros incompatíveis Verifique!!!");
+                         $("#confirmarPadrao").attr("disabled", "disabled");
+                         $("#km" + r).focus();
+                         $("#kmfim" + r).focus();
+
+                     }
+
+                 });
+             }
+
+             function CancelarPadrao(id) {
+                 if (confirm("Deseja Realmente Cancelar este Padrão?")) {
+                     $.ajax({
+                         type: "GET",
+                         url: '@Url.Action("Cancelar", "Conducao")',
+            data: { id: id },
+            success: function () {
+                alert("Sucesso");
+                window.location.href = '/Conducao/Listar/';
+            }
+        });
+    } else {
+
+    }
+
+
+}
+
+function pesquisarTipodeLotacao(id) {
+
+    var linha = id;
+
+    var selObjSb = document.getElementById('cbx_Maquinas'), count = 0;
+    var resultado = new Array();
+
+
+    for (var i = 0; i < selObjSb.length; i++) {
+        if (selObjSb[i].selected) {
+
+
+            resultado[count] = selObjSb[i].text;
+            count++;
+        }
+
+
+    }
+    $.getJSON('@Url.Action("ListarTipodeLotação", "GetJson")/' + resultado, function (json) {
+        $("#cbx_Tipodelotacao" + linha).empty();
+
+        if (json.length != 0) {
+
+            $.each(json, function (i, data) {
+
+                $("#cbx_Tipodelotacao" + linha).append("<option value='" + data.Id + "'>" + data.SNomeCombinacao + "</option>");
+
+                $(".selectpicker").selectpicker('refresh');
+            });
+        } else {
+
+
+            $(".selectpicker").selectpicker('refresh');
+        }
+
+    });
+
+} </script>
+}

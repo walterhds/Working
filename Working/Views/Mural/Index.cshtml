@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "Room";
+}
+
+<div class="col-md-11 pull-right">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="text-center">Room
+            </h2>
+        </div>
+        <div class="panel-body">
+            <div>
+                <form role="form" method="POST" class="form-horizontal" id="FormMural">
+                    <textarea class="form-control" id="txtMural" style="resize: none;" required autofocus></textarea>
+                    <div class="caracteres">
+                        <span class="pull-right" id="CaracterMural">5000 caracteres</span>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success btn-sm" id="PublicarMural">Publicar</button>
+                        <button type="button" class="btn btn-default btn-sm" id="LimparTxtMural">Limpar</button>
+                    </div>
+                </form>
+                <div id="ComentariosMural" style="padding-top: 10px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            ListarMural();
+        });
+
+        $('#txtMural').on('keyup keydown', function () {
+            var quant = 5000;
+            var total = $(this).val().length;
+
+            if (total == 0) {
+                $('#CaracterMural').text('5000 caracteres');
+            } else if (total < quant) {
+                $('#CaracterMural').text(quant - total + " caracteres restantes");
+            } else {
+                document.getElementById(this).value = document.getElementById(this).value.substr(0, quant);
+            }
+        });
+
+        $('#LimparTxtMural').click(function () {
+            $('#txtMural').val('');
+            $('#CaracterMural').text('5000 caracteres');
+        });
+
+        function CadastrarMural(comentario) {
+            $.ajax({
+                url: '/Mural/Cadastrar/',
+                data: {
+                    comentario: comentario
+                },
+                type: 'POST',
+                success: function () {
+                    $('#LimparTxtMural').click();
+                    AtualizarMural();
+                },
+                error: function (xhr, status, response) { alert(response); }
+            });
+        }
+
+        $('#PublicarMural').click(function () {
+            var comentario = $('#txtMural').val();
+            if (comentario.length == 0) {
+                $('#txtMural').focus();
+            } else {
+                CadastrarMural(comentario);
+            }
+        });
+
+        function AtualizarMural() {
+            $('#ComentariosMural').empty();
+            ListarMural();
+        }
+
+        function ListarMural() {
+            $.get('/Mural/ListarMural/', function(data) {
+                $.each(data, function(i, res) {
+                    if (res.Descricao != 'null') {
+                        var divPanel = $('<div />');
+                        divPanel.addClass('panel panel-info');
+
+                        var h3Title = $('<h3></h3>');
+                        h3Title.addClass('panel-title col-sm-10');
+                        h3Title.text(res.nome);
+
+                        var date = $('<span/>');
+                        date.addClass('glyphicon glyphicon-calendar');
+
+                        var divPanelHeading = $('<div />');
+                        divPanelHeading.addClass('panel-heading');
+                        divPanelHeading.append(h3Title);
+                        divPanelHeading.append(date);
+                        divPanelHeading.append(res.Data);
+                        
+                        var alterar = $('<a/>');
+                        alterar.addClass('glyphicon glyphicon-pencil pull-right');
+                        alterar.css('cursor', 'pointer');
+                        if (res.idFuncionario == res.IdLogado) {
+                            var horaSplit = res.Hora.split(':');
+                            var horas = new Date();
+                            horas.setHours(horaSplit[0]);
+                            horas.setMinutes(horaSplit[1]);
+                            var dtSplit = res.Data.split('/');
+                            var dt = new Date(dtSplit[2], dtSplit[1] - 1, dtSplit[0]);
+                            var hoje = new Date();
+                            if (dt.getFullYear() == hoje.getFullYear()) {
+                                if (dt.getMonth() == hoje.getMonth()) {
+                                    if (dt.getDate() == hoje.getDate()) {
+                                        if (horas.getHours() == hoje.getHours()) {
+                                            if (horas.getMinutes() <= hoje.getMinutes()) {
+                                                var minutos = hoje.getMinutes() - horas.getMinutes();
+                                                if (minutos < 15) {
+                                                    divPanelHeading.append(alterar);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        var divPanelBody = $('<div />');
+                        divPanelBody.addClass('panel-body');
+                        divPanelBody.text(res.Descricao);
+
+                        divPanel.append(divPanelHeading);
+                        divPanel.append(divPanelBody);
+                        $('#ComentariosMural').append(divPanel);
+                    }
+                });
+            });
+        }
+    </script>
+}

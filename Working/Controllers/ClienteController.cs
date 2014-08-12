@@ -26,6 +26,23 @@ namespace Working.Controllers
             return View(lista);
         }
 
+        public ActionResult Alterar(int id)
+        {
+            var cliente = _clienteService.ObterPorId(id);
+            return View(cliente);
+        }
+
+        [HttpPost]
+        public ActionResult Alterar(FormCollection form, int id)
+        {
+            var cliente = _clienteService.ObterPorId(id);
+            cliente.DataRegistro = DateTime.Now;
+            TryUpdateModel(cliente);
+            _clienteService.Cadastrar(cliente);
+
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Cadastrar()
         {
             return View();

@@ -189,8 +189,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MuralController.cs" />
     <Compile Include="Controllers\PecaController.cs" />
     <Compile Include="Controllers\SituacaoJobController.cs" />
+    <Compile Include="Controllers\TimelineJobController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -201,6 +203,7 @@
     <Compile Include="ViewsModels\DadosFuncionario.cs" />
     <Compile Include="ViewsModels\DadosIndex.cs" />
     <Compile Include="ViewsModels\Lista.cs" />
+    <Compile Include="ViewsModels\ObjetoJob.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bootstrap\css\bootstrap.css" />
@@ -870,6 +873,9 @@
     <Content Include="Views\Compromisso\Antigos.cshtml" />
     <Content Include="Views\Alterar.cshtml" />
     <Content Include="Views\Novo.cshtml" />
+    <Content Include="Views\Job\Index.cshtml" />
+    <Content Include="Views\Cliente\Alterar.cshtml" />
+    <Content Include="Views\Mural\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

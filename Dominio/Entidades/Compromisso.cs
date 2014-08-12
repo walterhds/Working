@@ -13,5 +13,6 @@ namespace Dominio.Entidades
         public virtual string Descricao { get; set; }
         public virtual int Situacao { get; set; }
         public virtual Funcionario UltimoFuncionario { get; set; }
+        public virtual Job Job { get; set; }
     }
 }

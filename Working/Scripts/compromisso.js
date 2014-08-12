@@ -42,17 +42,20 @@ function PreencherTabelaCompromisso() {
     });
 }
 
-function Cadastrar(date, hour, description) {
+function Cadastrar(date, hour, description, job) {
     $.ajax({
         url: '/Compromisso/CadastrarAjax/',
         data: {
             data: date,
             hora: hour,
-            descricao: description
+            descricao: description,
+            idJob: job
         },
         type: 'post',
         success: function () {
-            location.reload();
+            DeletarTabelaCompromisso();
+            PreencherTabelaCompromisso();
+            document.getElementById("Cancelar").click();
         },
         error: function (xhr, status, response) { alert('Erro no processamento: ' + response); }
     });
@@ -71,6 +74,9 @@ function CadastrarAjax(date, hour, description) {
             DeletarTabelaCompromisso();
             PreencherTabelaCompromisso();
             document.getElementById("Cancelar").click();
+            if (location.href.indexOf("/Compromisso/Index") || location.href.indexOf("/Compromisso/Index#")) {
+                location.reload();
+            }
         },
         error: function (xhr, status, response) { alert('Erro no processamento: ' + response); }
     });
@@ -87,14 +93,14 @@ $("#Salvar").click(function () {
     var hora = $("#Hora").val();
     var descricao = $("#Descricao").val();
 
-    Cadastrar(data, hora, descricao);
+    Cadastrar(data, hora, descricao,null);
 });
 
 $("#SalvarAjax").click(function () {
     var data = $("#Data").val();
     var hora = $("#Hora").val();
     var descricao = $("#Descricao").val();
-
+    
     CadastrarAjax(data, hora, descricao);
 });
 
@@ -108,7 +114,7 @@ function PopularModal(id) {
         success: function (lista) {
             $("#DataAlterar").val(lista.data);
             $("#HoraAlterar").val(lista.hora);
-            $("#DescricaoAlterar").val(lista.conteudo);
+            $("#DescricaoAlterarCompromisso").val(lista.conteudo);
             $("#id").val(id);
         },
         error: function () { alert("BUGO"); }
@@ -122,7 +128,8 @@ function Alterar(id, date, hour, description) {
             id: id,
             data: date,
             hora: hour,
-            descricao: description
+            descricao: description,
+            idJob: null
         },
         type: 'post',
         success: function () {
@@ -133,14 +140,15 @@ function Alterar(id, date, hour, description) {
     document.getElementById("CancelarAlterar").click();
 }
 
-function AlterarAjax(id, date, hour, description) {
+function AlterarAjax(id, date, hour, description, idJob) {
     $.ajax({
         url: '/Compromisso/AlterarAjax/',
         data: {
             id: id,
             data: date,
             hora: hour,
-            descricao: description
+            descricao: description,
+            idJob: idJob
         },
         type: 'post',
         success: function () {

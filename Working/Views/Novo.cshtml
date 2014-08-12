@@ -1,0 +1,1561 @@
+﻿@using Dominios.Entidades
+@model MVCCerto.NewModels.ConjuntosListadeDados1
+
+@{
+    ViewBag.Title = "Cadastrar Condução";
+    int linhaGrid = 0;
+    var Usuario = (Pessoal)System.Web.HttpContext.Current.Session["usuario"];
+}
+
+
+
+
+<div class="container">
+    <form class="form-horizontal" role="form" method="POST" id="formNovaConducao">
+
+
+        <span class="col-sm-1 control-label">Data de Vigência</span>
+        <div class="col-sm-2">
+            <input required title="Campo Obrigatório" type="text" class="form-control datepickerRestricao" name="DVigencia" value="">
+        </div>
+        <span class="col-sm-1 control-label">Versão</span>
+        <div class="col-sm-1">
+            <input type="text" class="form-control" name="Versao" value="1" readonly="true">
+        </div>
+
+
+
+
+
+
+        <div class="form-group">
+
+            <span class="col-sm-1 control-label">UP</span>
+            <div class="col-sm-2">
+                <select class="selectpicker form-control" data-live-search="true" name="UPS" id="UPS">
+                    @foreach (var bb in Model.Ups)
+                    {
+                        if (Usuario.Up.sNome_Up == @bb.sNome_Up)
+                        {
+                        <option selected="selected" value="@bb.Id ">@bb.sNome_Up</option>    
+                        }
+
+                    }
+                </select>
+            </div>
+            <span class="col-sm-1 control-label">Trecho</span>
+            <div class="col-sm-2">
+                <select id="Trecho" class="selectpicker" name="Trecho">
+                    <option selected="selected"></option>
+                </select>
+            </div>
+
+
+
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <table class="table table-bordered" style="text-align: center; color: #000">
+
+            <tr>
+                <th>Km Abrtura/Fechamento 1</th>
+                <th>Km Abrtura/Fechamento 2</th>
+                <th>Km Abrtura/Fechamento 3</th>
+                <th>Km Abrtura/Fechamento 4</th>
+
+            </tr>
+            <tr>
+                <td>
+                    <span id="kmabertura1"></span>
+                </td>
+                <td>
+                    <span id="kmabertura2"></span>
+                </td>
+                <td>
+                    <span id="kmabertura3"></span>
+                </td>
+                <td>
+                    <span id="kmabertura4"></span>
+                </td>
+            </tr>
+        </table>
+
+        <br />
+        <br />
+
+        <div style="text-align: center" class="form-group  ">
+
+            <label class="col-sm-3 col-md-4 control-label"></label>
+            <div class="col-sm-4">
+                <label>Pesquisa de Máquinas e Combinações</label>
+                <select multiple class="selectpicker form-control" aria-readonly="true" data-live-search="true" id="cbx_Maquinas" name="maquinas">
+                    @foreach (var bb in Model.Maquinas)
+                    {
+                       
+                        <option value="@bb.Id ">@bb.Descricao</option>    
+                        
+
+                    }
+                </select>
+            </div>
+
+
+
+        </div>
+        <table class="table table-hover table-bordered" id="Grid_Tipo_Lotacao">
+            <tbody>
+                <tr>
+                    <th>Tipo de Lotação</th>
+                    <th>Peso Inicial</th>
+                    <th>Peso Final</th>
+                    <th class="text-center w150">Ações</th>
+
+
+                </tr>
+                <tr>
+                    <td>
+                        <select class=' form-control' data-live-search='true' id='cbx_Tipodelotacao1' name='cbx_Tipodelotacao1'></select></td>
+                    <td>
+                        <input type='text' class='form-control Numerico' required name='iPeso_Incial1' id='iPeso_Incial1' placeholder='Inicial'></td>
+                    <td>
+                        <input type='text' class='form-control Numerico' required name='iPeso_Final1' id='iPeso_Final1' placeholder='Final'></td>
+                    <td>
+                        <button onclick=" pesquisarTipodeLotacao(this.parentNode.parentNode.rowIndex) " class='btn btn-default ' type='button' title='Pesquisar Tipo de Lotação' data-toggle='modal'><i class='glyphicon glyphicon-search'></i></button>
+                        <button onclick=" add_Campos() " class='btn btn-primary ' type='button' title='Adicionar Tipo de Lotação' data-toggle='modal'><i class='glyphicon glyphicon-plus'></i></button>
+                    </td>
+                </tr>
+
+            </tbody>
+
+
+        </table>
+
+
+        <br />
+        <br />
+        <div class="form-group">
+
+            <span class="col-sm-2 control-label">SBs do Trecho</span>
+            <div class="col-sm-7">
+                <select multiple class="selectpicker form-control" id="cbx_SB" name="SB">
+                </select>
+            </div>
+            <span class="col-sm-1 control-label">Opções do trecho</span>
+            <div class="col-sm-2">
+                <select class=" form-control selectpicker" id="cbx_Opcoestrecho" name="cbx_Opcoestrecho">
+                    <option value="SELECIONE"></option>
+                    <option value="Ida">Ida</option>
+                    <option value="Volta">Volta</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <table class="table table-hover table-bordered" id="GridPadrao">
+                <tbody>
+                    <tr>
+                        <th class="w150">SB</th>
+                        <th class="w80">1</th>
+                        <th class="w80">2</th>
+                        <th class="w80">3</th>
+                        <th class="w80">4</th>
+                        <th class="w80">5</th>
+                        <th class="w80">6</th>
+                        <th class="w140">Km Inicio</th>
+                        <th class="w300">Condução</th>
+                        <th class="w140">Km Fim</th>
+                        <th class="w300">Observações</th>
+                        <th>Ações</th>
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+            <button class="btn btn-primary pull-right" type="button" id="criarlinha">Gerar Primeira Linha  <i class="glyphicon glyphicon-arrow-down"></i></button>
+
+
+
+
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="form-group">
+            <label for="inputPassword1" class="col-lg-1 control-label">Rodapé</label>
+            <div class="col-lg-11">
+                <textarea class="form-control" rows="6" placeholder="Escrever algumas Observações" name="sRodape"></textarea>
+            </div>
+        </div>
+        <button class="btn btn-primary pull-right" type="button" onclick=" location.href = '/Conducao/Listar' "><b>Voltar a Lista de Padrão</b> <i class="glyphicon glyphicon-list-alt"></i></button>
+
+        <br />
+
+        <div class="text-center">
+            <div class="btn-group">
+                <button id="VerificarPadrao" class='btn btn-warning ' type="button"><i class='glyphicon glyphicon-ok'></i>Verificar padrão</button>
+                <button disabled="disabled" id="confirmarPadrao" class="btn btn-success" type="submit">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Salvar
+                </button>
+                <button class="btn btn-danger del" type="reset" onclick=" Reload(); ">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Cancelar
+                </button>
+                <button class="btn btn-default" type="reset" onclick=" window.history.go(-1) ">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    Voltar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function() {
+            $("#VerificarPadrao").click(function(e) {
+                var teste1 = new Array();
+                var teste2 = new Array();
+                var contadorteste1 = 0;
+                var contadorteste2 = 0;
+                var contador = 1;
+                var sbs = document.getElementById('cbx_SB');
+                var linhasGrid = document.getElementById('GridPadrao').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+                var strinkminicio = "";
+                var stringkmfim = "";
+                var km1;
+                var km2;
+
+                for (var i = 1; i < linhasGrid; i++) {
+                    strinkminicio += $("#km" + i).val() + ".";
+                    stringkmfim += $("#kmfim" + i).val() + ".";
+                    //if ($("#km" + i).val() == "") {
+                    //    alert("Preecha o Campo  Km de Inicio");
+                    //    $("#km" + i).focus();
+                    //    return null;
+                    //} else if ($("#kmfim" + i).val() == "") {
+                    //    $("#kmfim" + i).focus();
+                    //    alert("Preecha o Campo  Km de Fim");
+                    //    return null;
+                    //}
+                }
+
+
+                $('#GridPadrao tbody tr td').each(
+                    function() {
+                        var teste = $(this).find('input, textarea').val();
+
+                        if (teste != null && teste != "") {
+
+                            var oi = isNumeric(teste);
+                            if (oi == true) {
+                                if (contador == 1) {
+                                    teste1[contadorteste1] = teste;
+                                    km1 = teste;
+                                    contadorteste1++;
+                                    contador++;
+                                } else {
+                                    teste2[contadorteste2] = teste;
+                                    km2 = teste;
+                                    contadorteste2++;
+                                    contador = 1;
+                                }
+
+
+                            }
+
+                        }
+
+
+                    }
+                );
+                var foco = 0;
+                var valoresultado;
+                var linharesultado = 0;
+                var resultado = false;
+                var count = teste1.length;
+                for (var l = 1; l < count; l++) {
+                    if (teste1[l] != teste2[l - 1]) {
+
+                        linharesultado = l;
+                        valoresultado = teste2[l - 1];
+                        resultado = false;
+
+                        break;
+                    } else {
+                        resultado = true;
+                    }
+                }
+                if (resultado == true) {
+
+                    var linhakm = document.getElementById('GridPadrao').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+                    $.getJSON("/GetJson/VerificarUltimaSb/", { id: km1, id2: km2, id3: sbs[sbs.length - 1].value,id4:$("#cbx_Opcoestrecho").val() }, function(r) {
+                        if (r == true) {
+
+                            chamarFuncaoValidarPadrao();
+                        } else {
+                            alert("Trecho Incompleto Ultimo Patio é : " + sbs[sbs.length - 1].text);
+                        }
+                    }
+                    );
+
+
+                } else {
+                    alert("Verifique Quilômetros Faltando !!!");
+                    $('#GridPadrao tbody tr td').each(
+                        function() {
+                            var teste = $(this).find('input, textarea').val();
+
+                            if (teste != null && teste != "") {
+
+                                var oi = isNumeric(teste);
+                                if (oi == true) {
+                                    if (teste == valoresultado) {
+                                        $(this).find('input, textarea').focus();
+                                    }
+
+
+                                }
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+
+            });
+
+            function chamarFuncaoValidarPadrao() {
+
+
+                var teste1 = new Array();
+                var teste2 = new Array();
+                var contadorteste1 = 0;
+                var contadorteste2 = 0;
+                var contador = 1;
+                $('#GridPadrao tbody tr td').each(
+                    function() {
+                        var teste = $(this).find('input, textarea').val();
+
+                        if (teste != null && teste != "") {
+
+                            var oi = isNumeric(teste);
+                            if (oi == true) {
+                                if (contador == 1) {
+                                    teste1[contadorteste1] = teste;
+                                    contadorteste1++;
+                                    contador++;
+                                } else {
+                                    teste2[contadorteste2] = teste;
+                                    contadorteste2++;
+                                    contador = 1;
+                                }
+
+
+                            }
+
+                        }
+
+
+                    });
+
+
+                var stringteste1 = "";
+                var stringteste2 = "";
+                var count = teste1.length;
+                for (var l = 0; l < count; l++) {
+                    stringteste1 += teste1[l] + ",";
+
+                }
+                for (var j = 0; j < count; j++) {
+                    stringteste2 += teste2[j] + ",";
+
+                }
+
+                $.getJSON("/GetJson/ValidarPadrao/", { id: stringteste1, id2: stringteste2, id3: 1 }, function(r) {
+
+
+                    if (r == "certo") {
+                        alert("Kms Compativeís!");
+                        $("#confirmarPadrao").removeAttr("disabled", "disabled");
+
+                    } else {
+                        alert("Quilômetros incompatíveis Verifique!!!");
+                        $("#confirmarPadrao").attr("disabled", "disabled");
+                        $("#km" + r).focus();
+                        $("#kmfim" + r).focus();
+
+                    }
+
+                });
+            }
+
+            //$('#formNovaConducao').submit(function(e) {
+
+            //    var linha = document.getElementById('GridPadrao').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+
+            //    if (linha > 1) {
+            //        $('#formNovaConducao').submit();
+            //    } else {
+            //        alert("Crie o Padrão para Salvar ");
+            //        $("#criarlinha").focus();
+            //        e.preventDefault();
+            //    }
+            //});
+
+            $.validator.addMethod(
+                "australianDate",
+                function(value, element) {
+                    // put your own logic here, this is just a (crappy) example
+                    return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+                },
+                "Insira a data no formato dd/mm/yyyy."
+            );
+
+
+          
+
+            $("#Trecho").change(function() {
+                document.getElementById("cbx_SB").options.length = 0;
+                $("#kmabertura1").empty();
+                $("#kmabertura2").empty();
+                $("#kmabertura3").empty();
+                $("#kmabertura4").empty();
+                $("#cbx_SB").empty();
+                $(".selectpicker").selectpicker('refresh');
+                $("#confirmarPadrao").attr("disabled", "disabled");
+                var grid = document.getElementById('GridPadrao');
+                grid.innerHTML = "<tr>  <th class='w150'>SB</th><th class='w80'>1</th><th class='w80'>2</th><th class='w80'>3</th><th class='w80'>4</th><th class='w80'>5</th> <th class='w80'>6</th><th class='w140'>Km Inicio</th><th class='w320'>Condução</th><th class='w140'>Km Fim</th><th class='w320'>Observações</th><th>Ações</th></tr>";
+                document.getElementById("cbx_Opcoestrecho").innerHTML = " <option value=' '></option><option value='Ida'>Ida</option> <option value='Volta'>Volta</option>";
+                $(".selectpicker").selectpicker('refresh');
+                listaTrechoKmab($(this).val());
+
+
+            });
+            $("#cbx_Opcoestrecho").change(function() {
+
+                if ($("#cbx_Opcoestrecho").val() == "SELECIONE") {
+                    $("#cbx_SB").empty();
+                    $(".selectpicker").selectpicker('refresh');
+                    $("#confirmarPadrao").attr("disabled", "disabled");
+                    return;
+                }
+              
+                listaSB($("#Trecho").val(), $("#cbx_Opcoestrecho").val());
+                var linha = document.getElementById('GridPadrao').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length;
+                var grid = document.getElementById('GridPadrao');
+                grid.innerHTML = "<tr>  <th class='w150'>SB</th><th class='w80'>1</th><th class='w80'>2</th><th class='w80'>3</th><th class='w80'>4</th><th class='w80'>5</th> <th class='w80'>6</th><th class='w140'>Km Inicio</th><th class='w320'>Condução</th><th class='w140'>Km Fim</th><th class='w320'>Observações</th><th>Ações</th></tr>";
+                $("#criarlinha").removeAttr("disabled", "disabled");
+             
+            });
+            $("#criarlinha").click(function() {
+
+                Criarlinha(document.getElementById('GridPadrao').rows.length - 1);
+
+                $("#criarlinha").attr("disabled", "disabled");
+            });
+
+
+           
+            listaTrecho($("#UPS").val());
+        });
+        $("#UPS").change(function() {
+
+
+            $("#Trecho").empty();
+            $("#cbx_SB").empty();
+
+            listaTrecho($(this).val());
+
+
+        });
+
+                                                                                                                                                                                                  @*      function GravarPadrao() {
+            var id = $("#cbx_Opcoestrecho").val();
+            var id2 = document.getElementById("teste");
+            if (confirm("Deseja Realmente apagar este Padrão?")) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GravarPadrao", "Conducao")',
+                    data: { id: id,form:id2 },
+                    success: function () {
+                        alert("Sucesso");
+                        window.location.href = '/Conducao/Listar/';
+                    }
+                });
+            } else {
+                alert("Ok vc não que fazer isto");
+            }
+
+        }*@
+
+        function listaSB(id, id2) {
+
+            $.getJSON("/GetJson/ListarSbConducao/", { id: id, id2: id2.toString() }, dispararKmAbertura);
+
+        }
+
+        function dispararKmAbertura(json) {
+
+            var iten = "<option value='SELECIONE'></option>";
+            $("#cbx_SB:gt(0)").remove();
+            $(json).each(function() {
+
+
+                iten += ("<option selected='selected' value='" + this.Kmfim + "'>" + this.Nome + "</option>");
+            });
+            $("#cbx_SB").html(iten);
+
+
+            $(".selectpicker").selectpicker('refresh');
+            listaTrechoKmab($("#Trecho").val());
+
+        }
+
+
+        function listaTrecho(id) {
+            $.getJSON('@Url.Action("ListarTrecho", "GetJson")/' + id, listatrechoCallBack);
+
+
+        }
+
+
+        function listatrechoCallBack(json) {
+
+            var iten;
+            $("#Trecho:gt(0)").remove();
+
+            $(json).each(function(r) {
+
+                iten += ("<option value='" + this.Id + "'>" + this.Nome + "</option>");
+            });
+            $("#Trecho").html(iten);
+            $(".selectpicker").selectpicker('refresh');
+            listaTrechoKmab($("#Trecho").val());
+
+        }
+
+
+        function listaTrechoKmab(id) {
+
+            $.getJSON('@Url.Action("ListarTrechoKm", "GetJson")/' + id, listatrechoKmabCallBack);
+        }
+
+
+        function listatrechoKmabCallBack(json) {
+            $("#kmabertura1").empty();
+            $("#kmabertura2").empty();
+            $("#kmabertura3").empty();
+            $("#kmabertura4").empty();
+            $(json).each(function() {
+
+
+                if ($("#cbx_Opcoestrecho").val() == " ") {
+                    $("#kmabertura1").append(this.KmAberturaInicial1 + " - " + this.KmAberturaFinal1 + " / " + this.KmFechamentoInicial1 + "-" + this.KmFechamentoFinal1);
+                    $("#kmabertura2").append(this.KmAberturaInicial2 + " - " + this.KmAberturaFinal2 + " / " + this.KmFechamentoInicial2 + "-" + this.KmFechamentoFinal2);
+                    $("#kmabertura3").append(this.KmAberturaInicial3 + " - " + this.KmAberturaFinal3 + " / " + this.KmFechamentoInicial3 + "-" + this.KmFechamentoFinal3);
+                    $("#kmabertura4").append(this.KmAberturaInicial4 + " - " + this.KmAberturaFinal4 + " / " + this.KmFechamentoInicial4 + "-" + this.KmFechamentoFinal4);
+                } else if ($("#cbx_Opcoestrecho").val() == "Ida") {
+                    $("#kmabertura1").append(this.KmAberturaInicial1 + " - " + this.KmAberturaFinal1 + " / " + this.KmFechamentoInicial1 + "-" + this.KmFechamentoFinal1);
+                    $("#kmabertura2").append(this.KmAberturaInicial2 + " - " + this.KmAberturaFinal2 + " / " + this.KmFechamentoInicial2 + "-" + this.KmFechamentoFinal2);
+                    $("#kmabertura3").append(this.KmAberturaInicial3 + " - " + this.KmAberturaFinal3 + " / " + this.KmFechamentoInicial3 + "-" + this.KmFechamentoFinal3);
+                    $("#kmabertura4").append(this.KmAberturaInicial4 + " - " + this.KmAberturaFinal4 + " / " + this.KmFechamentoInicial4 + "-" + this.KmFechamentoFinal4);
+
+
+                } else {
+
+                    $("#kmabertura1").append(this.KmFechamentoFinal1 + " - " + this.KmFechamentoInicial1 + " / " + this.KmAberturaFinal1 + "-" + this.KmAberturaInicial1);
+                    $("#kmabertura2").append(this.KmFechamentoFinal2 + " - " + this.KmFechamentoInicial2 + " / " + this.KmAberturaFinal2 + "-" + this.KmAberturaInicial2);
+                    $("#kmabertura3").append(this.KmFechamentoFinal3 + " - " + this.KmFechamentoInicial3 + " / " + this.KmAberturaFinal3 + "-" + this.KmAberturaInicial3);
+                    $("#kmabertura4").append(this.KmFechamentoFinal4 + " - " + this.KmFechamentoInicial4 + " / " + this.KmAberturaFinal4 + "-" + this.KmAberturaInicial4);
+                }
+
+
+            });
+
+        }
+
+
+        function Criarlinha(i) {
+
+            var id2 = $("#cbx_Opcoestrecho").val();
+
+            var sbinicial = document.getElementById('cbx_SB');
+            var id = sbinicial[1].text;
+
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ProcurarSb3Descricao", "GetJson")',
+                data: { id: id },
+                success: function(r) {
+
+
+                    if (id2 == 'Ida') {
+                        var tbl = document.getElementById("GridPadrao");
+
+                        $("#GridPadrao").append("<tr > <td title='" + r.KmInicio + " - "+r.Kmfim+ "' id='td" + i + "'>" + r.Nome + " </td><td> <input readonly onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' type='text' class='form-control clicarTipoLotação pintar' value=''  name='sStatus_Loc1" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='' readonly name='sStatus_Loc2" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='' readonly name='sStatus_Loc3" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='' readonly name='sStatus_Loc4" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='' readonly name='sStatus_Loc5" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='' readonly name='sStatus_Loc6" + i + "' /></td><td> <input value='" + r.KmInicio + "' type='text' class='form-control ' placeholder='Km Inicio' id='km" + i + "' name='km" + i + "' /></td><td> <textarea class='form-control' name='descricao" + i + "' rows='2'></textarea></td><td>  <input value=" + r.Kmfim + " type='text' class='form-control'  id='kmfim" + i + "' name='kmfim" + i + "' placeholder='Km Fim'   /></td><td>    <textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)'class='form-control'name='obs" + i + "' rows='2'></textarea></td><td></td></tr>");
+
+                        $("#km" + i).focus();
+
+                    } else {
+                        $("#GridPadrao").append("<tr > <td title='" + r.Kmfim + " - " + r.KmInicio + "' id='td" + i + "'>" + r.Nome + " </td><td> <input readonly onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' type='text' class='form-control clicarTipoLotação pintar' value=''  name='sStatus_Loc1" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='' readonly name='sStatus_Loc2" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='' readonly name='sStatus_Loc3" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='' readonly name='sStatus_Loc4" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='' readonly name='sStatus_Loc5" + i + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='' readonly name='sStatus_Loc6" + i + "' /></td><td> <input value='" + r.Kmfim + "' type='text' class='form-control ' placeholder='Km Inicio' id='km" + i + "' name='km" + i + "' /></td><td> <textarea class='form-control' name='descricao" + i + "' rows='2'></textarea></td><td>  <input value=" + r.KmInicio + " type='text' class='form-control'  id='kmfim" + i + "' name='kmfim" + i + "' placeholder='Km Fim'   /></td><td>    <textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)'class='form-control'name='obs" + i + "' rows='2'></textarea></td><td></td></tr>");
+                        $("#km" + i).focus();
+                    }
+                   
+                }
+            });
+
+
+        }
+
+
+        function PintarStatusLoco(id) {
+
+            var statusLoco = id.value;
+
+            if (statusLoco == "L") {
+
+
+                $("#" + id.id).val("I");
+                $("#" + id.id).css("background-color", "yellow");
+                $("#" + id.id).css("color", "#000000");
+            } else if (statusLoco == "I") {
+                $("#" + id.id).val("D");
+                $("#" + id.id).css("background-color", "red");
+                $("#" + id.id).css("color", "#000000");
+            } else if (statusLoco == "D") {
+                $("#" + id.id).val("LD");
+                $("#" + id.id).css("background-color", "green");
+                $("#" + id.id).css("color", "#000000");
+            } else if (statusLoco == "LD") {
+                $("#" + id.id).val("ID");
+                $("#" + id.id).css("background-color", "yellow");
+                $("#" + id.id).css("color", "#000000");
+            } else if (statusLoco == "ID") {
+                $("#" + id.id).val("DD");
+                $("#" + id.id).css("background-color", "red");
+                $("#" + id.id).css("color", "#000000");
+            } else if (statusLoco == "DD") {
+                $("#" + id.id).val("");
+                $("#" + id.id).css("background-color", "white");
+                $("#" + id.id).css("color", "#000000");
+            } else if (statusLoco == "") {
+                $("#" + id.id).val("L");
+                $("#" + id.id).css("background-color", "green");
+                $("#" + id.id).css("color", "#000000");
+            }
+
+        }
+
+        function isNumeric(valor) {
+
+            var validChar = '0123456789.,';
+            for (var i = 0; i < valor.length; i++)
+                if (validChar.indexOf(valor.substr(i, 1)) < 0)
+                    return false;
+            return true;
+        }
+
+        function listarsb(novalinha) {
+            $("#confirmarPadrao").attr("disabled", "disabled");
+            var sbs = document.getElementById('cbx_SB');
+            var linha = novalinha - 1;
+            var kmi;
+            var kmifake;
+            var kmffake;
+            var contador1 = 1;
+            var contador2 = 1;
+            var contadorLinha = 0;
+            var kmf;
+            var teste1 = new Array();
+            var teste2 = new Array();
+            var contadorteste1 = 0;
+            var contadorteste2 = 0;
+            var contadoraux = 0;
+            var verificacaoseexisteLinha = false;
+
+            $('#GridPadrao tbody tr td').each(
+                function() {
+                    var teste = $(this).find('input, textarea').val();
+
+                    if (teste != null && teste != "") {
+
+
+                        var oi = isNumeric(teste);
+
+                        if (oi == true) {
+                            if (contador1 == 1) {
+
+                                teste1[contadorteste1] = teste;
+                                contadorteste1++;
+
+                                contador1++;
+                            } else {
+
+
+                                teste2[contadorteste2] = teste;
+                                contadorteste2++;
+                                contadorLinha++;
+                                contador1 = 1;
+                            }
+                            //alert("contador linha " + contadorLinha + "==" + novalinha + "Novalinha");
+                            if (parseInt(novalinha) == parseInt(contadorLinha)) {
+                                contadoraux = contadorLinha - 1;
+                            }
+
+                        }
+
+                    }
+
+
+                }
+            );
+
+            kmi = teste1[contadoraux];
+            kmf = teste2[contadoraux];
+
+
+            var valordalinha;
+            var row;
+            var contararrayteste1 = contadoraux + 1;
+
+
+            if (teste2[contadoraux] == teste1[contararrayteste1]) {
+                verificacaoseexisteLinha = true;
+
+            } else {
+
+                verificacaoseexisteLinha = false;
+
+
+            }
+            contararrayteste1++;
+
+
+            if (verificacaoseexisteLinha != true) {
+
+                var linhagrid = document.getElementById('GridPadrao').getElementsByTagName('tbody')[0].getElementsByTagName('tr').length - 1;
+                var trecho = $("#Trecho").val();
+
+                if ($("#cbx_Opcoestrecho").val() == 'Ida') {
+                    if (parseFloat(sbs[sbs.length - 1].value) > parseFloat(kmf)) {
+                        $.getJSON('@Url.Action("ProcurarSb2", "GetJson")/', { id: kmi, id2: kmf, id3: trecho }, function(r) {
+
+                            var positivoNegativo = parseInt(kmi) - parseInt(kmf);
+
+                            row = linha + 1;
+
+                            if (r.Nome == null) {
+                                alert("Não Existe SB entre esses Km");
+                                $("#td" + linha).html("<td> </td>");
+                            } else if (row == linhagrid) {
+
+                                row = linha + 1;
+                                var i = row;
+
+                                if (positivoNegativo <= 0) {
+                                 
+                                    if (r.KmInicio < kmf) {
+                                        alert("Ainda kms Incompativeis");
+                                    } else {
+                                        valordalinha = parseFloat(parseFloat(kmf).toString());
+                                        var linhaantiga;
+                                        var loco1;
+                                        var loco2;
+                                        var loco3;
+                                        var loco4;
+                                        var loco5;
+                                        var loco6;
+
+                                        if (r.Nome.length > 3) {
+                                            linhaantiga = linhagrid - 1;
+                                            loco1 = $("#sStatus_Loc1" + linhaantiga).val();
+                                            loco2 = $("#sStatus_Loc2" + linhaantiga).val();
+                                            loco3 = $("#sStatus_Loc3" + linhaantiga).val();
+                                            loco4 = $("#sStatus_Loc4" + linhaantiga).val();
+                                            loco5 = $("#sStatus_Loc5" + linhaantiga).val();
+                                            loco6 = $("#sStatus_Loc6" + linhaantiga).val();
+                                            //alert("aqui1")
+                                            $("#GridPadrao").append("<tr > <td title='" + r.KmInicio + " - " + r.Kmfim + "' class='w80' id='td" + row + "'>" + r.Nome + " </td><td> <input readonly type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + loco1 + "'  name='sStatus_Loc1" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + loco2 + "' readonly name='sStatus_Loc2" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + loco3 + "' readonly name='sStatus_Loc3" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + loco4 + "' readonly name='sStatus_Loc4" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + loco5 + "' readonly name='sStatus_Loc5" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + loco6 + "' readonly name='sStatus_Loc6" + row + "' /></td><td> <input readonly='true' type='text' class='form-control Numerico' value='" + valordalinha + "' placeholder='Km Inicio' id='km" + row + "' name='km" + row + "' /></td><td> <textarea class='form-control' name='descricao" + row + "' rows='2'></textarea></td><td>  <input value='" + r.Kmfim + "'   type='text' class='form-control Numerico'  id='kmfim" + row + "' name='kmfim" + row + "' placeholder='Km Fim'   /></td><td>    <textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)' class='form-control'name='obs" + row + "' rows='2'></textarea></td><td></td></tr>");
+                                            $("#km" + row).focus();
+                                            if ($("#sStatus_Loc1" + linhagrid).val() == 'L' || $("#sStatus_Loc1" + linhagrid).val() == 'LD') {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "D" || $("#sStatus_Loc1" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc2" + linhagrid).val() == "L" || $("#sStatus_Loc2" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhaantiga).val() == "I" || $("#sStatus_Loc2" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhagrid).val() == "D" || $("#sStatus_Loc2" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            }
+                                            if ($("#sStatus_Loc3" + linhagrid).val() == "L" || $("#sStatus_Loc3" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "D" || $("#sStatus_Loc3" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc4" + linhagrid).val() == "L" || $("#sStatus_Loc4" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "I" || $("#sStatus_Loc4" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "D" || $("#sStatus_Loc4" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc5" + linhagrid).val() == "L" || $("#sStatus_Loc5" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "I" || $("#sStatus_Loc5" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "D" || $("#sStatus_Loc5" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc6" + linhagrid).val() == "L" || $("#sStatus_Loc6" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "I" || $("#sStatus_Loc6" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "D" || $("#sStatus_Loc6" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            }
+                                        } else if (r.Kmfim > parseFloat($("#kmfim" + linha).val())) {
+                                            linhaantiga = linhagrid - 1;
+                                           
+                                            loco1 = $("#sStatus_Loc1" + linhaantiga).val();
+                                            loco2 = $("#sStatus_Loc2" + linhaantiga).val();
+                                            loco3 = $("#sStatus_Loc3" + linhaantiga).val();
+                                            loco4 = $("#sStatus_Loc4" + linhaantiga).val();
+                                            loco5 = $("#sStatus_Loc5" + linhaantiga).val();
+                                            loco6 = $("#sStatus_Loc6" + linhaantiga).val();
+                                            //alert("aqui2")
+                                            $("#GridPadrao").append("<tr > <td title='" + r.KmInicio + " - " + r.Kmfim + "' class='w80' id='td" + row + "'>" + r.Nome + " </td><td> <input readonly type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + loco1 + "'  name='sStatus_Loc1" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + loco2 + "' readonly name='sStatus_Loc2" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + loco3 + "' readonly name='sStatus_Loc3" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + loco4 + "' readonly name='sStatus_Loc4" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + loco5 + "' readonly name='sStatus_Loc5" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + loco6 + "' readonly name='sStatus_Loc6" + row + "' /></td><td> <input readonly='true' type='text' class='form-control Numerico' value='" + valordalinha + "' placeholder='Km Inicio' id='km" + row + "' name='km" + row + "' /></td><td> <textarea class='form-control' name='descricao" + row + "' rows='2'></textarea></td><td>  <input value='" + r.Kmfim + "'   type='text' class='form-control Numerico'  id='kmfim" + row + "' name='kmfim" + row + "' placeholder='Km Fim'   /></td><td>    <textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)' class='form-control'name='obs" + row + "' rows='2'></textarea></td><td></td></tr>");
+                                            $("#km" + row).focus();
+                                            if ($("#sStatus_Loc1" + linhagrid).val() == 'L' || $("#sStatus_Loc1" + linhagrid).val() == 'LD') {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "D" || $("#sStatus_Loc1" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc2" + linhagrid).val() == "L" || $("#sStatus_Loc2" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhaantiga).val() == "I" || $("#sStatus_Loc2" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhagrid).val() == "D" || $("#sStatus_Loc2" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            }
+                                            if ($("#sStatus_Loc3" + linhagrid).val() == "L" || $("#sStatus_Loc3" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "D" || $("#sStatus_Loc3" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc4" + linhagrid).val() == "L" || $("#sStatus_Loc4" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "I" || $("#sStatus_Loc4" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "D" || $("#sStatus_Loc4" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc5" + linhagrid).val() == "L" || $("#sStatus_Loc5" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "I" || $("#sStatus_Loc5" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "D" || $("#sStatus_Loc5" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc6" + linhagrid).val() == "L" || $("#sStatus_Loc6" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "I" || $("#sStatus_Loc6" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "D" || $("#sStatus_Loc6" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            }
+
+                                        }
+                                    }
+                                } else {
+                                    alert("O Km de Fim não pode ser maior que a de Inicio");
+
+                                    ($("#kmfim" + linha).focus());
+                                }
+
+
+                            } else {
+                                var linhanova = linha + 1;
+                                var valordalinha2;
+
+                                if (positivoNegativo <= 0) {
+
+                                    if (teste1[contadoraux + 1] < kmf) {
+                                        alert("Ainda kms Incompativeis");
+                                    } else {
+                                        valordalinha2 = parseFloat($("#kmfim" + linha).val().toString());
+                                        var tbl = document.getElementById('GridPadrao');
+
+
+                                        var newTR = tbl.insertRow(novalinha + 1);
+                                        var linhaId = novalinha + 1;
+                                        var sb = document.createElement('TD');
+                                        loco1 = document.createElement('TD');
+                                        loco2 = document.createElement('TD');
+                                        loco3 = document.createElement('TD');
+                                        loco4 = document.createElement('TD');
+                                        loco5 = document.createElement('TD');
+                                        loco6 = document.createElement('TD');
+                                        var kmInicio = document.createElement('TD');
+                                        var condução = document.createElement('TD');
+                                        var kmFim = document.createElement('TD');
+                                        var observacao = document.createElement('TD');
+                                        var acoes = document.createElement('TD');
+
+
+                                        i = linhagrid;
+
+
+                                        linhagrid = novalinha;
+                                        sb.innerHTML = "<td title='" + r.KmInicio + " - " + r.Kmfim + "' class='w80' id='td" + i + "'>" + r.Nome + " </td>";
+                                        if ($("#sStatus_Loc1" + novalinha).val() == 'L' || $("#sStatus_Loc1" + novalinha).val() == 'LD') {
+                                            loco1.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+                                        } else if ($("#sStatus_Loc1" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                            loco1.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc1" + linhagrid).val() == "D" || $("#sStatus_Loc1" + linhagrid).val() == "DD") {
+                                            loco1.innerHTML = "<input style='background-color: red;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+                                        } else {
+                                            loco1.innerHTML = "<input   type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+                                        }
+
+                                        if ($("#sStatus_Loc2" + novalinha).val() == 'L' || $("#sStatus_Loc2" + novalinha).val() == 'LD') {
+                                            loco2.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+                                        } else if ($("#sStatus_Loc2" + linhagrid).val() == "I" || $("#sStatus_Loc2" + linhagrid).val() == "ID") {
+                                            loco2.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc2" + linhagrid).val() == "D" || $("#sStatus_Loc2" + linhagrid).val() == "DD") {
+                                            loco2.innerHTML = "<input style='background-color: red;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+                                        } else {
+                                            loco2.innerHTML = "<input   type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc3" + novalinha).val() == 'L' || $("#sStatus_Loc3" + novalinha).val() == 'LD') {
+                                            loco3.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+                                        } else if ($("#sStatus_Loc3" + linhagrid).val() == "I" || $("#sStatus_Loc3" + linhagrid).val() == "ID") {
+                                            loco3.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc3" + linhagrid).val() == "D" || $("#sStatus_Loc3" + linhagrid).val() == "DD") {
+                                            loco3.innerHTML = "<input style='background-color: red;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+                                        } else {
+                                            loco3.innerHTML = "<input  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc4" + novalinha).val() == 'L' || $("#sStatus_Loc4" + novalinha).val() == 'LD') {
+                                            loco4.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+                                        } else if ($("#sStatus_Loc4" + linhagrid).val() == "I" || $("#sStatus_Loc4" + linhagrid).val() == "ID") {
+                                            loco4.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc4" + linhagrid).val() == "D" || $("#sStatus_Loc4" + linhagrid).val() == "DD") {
+                                            loco4.innerHTML = "<input style='background-color: red;color: #000000'    type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+                                        } else {
+                                            loco4.innerHTML = "<input  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc5" + novalinha).val() == 'L' || $("#sStatus_Loc5" + novalinha).val() == 'LD') {
+                                            loco5.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+                                        } else if ($("#sStatus_Loc5" + linhagrid).val() == "I" || $("#sStatus_Loc5" + linhagrid).val() == "ID") {
+                                            loco5.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc5" + linhagrid).val() == "D" || $("#sStatus_Loc5" + linhagrid).val() == "DD") {
+                                            loco5.innerHTML = "<input style='background-color: red;color: #000000'    type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+                                        } else {
+                                            loco5.innerHTML = "<input  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc6" + novalinha).val() == 'L' || $("#sStatus_Loc6" + novalinha).val() == 'LD') {
+                                            loco6.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        } else if ($("#sStatus_Loc6" + linhagrid).val() == "I" || $("#sStatus_Loc6" + linhagrid).val() == "ID") {
+
+                                            loco6.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        } else if ($("#sStatus_Loc6" + linhagrid).val() == "D" || $("#sStatus_Loc6" + linhagrid).val() == "DD") {
+                                            loco6.innerHTML = "<input style='background-color: red;color: #000000'    type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        } else {
+                                            loco6.innerHTML = "<input type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        }
+
+
+                                        kmInicio.innerHTML = "<input required onchange='DesabilitarBotaoSlavar()' onblur='validarcamposKms(this.id)' type='text' class='form-control Numerico' value='" + kmf + "' placeholder='Km Inicio' id='km" + i + "' name='km" + i + "' />";
+                                        condução.innerHTML = "<textarea class='form-control'id='descricao" + i + "' name='descricao" + i + "' rows='2'></textarea>";
+                                        kmFim.innerHTML = "<input required value='" + r.Kmfim + "'  onchange='DesabilitarBotaoSlavar()' onblur='validarcamposKms(this.id)'   type='text' class='form-control Numerico'  id='kmfim" + i + "' name='kmfim" + i + "' placeholder='Km Fim'  />";
+                                        observacao.innerHTML = "<textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)' class='form-control'name='obs" + i + "' rows='2'></textarea>";
+                                        acoes.innerHTML = "<button  onclick='ApagarLinhaNovaConducao(this.parentNode.parentNode.rowIndex)'  class='deletarnovaConducao btn btn-danger ' type='button' title='Excluir' data-toggle='modal'><i class='glyphicon glyphicon-trash'></i></button>";
+                                        //+ "<button id='"+i+"' class='btn btn-default ' type='button' onclick='PegarValorLinha(this.id)'><i class='glyphicon glyphicon-refresh'></i></button>
+
+                                        newTR.appendChild(sb);
+                                        newTR.appendChild(loco1);
+                                        newTR.appendChild(loco2);
+                                        newTR.appendChild(loco3);
+                                        newTR.appendChild(loco4);
+                                        newTR.appendChild(loco5);
+                                        newTR.appendChild(loco6);
+                                        newTR.appendChild(kmInicio);
+                                        newTR.appendChild(condução);
+                                        newTR.appendChild(kmFim);
+                                        newTR.appendChild(observacao);
+                                        newTR.appendChild(acoes);
+                                    }
+                                } else {
+
+                                    alert("O Km de Fim não pode ser menor que a de Inicio");
+
+                                    ($("#kmfim" + linha).focus());
+                                    r.Kmfim = "";
+                                }
+
+
+                                //        $("#td" + linhanova).html(r.Nome);
+                                //\\        $("#km" + linhanova).val(valordalinha2);
+                                //        $("#kmfim" + linhanova).val(r.Kmfim);
+
+                            }
+
+
+                        });
+
+                    } else if (parseFloat(sbs[sbs.length - 1].value) == parseFloat(kmf)) {
+
+                        alert("Fim do Trecho");
+                    } else {
+                        alert("Kms Imcompatível com o Trecho Verefique");
+                    }
+
+                } else {
+
+                    if (parseFloat(sbs[sbs.length - 1].value) < parseFloat(kmi)) {
+
+                        $.getJSON('@Url.Action("ProcurarSb4", "GetJson")/', { id: kmi, id2: kmf, id3: trecho }, function(r) {
+
+                            var positivoNegativo = parseInt(kmi) - parseInt(kmf);
+
+                            row = linha + 1;
+
+                            if (r.Nome == null) {
+                                alert("Não Existe SB entre esses Km");
+                                $("#td" + linha).html("<td> </td>");
+                            } else if (row == linhagrid) {
+
+                                row = linha + 1;
+                                var i = row;
+
+
+                                if (positivoNegativo >= 0) {
+                                 
+                                    if (r.Kmfim > kmf) {
+                                        alert("Ainda kms Incompativeis");
+                                    } else {
+                                        valordalinha = parseFloat(parseFloat($("#kmfim" + linha).val().toString()));
+                                        var linhaantiga;
+                                        var loco1;
+                                        var loco2;
+                                        var loco3;
+                                        var loco4;
+                                        var loco5;
+                                        var loco6;
+
+                                        if (r.Nome.length > 3) {
+
+                                            linhaantiga = linhagrid - 1;
+                                            loco1 = $("#sStatus_Loc1" + linhaantiga).val();
+                                            loco2 = $("#sStatus_Loc2" + linhaantiga).val();
+                                            loco3 = $("#sStatus_Loc3" + linhaantiga).val();
+                                            loco4 = $("#sStatus_Loc4" + linhaantiga).val();
+                                            loco5 = $("#sStatus_Loc5" + linhaantiga).val();
+                                            loco6 = $("#sStatus_Loc6" + linhaantiga).val();
+                                          
+                                            $("#GridPadrao").append("<tr > <td title='" + r.Kmfim + " - " + r.KmInicio + "' class='w80' id='td" + row + "'>" + r.Nome + " </td><td> <input readonly type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + loco1 + "'  name='sStatus_Loc1" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + loco2 + "' readonly name='sStatus_Loc2" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + loco3 + "' readonly name='sStatus_Loc3" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + loco4 + "' readonly name='sStatus_Loc4" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + loco5 + "' readonly name='sStatus_Loc5" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + loco6 + "' readonly name='sStatus_Loc6" + row + "' /></td><td> <input readonly='true' type='text' class='form-control Numerico' value='" + valordalinha + "' placeholder='Km Inicio' id='km" + row + "' name='km" + row + "' /></td><td> <textarea class='form-control' name='descricao" + row + "' rows='2'></textarea></td><td>  <input value='" + r.KmInicio + "'   type='text' class='form-control Numerico'  id='kmfim" + row + "' name='kmfim" + row + "' placeholder='Km Fim'   /></td><td>    <textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)' class='form-control'name='obs" + row + "' rows='2'></textarea></td><td></td></tr>");
+                                            $("#km" + row).focus();
+                                            if ($("#sStatus_Loc1" + linhagrid).val() == 'L' || $("#sStatus_Loc1" + linhagrid).val() == 'LD') {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "D" || $("#sStatus_Loc1" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc2" + linhagrid).val() == "L" || $("#sStatus_Loc2" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhaantiga).val() == "I" || $("#sStatus_Loc2" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhagrid).val() == "D" || $("#sStatus_Loc2" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            }
+                                            if ($("#sStatus_Loc3" + linhagrid).val() == "L" || $("#sStatus_Loc3" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "D" || $("#sStatus_Loc3" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc4" + linhagrid).val() == "L" || $("#sStatus_Loc4" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "I" || $("#sStatus_Loc4" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "D" || $("#sStatus_Loc4" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc5" + linhagrid).val() == "L" || $("#sStatus_Loc5" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "I" || $("#sStatus_Loc5" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "D" || $("#sStatus_Loc5" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc6" + linhagrid).val() == "L" || $("#sStatus_Loc6" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "I" || $("#sStatus_Loc6" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "D" || $("#sStatus_Loc6" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            }
+
+                                        } else {
+                          
+                                            if (r.Kmfim < parseFloat($("#kmfim" + linha).val()))
+                                                var linhaex = linhagrid - 1;
+                                                linhaantiga = linhagrid - 1;
+                                               
+                                            loco1 = $("#sStatus_Loc1" + linhaantiga).val();
+                                            loco2 = $("#sStatus_Loc2" + linhaantiga).val();
+                                            loco3 = $("#sStatus_Loc3" + linhaantiga).val();
+                                            loco4 = $("#sStatus_Loc4" + linhaantiga).val();
+                                            loco5 = $("#sStatus_Loc5" + linhaantiga).val();
+                                            loco6 = $("#sStatus_Loc6" + linhaantiga).val();
+
+                                            $("#GridPadrao").append("<tr > <td title='" + r.Kmfim + " - " + r.KmInicio + "' class='w80' id='td" + row + "'>" + r.Nome + " </td><td> <input readonly type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + loco1 + "'  name='sStatus_Loc1" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + loco2 + "' readonly name='sStatus_Loc2" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + loco3 + "' readonly name='sStatus_Loc3" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + loco4 + "' readonly name='sStatus_Loc4" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + loco5 + "' readonly name='sStatus_Loc5" + row + "' /></td><td ><input type='text' class='form-control ' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + loco6 + "' readonly name='sStatus_Loc6" + row + "' /></td><td> <input readonly='true' type='text' class='form-control Numerico' value='" + valordalinha + "' placeholder='Km Inicio' id='km" + row + "' name='km" + row + "' /></td><td> <textarea class='form-control' name='descricao" + row + "' rows='2'></textarea></td><td>  <input value='" + r.KmInicio + "'   type='text' class='form-control Numerico'  id='kmfim" + row + "' name='kmfim" + row + "' placeholder='Km Fim'   /></td><td>    <textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)' class='form-control'name='obs" + row + "' rows='2'></textarea></td><td></td></tr>");
+                                            $("#km" + row).focus();
+                                            if ($("#sStatus_Loc1" + linhagrid).val() == 'L' || $("#sStatus_Loc1" + linhagrid).val() == 'LD') {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc1" + linhagrid).val() == "D" || $("#sStatus_Loc1" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc1" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc1" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc2" + linhagrid).val() == "L" || $("#sStatus_Loc2" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhaantiga).val() == "I" || $("#sStatus_Loc2" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc2" + linhagrid).val() == "D" || $("#sStatus_Loc2" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc2" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc2" + linhagrid).css("color", "black");
+
+                                            }
+                                            if ($("#sStatus_Loc3" + linhagrid).val() == "L" || $("#sStatus_Loc3" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc3" + linhagrid).val() == "D" || $("#sStatus_Loc3" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc3" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc3" + linhagrid).css("color", "black");
+
+                                            }
+
+                                            if ($("#sStatus_Loc4" + linhagrid).val() == "L" || $("#sStatus_Loc4" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "I" || $("#sStatus_Loc4" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc4" + linhagrid).val() == "D" || $("#sStatus_Loc4" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc4" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc4" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc5" + linhagrid).val() == "L" || $("#sStatus_Loc5" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "I" || $("#sStatus_Loc5" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc5" + linhaantiga).val() == "D" || $("#sStatus_Loc5" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc5" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc5" + linhagrid).css("color", "black");
+
+                                            }
+
+
+                                            if ($("#sStatus_Loc6" + linhagrid).val() == "L" || $("#sStatus_Loc6" + linhagrid).val() == "LD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "green");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "I" || $("#sStatus_Loc6" + linhagrid).val() == "ID") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "yellow");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            } else if ($("#sStatus_Loc6" + linhagrid).val() == "D" || $("#sStatus_Loc6" + linhagrid).val() == "DD") {
+                                                $("#sStatus_Loc6" + linhagrid).css("background", "red");
+                                                $("#sStatus_Loc6" + linhagrid).css("color", "black");
+
+                                            }
+
+                                        }
+                                    }
+                                } else {
+                                    alert("O Km de Fim não pode ser maior que a de Inicio");
+
+                                    ($("#kmfim" + linha).focus());
+                                }
+
+
+                            } else {
+                               
+                                var linhanova = linha + 1;
+                                var valordalinha2;
+
+                                if (positivoNegativo > 0) {
+                                    if (teste1[contadoraux + 1] > kmf) {
+                                        alert("Ainda kms Incompativeis");
+                                    } else {
+                                        valordalinha2 = parseFloat($("#kmfim" + linha).val().toString());
+                                        var tbl = document.getElementById('GridPadrao');
+
+
+                                        var newTR = tbl.insertRow(novalinha + 1);
+                                        var linhaId = novalinha + 1;
+                                        var sb = document.createElement('TD');
+                                        loco1 = document.createElement('TD');
+                                        loco2 = document.createElement('TD');
+                                        loco3 = document.createElement('TD');
+                                        loco4 = document.createElement('TD');
+                                        loco5 = document.createElement('TD');
+                                        loco6 = document.createElement('TD');
+                                        var kmInicio = document.createElement('TD');
+                                        var condução = document.createElement('TD');
+                                        var kmFim = document.createElement('TD');
+                                        var observacao = document.createElement('TD');
+                                        var acoes = document.createElement('TD');
+
+
+                                        i = linhagrid;
+
+
+                                        linhagrid = novalinha;
+                                        sb.innerHTML = "<td title='" + r.Kmfim + " - " + r.KmInicio + "' class='w80' id='td" + i + "'>" + r.Nome + " </td>";
+                                        if ($("#sStatus_Loc1" + novalinha).val() == 'L' || $("#sStatus_Loc1" + novalinha).val() == 'LD') {
+                                            loco1.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+                                        } else if ($("#sStatus_Loc1" + linhagrid).val() == "I" || $("#sStatus_Loc1" + linhagrid).val() == "ID") {
+                                            loco1.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc1" + linhagrid).val() == "D" || $("#sStatus_Loc1" + linhagrid).val() == "DD") {
+                                            loco1.innerHTML = "<input style='background-color: red;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+                                        } else {
+                                            loco1.innerHTML = "<input   type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc1" + i + "' value='" + $("#sStatus_Loc1" + novalinha).val() + "'  name='sStatus_Loc1" + i + "' />";
+                                        }
+
+                                        if ($("#sStatus_Loc2" + novalinha).val() == 'L' || $("#sStatus_Loc2" + novalinha).val() == 'LD') {
+                                            loco2.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+                                        } else if ($("#sStatus_Loc2" + linhagrid).val() == "I" || $("#sStatus_Loc2" + linhagrid).val() == "ID") {
+                                            loco2.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc2" + linhagrid).val() == "D" || $("#sStatus_Loc2" + linhagrid).val() == "DD") {
+                                            loco2.innerHTML = "<input style='background-color: red;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+                                        } else {
+                                            loco2.innerHTML = "<input   type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc2" + i + "' value='" + $("#sStatus_Loc2" + novalinha).val() + "'  name='sStatus_Loc2" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc3" + novalinha).val() == 'L' || $("#sStatus_Loc3" + novalinha).val() == 'LD') {
+                                            loco3.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+                                        } else if ($("#sStatus_Loc3" + linhagrid).val() == "I" || $("#sStatus_Loc3" + linhagrid).val() == "ID") {
+                                            loco3.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc3" + linhagrid).val() == "D" || $("#sStatus_Loc3" + linhagrid).val() == "DD") {
+                                            loco3.innerHTML = "<input style='background-color: red;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+                                        } else {
+                                            loco3.innerHTML = "<input  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc3" + i + "' value='" + $("#sStatus_Loc3" + novalinha).val() + "'  name='sStatus_Loc3" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc4" + novalinha).val() == 'L' || $("#sStatus_Loc4" + novalinha).val() == 'LD') {
+                                            loco4.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+                                        } else if ($("#sStatus_Loc4" + linhagrid).val() == "I" || $("#sStatus_Loc4" + linhagrid).val() == "ID") {
+                                            loco4.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc4" + linhagrid).val() == "D" || $("#sStatus_Loc4" + linhagrid).val() == "DD") {
+                                            loco4.innerHTML = "<input style='background-color: red;color: #000000'    type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+                                        } else {
+                                            loco4.innerHTML = "<input  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc4" + i + "' value='" + $("#sStatus_Loc4" + novalinha).val() + "'  name='sStatus_Loc4" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc5" + novalinha).val() == 'L' || $("#sStatus_Loc5" + novalinha).val() == 'LD') {
+                                            loco5.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+                                        } else if ($("#sStatus_Loc5" + linhagrid).val() == "I" || $("#sStatus_Loc5" + linhagrid).val() == "ID") {
+                                            loco5.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+
+                                        } else if ($("#sStatus_Loc5" + linhagrid).val() == "D" || $("#sStatus_Loc5" + linhagrid).val() == "DD") {
+                                            loco5.innerHTML = "<input style='background-color: red;color: #000000'    type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+                                        } else {
+                                            loco5.innerHTML = "<input  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc5" + i + "' value='" + $("#sStatus_Loc5" + novalinha).val() + "'  name='sStatus_Loc5" + i + "' />";
+                                        }
+                                        if ($("#sStatus_Loc6" + novalinha).val() == 'L' || $("#sStatus_Loc6" + novalinha).val() == 'LD') {
+                                            loco6.innerHTML = "<input style='background-color: green;color: #000000'  type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        } else if ($("#sStatus_Loc6" + linhagrid).val() == "I" || $("#sStatus_Loc6" + linhagrid).val() == "ID") {
+
+                                            loco6.innerHTML = "<input style='background-color: yellow;color: #000000' type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        } else if ($("#sStatus_Loc6" + linhagrid).val() == "D" || $("#sStatus_Loc6" + linhagrid).val() == "DD") {
+                                            loco6.innerHTML = "<input style='background-color: red;color: #000000'    type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        } else {
+                                            loco6.innerHTML = "<input type='text' class='pintar form-control' onclick='PintarStatusLoco(this)'id='sStatus_Loc6" + i + "' value='" + $("#sStatus_Loc6" + novalinha).val() + "'  name='sStatus_Loc6" + i + "' />";
+                                        }
+
+
+                                        kmInicio.innerHTML = "<input required  onblur='validarcamposKms(this.id)' type='text' class='form-control Numerico' value='" + kmf + "' placeholder='Km Inicio' id='km" + i + "' name='km" + i + "' />";
+                                        condução.innerHTML = "<textarea class='form-control'id='descricao" + i + "' name='descricao" + i + "' rows='2'></textarea>";
+                                        kmFim.innerHTML = "<input required value='" + r.KmInicio + "'  onchange='DesabilitarBotaoSlavar()' onblur='validarcamposKms(this.id)'   type='text' class='form-control Numerico'  id='kmfim" + i + "' name='kmfim" + i + "' placeholder='Km Fim'  />";
+                                        observacao.innerHTML = "<textarea onblur='listarsb(this.parentNode.parentNode.rowIndex)' class='form-control'name='obs" + i + "' rows='2'></textarea>";
+                                        acoes.innerHTML = "<button  onclick='ApagarLinhaNovaConducao(this.parentNode.parentNode.rowIndex)'  class='deletarnovaConducao btn btn-danger ' type='button' title='Excluir' data-toggle='modal'><i class='glyphicon glyphicon-trash'></i></button>";
+                                        //+ "<button id='"+i+"' class='btn btn-default ' type='button' onclick='PegarValorLinha(this.id)'><i class='glyphicon glyphicon-refresh'></i></button>
+
+                                        newTR.appendChild(sb);
+                                        newTR.appendChild(loco1);
+                                        newTR.appendChild(loco2);
+                                        newTR.appendChild(loco3);
+                                        newTR.appendChild(loco4);
+                                        newTR.appendChild(loco5);
+                                        newTR.appendChild(loco6);
+                                        newTR.appendChild(kmInicio);
+                                        newTR.appendChild(condução);
+                                        newTR.appendChild(kmFim);
+                                        newTR.appendChild(observacao);
+                                        newTR.appendChild(acoes);
+                                    }
+
+                                    //$("#td" + linhanova).html(r.Nome);
+                                    //$("#km" + linhanova).val(valordalinha2);
+                                    //$("#kmfim" + linhanova).val(r.KmInicio);
+                                } else {
+                                    alert("O Km de Fim não pode ser maior que a de Inicio");
+
+                                    ($("#kmfim" + linha).focus());
+                                }
+                            }
+
+
+                        });
+
+                    } else if (parseFloat(sbs[sbs.length - 1].value) == parseFloat(kmi)) {
+
+                        alert("Fim do Trecho");
+
+
+                    } else {
+                        alert(sbs[sbs.length - 1].value);
+                        alert(kmi);
+                        alert("Kms Imcompatível com o Trecho Verefique");
+                    }
+                }
+            } else {
+                //alert("Esta linha ja existe!");
+            }
+        }
+
+        function pesquisarTipodeLotacao(id) {
+
+            var linha = id;
+
+            var selObjSb = document.getElementById('cbx_Maquinas'), count = 0;
+
+            if (selObjSb.value != "") {
+
+                var resultado = new Array();
+
+
+                for (var i = 0; i < selObjSb.length; i++) {
+                    if (selObjSb[i].selected) {
+
+
+                        resultado[count] = selObjSb[i].text;
+                        count++;
+                    }
+
+
+                }
+                $.getJSON('@Url.Action("ListarTipodeLotação", "GetJson")/' + resultado, function(json) {
+                    $("#cbx_Tipodelotacao" + linha).empty();
+
+                    if (json.length != 0) {
+
+                        $.each(json, function(i, data) {
+
+                            $("#cbx_Tipodelotacao" + linha).append("<option value='" + data.Id + "'>" + data.SNomeCombinacao + "</option>");
+
+                            $(".selectpicker").selectpicker('refresh');
+                        });
+                    } else {
+
+
+                        $(".selectpicker").selectpicker('refresh');
+                    }
+
+                });
+            } else {
+                alert("Selecione uma Máquina");
+            }
+        }
+    </script>
+
+}
