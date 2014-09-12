@@ -13,12 +13,16 @@ function PreencherTabelaCompromisso() {
             if (res != null) {
                 var linhaCabecalho = tabela.insertRow(cont);
                 var dataCompromisso = document.createElement('th');
-                dataCompromisso.innerHTML = "<th>" +
-                    "<a onclick='PopularModal(" + res.id + ");' id='" + res.id + "' title='Alterar' data-toggle='modal' data-target='#AlterarCompromisso' style='font-size: 11px; padding-top: 5px; width: 15px;'></a>" +
-                    res.Data +
-                    "<span class='alteracao'>Última alteração feita por: " + res.Alterado + "</span>" +
-                    "<button type='button' class='close' onclick='ConfirmarCompromisso(" + res.id + ")' aria-hidden='true'><span class='glyphicon glyphicon-ok' style='color: green; font-size: 15px; padding-top: 5px; width: 15px;'></span></button>" +
-                    "</th>";
+                dataCompromisso.innerHTML = "<th>";
+                if (res.Situacao == null) {
+                    dataCompromisso.innerHTML += "<a onclick='PopularModal(" + res.id + ");' id='" + res.id + "' title='Alterar' data-toggle='modal' data-target='#AlterarCompromisso' style='font-size: 11px; padding-top: 5px; width: 15px;'></a>";
+                }
+                dataCompromisso.innerHTML += res.Data +
+                    "<span class='alteracao'>Última alteração feita por: " + res.Alterado + "</span>";
+                if (res.Situacao == null) {
+                    dataCompromisso.innerHTML += "<button type='button' class='close' onclick='ConfirmarCompromisso(" + res.id + ")' aria-hidden='true'><span class='glyphicon glyphicon-ok' style='color: green; font-size: 15px; padding-top: 5px; width: 15px;'></span></button>";
+                }
+                dataCompromisso.innerHTML += "</th>";
 
                 var linhaDescricao = tabela.insertRow(++cont);
                 var descricao = document.createElement('td');

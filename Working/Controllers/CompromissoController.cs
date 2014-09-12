@@ -20,12 +20,14 @@ namespace Working.Controllers
         private readonly CompromissoService _compromissoService;
         private readonly FuncionarioService _funcionarioService;
         private readonly JobService _jobService;
+        private readonly ClienteService _clienteService;
 
         public CompromissoController()
         {
             _compromissoService = Dependencia.Resolver<CompromissoService>();
             _funcionarioService = Dependencia.Resolver<FuncionarioService>();
             _jobService = Dependencia.Resolver<JobService>();
+            _clienteService = Dependencia.Resolver<ClienteService>();
         }
 
         public ActionResult Index()
@@ -40,7 +42,7 @@ namespace Working.Controllers
             return View(lista);
         }
 
-        public JsonResult CadastrarAjax(string data, string hora, string descricao, string idJob)
+        public JsonResult CadastrarAjax(string data, string hora, string descricao, int idJob)
         {
             var compromisso = new Compromisso();
             compromisso.Data = Convert.ToDateTime(data);
@@ -48,9 +50,10 @@ namespace Working.Controllers
             compromisso.Descricao = descricao;
             compromisso.DataRegistro = DateTime.Now;
             compromisso.UltimoFuncionario = _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
-            if (idJob != null)
+            if (idJob != 0)
             {
-                compromisso.Job = _jobService.ObterPorId(Convert.ToInt16(idJob));
+                compromisso.Job = _jobService.ObterPorId(idJob);
+                compromisso.Descricao = "Entregar Job do Cliente: " + _clienteService.ObterPorId(Convert.ToInt16(descricao)).Nome;
             }
             _compromissoService.Cadastrar(compromisso);
             return null;
@@ -76,7 +79,7 @@ namespace Working.Controllers
                 {
                     i.Data = Convert.ToDateTime(data);
                     i.UltimoFuncionario = funcionario;
-                    i.Descricao = descricao;
+                    i.Descricao = "Entregar Job do Cliente: " + _clienteService.ObterPorId(Convert.ToInt16(descricao)).Nome;
                     i.Hora = hora;
                     i.DataRegistro = DateTime.Now;
                     _compromissoService.Cadastrar(i);
@@ -128,14 +131,30 @@ namespace Working.Controllers
             var lista = new List<Objeto>();
             foreach (var i in compromisso)
             {
-                lista.Add(new Objeto
+                if (i.Job == null)
                 {
-                    id = i.Id,
-                    Data = i.Data.Day.ToString("D2") + "/" + i.Data.ToString("MMM"),
-                    Hora = i.Hora,
-                    Descricao = i.Descricao,
-                    Alterado = _funcionarioService.ObterPorId(i.UltimoFuncionario.Id).Nome
-                });
+                    lista.Add(new Objeto
+                    {
+                        id = i.Id,
+                        Data = i.Data.Day.ToString("D2") + "/" + i.Data.ToString("MMM"),
+                        Hora = i.Hora,
+                        Descricao = i.Descricao,
+                        Alterado = _funcionarioService.ObterPorId(i.UltimoFuncionario.Id).Nome,
+                        Situacao = null
+                    });
+                }
+                else
+                {
+                    lista.Add(new Objeto
+                    {
+                        id = i.Id,
+                        Data = i.Data.Day.ToString("D2") + "/" + i.Data.ToString("MMM"),
+                        Hora = i.Hora,
+                        Descricao = i.Descricao,
+                        Alterado = _funcionarioService.ObterPorId(i.UltimoFuncionario.Id).Nome,
+                        Situacao = i.Job.Situacao
+                    });
+                }
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
         }

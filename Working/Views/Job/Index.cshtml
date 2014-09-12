@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "Meus Jobs";
 }
+@RenderPage("~/Views/Shared/_AlterarJobEMPRODUCAO.cshtml")
 <div class="form-working col-sm-12">
     <div class="titulo1">
         <h1>Meus Jobs</h1>
@@ -12,6 +13,7 @@
         <table class="table table-bordered table-hover table-working" id="TabelaMeusJobs">
             <tr>
                 <th>Cliente</th>
+                <th>Nome</th>
                 <th>Peças</th>
                 <th>Data Criação</th>
                 <th>Data Estimativa</th>
@@ -19,10 +21,11 @@
                 <th>Operações</th>
             </tr>
 
-            @foreach (var i in Model)
+            @foreach (var i in Model.Where(e => e.Fase != "ENTREGUE"))
             {
                 <tr>
                     <td>@i.Cliente.Nome</td>
+                    <td>@i.Nome</td>
                     <td>
                         @foreach (var j in i.Peca)
                         {
@@ -41,7 +44,7 @@
                     <td>@i.Situacao.Descricao</td>
                     <td class="col-md-1">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" id="@i.Id" onclick="Listar(@i.Id)" data-toggle="modal" data-target="#AlterarJob">
+                            <button class="btn btn-default" id="@i.Id" onclick="ListarEMPRODUCAO(@i.Id)" data-toggle="modal" data-target="#AlterarJobEMPRODUCAO">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                             <button class="btn btn-success" data-toggle="modal" data-target="#Timeline" onclick="ListarComentarios(@i.Id)">
@@ -54,9 +57,3 @@
         </table>
     </div>
 </div>
-
-@section Scripts{
-    <script>
-        
-    </script>
-}

@@ -20,5 +20,7 @@ namespace Dominio.Entidades
         public virtual SituacaoJob Situacao { get; set; }
         public virtual IList<Peca> Peca { get; set; } 
         public virtual IList<Fornecedor> Fornecedor { get; set; } 
+        public virtual string Fase { get; set; }
+        public virtual string Nome { get; set; }
     }
 }

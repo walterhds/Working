@@ -31,6 +31,8 @@ namespace Dependencias
             _container.Register(Component.For<SituacaoJobService>().ImplementedBy<SituacaoJobService>());
             _container.Register(Component.For<TimelineJobService>().ImplementedBy<TimelineJobService>());
             _container.Register(Component.For<MuralService>().ImplementedBy<MuralService>());
+            _container.Register(Component.For<FuncionalidadeService>().ImplementedBy<FuncionalidadeService>());
+            _container.Register(Component.For<AcessoService>().ImplementedBy<AcessoService>());
 
             //Repositorios
             _container.Register(Component.For<ICargoRepositorio>().ImplementedBy<CargoRepositorio>());
@@ -43,6 +45,8 @@ namespace Dependencias
             _container.Register(Component.For<ISituacaoJobRepositorio>().ImplementedBy<SituacaoJobRepositorio>());
             _container.Register(Component.For<ITimelineJobRepositorio>().ImplementedBy<TimelineJobRepositorio>());
             _container.Register(Component.For<IMuralRepositorio>().ImplementedBy<MuralRepositorio>());
+            _container.Register(Component.For<IFuncionalidadeRepositorio>().ImplementedBy<FuncionalidadeRepositorio>());
+            _container.Register(Component.For<IAcessoRepositorio>().ImplementedBy<AcessoRepositorio>());
         }
 
         public static T Resolver<T>()

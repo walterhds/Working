@@ -15,8 +15,15 @@ namespace Percistencia.Ado.Mapping
                 m.Generator(Generators.Identity);
             });
             this.Property(p => p.Nome, m => m.Column("NOME"));
-            this.Property(p => p.Permissao, m => m.Column("PERMISSAO"));
             this.Property(p => p.DataRegistro, m => m.Column("DATA_REGISTRO"));
+            Bag<Acesso>(p=>p.Acessos, c =>
+            {
+                c.Table("CARGO_ACESSO");
+                c.Cascade(Cascade.None);
+                c.Lazy(CollectionLazy.Lazy);
+                c.Fetch(CollectionFetchMode.Join);
+                c.Key(k=>k.Column("ID_CARGO"));
+            },map=>map.ManyToMany(p=>p.Column("ID_ACESSO")));
         }
     }
 }

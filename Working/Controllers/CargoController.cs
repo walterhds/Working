@@ -1,18 +1,22 @@
-﻿using Dependencias;
+﻿using System.Collections.Generic;
+using Dependencias;
 using Dominio.Entidades;
 using Dominio.Servicos;
 using System;
 using System.Web.Mvc;
+using NHibernate.Mapping;
 
 namespace Working.Controllers
 {
     public class CargoController : Controller
     {
         private readonly CargoService _cargoService;
+        private readonly AcessoService _acessoService;
 
         public CargoController()
         {
             _cargoService = Dependencia.Resolver<CargoService>();
+            _acessoService = Dependencia.Resolver<AcessoService>();
         }
 
         public ActionResult Index()
@@ -23,7 +27,8 @@ namespace Working.Controllers
 
         public ActionResult Cadastrar()
         {
-            return View();
+            var lista = _acessoService.Listar(e => true);
+            return View(lista);
         }
 
         [HttpPost]
@@ -32,6 +37,13 @@ namespace Working.Controllers
             var cargo = new Cargo();
             TryUpdateModel(cargo);
             cargo.DataRegistro = DateTime.Now;
+            var acessos = Request["Acesso"].Split(',');
+            IList<Acesso> lista = new List<Acesso>();
+            foreach (var i in acessos)
+            {
+                lista.Add(_acessoService.ObterPorId(Convert.ToInt16(i)));
+            }
+            cargo.Acessos = lista;
             _cargoService.Cadastrar(cargo);
             return RedirectToAction("Index");
         }

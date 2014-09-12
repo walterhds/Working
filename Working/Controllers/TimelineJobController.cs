@@ -62,6 +62,18 @@ namespace Working.Controllers
             }
 
             return Json(lista, JsonRequestBehavior.AllowGet);
-        } 
+        }
+
+        public bool AlterarComentario(int id, string texto)
+        {
+            var comentario = _timelineJobService.ObterPorId(id);
+            comentario.Comentario = texto;
+            return _timelineJobService.Cadastrar(comentario);
+        }
+
+        public bool ExcluirComentario(int id)
+        {
+            return _timelineJobService.Remover(_timelineJobService.ObterPorId(id));
+        }
     }
 }

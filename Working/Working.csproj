@@ -198,6 +198,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Autorizar.cs" />
+    <Compile Include="Models\HelpClass.cs" />
     <Compile Include="Models\Objeto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewsModels\DadosFuncionario.cs" />
@@ -876,6 +878,15 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Cliente\Alterar.cshtml" />
     <Content Include="Views\Mural\Index.cshtml" />
+    <Content Include="Views\Shared\_ModalJobAtendimento.cshtml" />
+    <Content Include="Views\Shared\_AlterarJobANALISE.cshtml" />
+    <Content Include="Views\Shared\_AlterarJobPRODUCAO.cshtml" />
+    <Content Include="Views\Shared\_AlterarJobEMPRODUCAO.cshtml" />
+    <Content Include="Views\Shared\_MenuCadastrosAdministrador.cshtml" />
+    <Content Include="Views\Shared\_MenuCadastrosDiretorDeArte.cshtml" />
+    <Content Include="Views\Shared\_MenuCadastrosDesigner.cshtml" />
+    <Content Include="Views\Shared\_MenuCadastrosPublicitario.cshtml" />
+    <Content Include="Views\Shared\_MenuCadastrosRelacoesPublicas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

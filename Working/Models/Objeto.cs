@@ -10,6 +10,7 @@ namespace Working.Models
     {
         public int id { get; set; }
         public string nome { get; set; }
+        public string Cliente { get; set; }
         public SituacaoJob Situacao { get; set; }
         public string DataCriacao { get; set; }
         public string DataEstimativa { get; set; }
@@ -27,5 +28,7 @@ namespace Working.Models
         public int idFuncionario { get; set; }
         public int IdLogado { get; set; }
         public IList<Peca> Pecas { get; set; }
+        public string Fase { get; set; }
+        public bool TemAcesso { get; set; }
     }
 }

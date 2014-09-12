@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio.Entidades;
+using NHibernate.Mapping;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 
@@ -33,7 +34,9 @@ namespace Percistencia.Ado.Mapping
             this.Property(p => p.DataCriacao, m => m.Column("DATA_CRIACAO"));
             this.Property(p => p.DataEstimativa, m => m.Column("DATA_ESTIMATIVA"));
             this.Property(p => p.DataEntrega, m => m.Column("DATA_ENTREGA"));
+            this.Property(p => p.Fase, m => m.Column("FASE"));
             this.Property(p => p.HorasNecessarias, m => m.Column("HORAS_NECESSARIAS"));
+            this.Property(p => p.Nome, m => m.Column("NOME"));
             this.ManyToOne(p => p.Situacao, m =>
             {
                 m.Column("SITUACAO");

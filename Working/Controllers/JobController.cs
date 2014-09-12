@@ -23,7 +23,6 @@ namespace Working.Controllers
         private readonly PecaService _pecaService;
         private readonly SituacaoJobService _situacaoJobService;
         private readonly FornecedorService _fornecedorService;
-        private readonly TimelineJobService _timelineJobService;
 
         public JobController()
         {
@@ -33,7 +32,6 @@ namespace Working.Controllers
             _pecaService = Dependencia.Resolver<PecaService>();
             _situacaoJobService = Dependencia.Resolver<SituacaoJobService>();
             _fornecedorService = Dependencia.Resolver<FornecedorService>();
-            _timelineJobService = Dependencia.Resolver<TimelineJobService>();
         }
 
         public ActionResult Index()
@@ -53,14 +51,16 @@ namespace Working.Controllers
                 _jobService.Listar(
                     e =>
                         e.Funcionario ==
-                        _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]));
+                        _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]) &&
+                        e.Fase != "ENTREGUE");
 
             foreach (var i in listaJob)
             {
                 lista.Add(new Objeto
                 {
                     id = i.Id,
-                    nome = i.Cliente.Nome,
+                    Cliente = i.Cliente.Nome,
+                    nome = i.Nome,
                     Pecas = i.Peca,
                     DataCriacao = i.DataCriacao.Day.ToString("D2") + "/" + i.DataCriacao.ToString("MMMM"),
                     DataEstimativa = i.DataEstimativa.Day.ToString("D2") + "/" + i.DataEstimativa.ToString("MMMM"),
@@ -71,78 +71,35 @@ namespace Working.Controllers
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
 
-        public int CadastrarAjax(int cliente, string briefing, string fornecedores, string pecas, string descricao,
-            int funcionario,
-            string dataCriacao, string dataEstimativa, string dataEntrega, string horasNecessarias,
-            int situacao)
+        public int CadastrarAjax(int cliente, string briefing)
         {
             var job = new Job();
-            var pecasId = pecas.Split(',');
-            var fornecedoresId = fornecedores.Split(',');
+            var dt = "01/01/01";
             job.DataRegistro = DateTime.Now;
-            job.Funcionario = _funcionarioService.ObterPorId(funcionario);
             job.Cliente = _clienteService.ObterPorId(cliente);
             job.Briefing = briefing;
-            job.Descricao = descricao;
-            job.DataCriacao = Convert.ToDateTime(dataCriacao);
-            job.DataEstimativa = Convert.ToDateTime(dataEstimativa);
-            job.DataEntrega = Convert.ToDateTime(dataEntrega);
-            IList<Fornecedor> listaFornecedor = new List<Fornecedor>();
-            foreach (var i in fornecedoresId)
-            {
-                var fornecedor = _fornecedorService.ObterPorId(Convert.ToInt16(i));
-                listaFornecedor.Add(fornecedor);
-                job.Fornecedor = listaFornecedor;
-            }
-
-            IList<Peca> listaPeca = new List<Peca>();
-            foreach (var i in pecasId)
-            {
-                var peca = _pecaService.ObterPorId(Convert.ToInt16(i));
-                listaPeca.Add(peca);
-                job.Peca = listaPeca;
-            }
-
-            if (horasNecessarias.Contains(':'))
-            {
-                var horas = horasNecessarias.Split(':');
-                if (horas[1].Length > 1)
-                {
-                    job.HorasNecessarias = horasNecessarias;
-                }
-                else
-                {
-                    horasNecessarias = horas[0] + ":" + horas[1] + "0";
-                    job.HorasNecessarias = horasNecessarias;
-                }
-            }
-            else
-            {
-                horasNecessarias += ":00";
-                job.HorasNecessarias = horasNecessarias;
-            }
-            job.Situacao = _situacaoJobService.ObterPorId(situacao);
+            job.Fase = "ANALISE";
+            job.DataCriacao = Convert.ToDateTime(dt);
+            job.DataEntrega = Convert.ToDateTime(dt);
+            job.DataEstimativa = Convert.ToDateTime(dt);
             _jobService.Cadastrar(job);
 
             return _jobService.Listar(e => true).Last().Id;
         }
 
-        public void AlterarAjax(int idJob, int cliente, string briefing, string fornecedores, string pecas, string descricao,
-            int funcionario,
-            string dataCriacao, string dataEstimativa, string dataEntrega, string horasNecessarias,
-            int situacao)
+        public void AlterarAjax(int idJob, string fornecedores, string pecas, string descricao, string nome)
         {
+            var dt = "01/01/01";
             var job = _jobService.ObterPorId(idJob);
             var pecasId = pecas.Split(',');
             var fornecedoresId = fornecedores.Split(',');
             job.DataRegistro = DateTime.Now;
-            job.Funcionario = _funcionarioService.ObterPorId(funcionario);
-            job.Cliente = _clienteService.ObterPorId(cliente);
-            job.Briefing = briefing;
             job.Descricao = descricao;
-            job.DataCriacao = Convert.ToDateTime(dataCriacao);
-            job.DataEstimativa = Convert.ToDateTime(dataEstimativa);
-            job.DataEntrega = Convert.ToDateTime(dataEntrega);
+            job.DataCriacao = Convert.ToDateTime(dt);
+            job.DataEstimativa = Convert.ToDateTime(dt);
+            job.DataEntrega = Convert.ToDateTime(dt);
+            job.Fase = "PRODUCAO";
+            job.Nome = nome;
             IList<Fornecedor> listaFornecedor = new List<Fornecedor>();
             foreach (var i in fornecedoresId)
             {
@@ -158,26 +115,44 @@ namespace Working.Controllers
                 listaPeca.Add(peca);
                 job.Peca = listaPeca;
             }
+            _jobService.Cadastrar(job);
+        }
 
-            if (horasNecessarias.Contains(':'))
+        public void AlterarAjaxProducao(int idJob, string dtCriacao, string horas, string dtEstimativa, string funcionario, string situacao, string dtEntrega)
+        {
+            var job = _jobService.ObterPorId(idJob);
+            if (horas.Contains(':'))
             {
-                var horas = horasNecessarias.Split(':');
-                if (horas[1].Length > 1)
+                var hrs = horas.Split(':');
+                if (hrs[1].Length > 1)
                 {
-                    job.HorasNecessarias = horasNecessarias;
+                    job.HorasNecessarias = horas;
                 }
                 else
                 {
-                    horasNecessarias = horas[0] + ":" + horas[1] + "0";
-                    job.HorasNecessarias = horasNecessarias;
+                    horas = hrs[0] + ":" + hrs[1] + "0";
+                    job.HorasNecessarias = horas;
                 }
             }
             else
             {
-                horasNecessarias += ":00";
-                job.HorasNecessarias = horasNecessarias;
+                horas += ":00";
+                job.HorasNecessarias = horas;
             }
-            job.Situacao = _situacaoJobService.ObterPorId(situacao);
+            if (!string.IsNullOrWhiteSpace(dtEntrega))
+            {
+                job.Fase = "ENTREGUE";
+                job.DataEntrega = Convert.ToDateTime(dtEntrega);
+            }
+            else
+            {
+                job.Fase = "EMPRODUCAO";
+            }
+            job.DataCriacao = Convert.ToDateTime(dtCriacao);
+            job.DataEstimativa = Convert.ToDateTime(dtEstimativa);
+            job.Funcionario = _funcionarioService.ObterPorId(Convert.ToInt16(funcionario));
+            job.Situacao = _situacaoJobService.ObterPorId(Convert.ToInt16(situacao));
+            job.DataRegistro = DateTime.Now;
             _jobService.Cadastrar(job);
         }
 
@@ -187,17 +162,45 @@ namespace Working.Controllers
                 _jobService.Listar(e => true)
                     .OrderByDescending(e => e.DataEstimativa)
                     .ThenByDescending(e => e.DataCriacao)
-                    .ThenByDescending(e => e.Id);
+                    .ThenByDescending(e => e.Id).Where(e => e.Fase != "ENTREGUE");
             var lista = new List<Objeto>();
+            var fun = _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
             foreach (var i in job)
             {
-                lista.Add(new Objeto
+                if (i.Funcionario != null)
                 {
-                    nome = i.Cliente.Nome,
-                    DataCriacao = i.DataCriacao.Day.ToString("D2") + "/" + i.DataCriacao.ToString("MMM"),
-                    DataEstimativa = i.DataEstimativa.Day.ToString("D2") + "/" + i.DataEstimativa.ToString("MMM"),
-                    Situacao = i.Situacao
-                });
+                    lista.Add(new Objeto
+                    {
+                        id = i.Id,
+                        Cliente = i.Cliente.Nome,
+                        nome = i.Nome,
+                        DataCriacao = i.DataCriacao.Day.ToString("D2") + "/" + i.DataCriacao.ToString("MMM"),
+                        DataEstimativa = i.DataEstimativa.Day.ToString("D2") + "/" + i.DataEstimativa.ToString("MMM"),
+                        Situacao = i.Situacao,
+                        IdLogado = fun.Id,
+                        idFuncionario = i.Funcionario.Id,
+                        TemAcesso = fun.TemAcesso(i.Fase),
+                        Descricao = fun.Cargo.Nome,
+                        Fase = i.Fase
+                    });
+                }
+                else
+                {
+                    lista.Add(new Objeto
+                    {
+                        id = i.Id,
+                        Cliente = i.Cliente.Nome,
+                        nome = i.Nome,
+                        DataCriacao = i.DataCriacao.Day.ToString("D2") + "/" + i.DataCriacao.ToString("MMM"),
+                        DataEstimativa = i.DataEstimativa.Day.ToString("D2") + "/" + i.DataEstimativa.ToString("MMM"),
+                        Situacao = i.Situacao,
+                        IdLogado = fun.Id,
+                        idFuncionario = 0,
+                        TemAcesso = fun.TemAcesso(i.Fase),
+                        Descricao = fun.Cargo.Nome,
+                        Fase = i.Fase
+                    });
+                }
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
@@ -280,25 +283,48 @@ namespace Working.Controllers
         public JsonResult ObterJobPorIdJson(int id)
         {
             var job = _jobService.ObterPorId(id);
-            
             var lista = new List<ObjetoJob>();
-            lista.Add(new ObjetoJob
+            if (job.Fase == "ANALISE")
             {
-                Id = job.Id,
-                Briefing = job.Briefing,
-                Descricao = job.Descricao,
-                DataCriacao = job.DataCriacao.ToShortDateString(),
-                DataEstimativa = job.DataEstimativa.ToShortDateString(),
-                DataEntrega = job.DataEntrega.ToShortDateString(),
-                SituacaoJob = job.Situacao.Id.ToString(),
-                Cliente = job.Cliente.Id.ToString(),
-                Funcionario = job.Funcionario.Id.ToString(),
-                HorasNecessarias = job.HorasNecessarias,
-                DataRegistro = job.DataRegistro.ToShortDateString(),
-                Fornecedor = job.Fornecedor,
-                Peca = job.Peca
-            });
-
+                lista.Add(new ObjetoJob
+                {
+                    Id = job.Id,
+                    Briefing = job.Briefing,
+                    Cliente = job.Cliente.Id.ToString(),
+                    Fase = job.Fase
+                });
+            }
+            else if(job.Fase == "PRODUCAO")
+            {
+                lista.Add(new ObjetoJob
+                {
+                    Id = job.Id,
+                    Briefing = job.Briefing,
+                    Descricao = job.Descricao,
+                    Cliente = job.Cliente.Id.ToString(),
+                    DataRegistro = job.DataRegistro.ToShortDateString(),
+                    Fase = job.Fase
+                });
+            }
+            else
+            {
+                lista.Add(new ObjetoJob
+                {
+                    Id = job.Id,
+                    Briefing = job.Briefing,
+                    Descricao = job.Descricao,
+                    SituacaoJob = job.Situacao.Id.ToString(),
+                    Cliente = job.Cliente.Id.ToString(),
+                    DataRegistro = job.DataRegistro.ToShortDateString(),
+                    Fornecedor = job.Fornecedor,
+                    Peca = job.Peca,
+                    Fase = job.Fase,
+                    DataCriacao = job.DataCriacao.ToShortDateString(),
+                    DataEstimativa = job.DataEstimativa.ToShortDateString(),
+                    HorasNecessarias = job.HorasNecessarias,
+                    Funcionario = job.Funcionario.Id.ToString()
+                });
+            }
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
 
@@ -400,5 +426,5 @@ namespace Working.Controllers
 
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
-    }   
+    }
 }

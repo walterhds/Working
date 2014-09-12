@@ -21,5 +21,6 @@ namespace Working.ViewsModels
         public string SituacaoJob { get; set; }
         public IList<Peca> Peca { get; set; }
         public IList<Fornecedor> Fornecedor { get; set; } 
+        public string Fase { get; set; }
     }
 }

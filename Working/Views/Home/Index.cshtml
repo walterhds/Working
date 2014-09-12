@@ -1,9 +1,15 @@
-﻿@using Dominio.Entidades
+﻿@using Castle.Core.Internal
+@using Dominio.Entidades
 @using NHibernate.Context
+@using Working.Models
+@{var funcionario = HelpClass.UsuarioLogado();}
 @model Working.ViewsModels.DadosIndex
 @{
     ViewBag.Title = "Home";
 }
+@RenderPage("~/Views/Shared/_AlterarJobANALISE.cshtml")
+@RenderPage("~/Views/Shared/_AlterarJobPRODUCAO.cshtml")
+@RenderPage("~/Views/Shared/_AlterarJobEMPRODUCAO.cshtml")
 <div class="panel-default col-md-3 pull-right">
     <div class="panel-heading">
         <span class="glyphicon glyphicon-list-alt pull-left"></span>
@@ -13,10 +19,17 @@
         @foreach (var i in Model.Compromissos.OrderBy(e => e.Data).ThenBy(e => e.Hora).Where(e => e.Situacao == 0 && e.Data >= DateTime.Now.AddDays(-1)).Take(5))
         {
             <tr class="@i.Id">
-                <th class="glyphicon-compromisso"><a onclick="PopularModal(@i.Id);" id="@i.Id" title="Alterar" data-toggle="modal" data-target="#AlterarCompromisso" class="glyphicon glyphicon-pencil pull-left" style="font-size: 11px; padding-top: 5px; width: 15px;"></a>
+                <th class="glyphicon-compromisso">
+                    @if (i.Job == null)
+                    {
+                        <a onclick=" PopularModal(@i.Id); " id="@i.Id" title="Alterar" data-toggle="modal" data-target="#AlterarCompromisso" class="glyphicon glyphicon-pencil pull-left" style="font-size: 11px; padding-top: 5px; width: 15px;"></a>
+                    }
                     @i.Data.Day.ToString("D2")/@i.Data.ToString("MMM")
                     <span class="alteracao">Última alteração feita por: @i.UltimoFuncionario.Nome</span>
-                    <button type="button" class="close" onclick="ConfirmarCompromissoAjax(@i.Id,@Model.Funcionario.Id)" title="Confirmar" aria-hidden="true"><span class="glyphicon glyphicon-ok" style="color: green; font-size: 15px; padding-top: 5px; width: 15px;"></span></button>
+                    @if (i.Job == null)
+                    {
+                        <button type="button" class="close" onclick=" ConfirmarCompromissoAjax(@i.Id, @Model.Funcionario.Id) " title="Confirmar" aria-hidden="true"><span class="glyphicon glyphicon-ok" style="color: green; font-size: 15px; padding-top: 5px; width: 15px;"></span></button>
+                    }
                 </th>
             </tr>
             <tr>
@@ -43,28 +56,69 @@
         <tbody>
             <tr>
                 <th>Cliente</th>
+                <th>Nome</th>
                 <th>Criação</th>
                 <th>Estimativa</th>
                 <th>Situação</th>
                 <th>Operações</th>
             </tr>
-            @foreach (var i in Model.Jobs.OrderBy(e => e.DataEstimativa).ThenBy(e => e.DataCriacao).ThenBy(e => e.Id))
+            @foreach (var i in Model.Jobs.OrderBy(e => e.DataEstimativa).ThenBy(e => e.DataCriacao).ThenBy(e => e.Id).Where(e => e.Fase != "ENTREGUE"))
             {
                 <tr>
                     <td>@i.Cliente.Nome</td>
-                    <td>@i.DataCriacao.Day.ToString("D2")/@i.DataCriacao.ToString("MMM")</td>
-                    <td>@i.DataEstimativa.Day.ToString("D2")/@i.DataEstimativa.ToString("MMM")</td>
-                    <td>@i.Situacao.Descricao</td>
+                    @if (i.Fase == "PRODUCAO" || i.Fase == "EMPRODUCAO")
+                    {
+                        <td>@i.Nome</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    @if (i.Fase == "EMPRODUCAO")
+                    {
+                        <td>@i.DataCriacao.Day.ToString("D2")/@i.DataCriacao.ToString("MMM")</td>
+                        <td>@i.DataEstimativa.Day.ToString("D2")/@i.DataEstimativa.ToString("MMM")</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                    @if (i.Situacao != null)
+                    {
+                        <td>@i.Situacao.Descricao</td>
+                    }
+                    else
+                    {
+                        <td>@i.Fase</td>
+                    }
                     <td>
                         <div class="btn-group">
                             <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#Timeline" onclick="ListarComentarios(@i.Id);">
                                 <span class="glyphicon glyphicon-comment"></span>
                             </button>
-                            @if (i.Funcionario.Nome == HttpContext.Current.User.Identity.Name)
+                            @if (funcionario.TemAcesso(i.Fase))
                             {
-                                <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#AlterarJob" onclick="Listar(@i.Id)">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
+                                if (i.Fase == "EMPRODUCAO")
+                                {
+                                    if (i.Funcionario == funcionario || funcionario.Cargo.Nome == "Diretor de Arte" || funcionario.Cargo.Nome == "Administrador")
+                                    {
+                                        var target = "#AlterarJob" + i.Fase;
+                                        var listar = "Listar" + i.Fase + "(" + i.Id + ")";
+                                        <button class="btn btn-default btn-xs" data-toggle="modal" data-target="@target" onclick="@listar">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                    }
+                                }
+                                else
+                                {
+                                    @RenderPage("~/Views/Shared/_AlterarJob" + i.Fase + ".cshtml")
+                                    var target = "#AlterarJob" + i.Fase;
+                                    var listar = "Listar" + i.Fase + "(" + i.Id + ")";
+                                    <button class="btn btn-default btn-xs" data-toggle="modal" data-target="@target" onclick="@listar">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                }
                             }
                         </div>
                     </td>

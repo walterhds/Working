@@ -99,7 +99,7 @@ namespace Working.Controllers
 
         public JsonResult ListarFuncionarioJson()
         {
-            var funcionario = _funcionarioService.Listar(e => true);
+            var funcionario = _funcionarioService.Listar(e => e.Cargo.Nome == "Designer");
             var lista = new List<Objeto>();
             foreach (var i in funcionario)
             {
