@@ -321,6 +321,15 @@
                         </a>
                     </li>
                 }
+                @if (funcionario.TemAcesso("FINANCEIRO"))
+                {
+                    <li>
+                        <a href="~/Contrato/Index/">
+                            <span class="glyphicon glyphicon-usd"></span>
+                            Financeiro
+                        </a>
+                    </li>
+                }
                 <li>
                     <a href="~/Mural/Index/">
                         <span class="glyphicon glyphicon-comment glyphicon-working"></span>
@@ -378,6 +387,7 @@
         <script src="~/Scripts/bootstrap-select.js"></script>
         <script src="~/Scripts/jquery-ui-timepicker-addon.js"></script>
         <script>
+            $(".currency").mask("#.##0,00", { reverse: true, maxlength: false });
             $(".draggable").draggable();
             $(".selectpicker").selectpicker({
                 size: 6

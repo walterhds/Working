@@ -184,6 +184,7 @@
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\CompromissoController.cs" />
     <Compile Include="Controllers\ConducaoController.cs" />
+    <Compile Include="Controllers\ContratoController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Controllers\PecaController.cs" />
     <Compile Include="Controllers\SituacaoJobController.cs" />
     <Compile Include="Controllers\TimelineJobController.cs" />
+    <Compile Include="Controllers\TipoContaController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -887,6 +889,9 @@
     <Content Include="Views\Shared\_MenuCadastrosDesigner.cshtml" />
     <Content Include="Views\Shared\_MenuCadastrosPublicitario.cshtml" />
     <Content Include="Views\Shared\_MenuCadastrosRelacoesPublicas.cshtml" />
+    <Content Include="Views\Contrato\Index.cshtml" />
+    <Content Include="Views\Contrato\Cadastrar.cshtml" />
+    <Content Include="Views\Shared\_MenuCadastrosDiretorFinanceiro.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

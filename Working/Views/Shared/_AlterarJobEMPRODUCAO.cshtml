@@ -1,0 +1,642 @@
+﻿@using Working.Models
+<div class="modal fade" id="AlterarJobEMPRODUCAO">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="FecharAlterarJob" data-dismiss="modal" aria-hidden="true" onclick="LimparEmProducao();">&times;</button>
+                <h4 class="modal-title">Alterar Job</h4>
+                <span id="IdJobEmProducao" style="color: transparent; font-size: 2px !important;" class="col-sm-2"></span>
+            </div>
+            <div class="modal-body form-working">
+                <form role="form" method="POST" class="form-horizontal">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="ClienteAlterar" class="control-label col-sm-2">Cliente:</label>
+                            <div class="col-sm-10">
+                                <select class="selectpicker show-tick form-control" name="ClienteAlterar" id="ClienteAlterarEmProducao" data-live-search="true" disabled="disabled">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="BriefingAlterar" class="control-label col-sm-2">Briefing:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="BriefingAlterar" id="BriefingAlterarEmProducao" style="resize: none;" disabled="disabled"></textarea>
+                            </div>
+                            <div class="caracteres">
+                                <span id="CaracterBriefingAlterar" class="pull-right">5000 caracteres</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="NomeAlterar" class="control-label col-sm-2">Nome:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="NomeAlterar" id="NomeAlterarAnalise" disabled="disabled" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="FornecedoresAlterar" class="control-label col-sm-2" style="margin-left: -10px;">Fornecedores:</label>
+                            <div class="col-sm-8" style="padding-left: 30px;">
+                                <select class="selectpicker show-tick form-control" multiple name="FornecedoresAlterar" id="FornecedoresAlterarEmProducao" data-live-search="true" disabled="disabled">
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-info AdicionarFornecedor" data-dismiss="modal" data-toggle="modal" data-target="#CadastrarFornecedor" disabled="disabled">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="PecasAlterar" class="control-label col-sm-2">Peças:</label>
+                            <div class="col-sm-8">
+                                <select class="selectpicker show-tick form-control" multiple name="PecasAlterar" id="PecasAlterarEmProducao" data-live-search="true" disabled="disabled">
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-info AdicionarPeca" data-dismiss="modal" data-toggle="modal" data-target="#CadastrarPeca" disabled="disabled">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="DescricaoAlterar" class="control-label col-sm-2">Descrição:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="DescricaoAlterar" id="DescricaoAlterarEmProducao" style="resize: none;" disabled="disabled"></textarea>
+                            </div>
+                            <div class="caracteres">
+                                <span id="CaracterDescricaoAlterar" class="pull-right">5000 caracteres</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="">
+                                <label for="DataCriacaoAlterar" class="control-label col-sm-2">Criação:</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" name="DataCriacaoAlterar" id="DataCriacaoAlterarEmProducao" readonly="readonly" />
+                                </div>
+                            </div>
+                            <div>
+                                <label for="HorasNecessariasAlterar" class="control-label col-sm-2">Horas:</label>
+                                <div class="col-sm-3">
+                                    @{
+                                        var dis = "disabled";
+                                        if (HelpClass.UsuarioLogado().Cargo.Nome == "Diretor de Arte")
+                                        {
+                                            dis = "";
+                                        }
+                                    }
+                                    <input type="text" class="form-control" name="HorasNecessariasAlterar" id="HorasNecessariasAlterarEmProducao" onchange="VerificaFuncionarioAlterarEmProducao();" @dis/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="DataEstimativaAlterar" class="control-label col-sm-2">Estimativa:</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control datepicker" name="DataEstimativaAlterar" id="DataEstimativaAlterarEmProducao" onchange="VerificaFuncionarioAlterarEmProducao();" @dis/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="FuncionarioAlterar" class="control-label col-sm-2">Colaborador:</label>
+                            <div class="col-sm-10">
+                                <select class="selectpicker show-tick form-control" name="FuncionarioAlterar" id="FuncionarioAlterarEmProducao" data-live-search="true" onchange="VerificaFuncionarioAlterarEmProducao();" @dis>
+                                </select>
+                            </div>
+                            <div class="info text-center">
+                                <span id="InfoAlterarEmProducao"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label for="SituacaoAlterar" class="control-label col-sm-2">Situação:</label>
+                                <div class="col-sm-5">
+                                    <select class="selectpicker show-tick form-control" name="SituacaoAlterar" id="SituacaoAlterarEmProducao" data-live-search="true">
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="DataEntregaAlterar" class="control-label col-sm-2">Entrega:</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control datepicker" name="DataEntregaAlterar" id="DataEntregaAlterarEmProducao" />
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success" id="SalvarJobAlterarEmProducao" data-dismiss="modal" onclick="SalvarJobEmProducao();">
+                            <span class="glyphicon glyphicon-floppy-saved"></span>
+                            Alterar                                                                      
+                        </button>
+                        <button type="button" class="btn btn-danger" id="CancelarJobAlterarEmProducao" data-dismiss="modal" onclick="LimparEmProducao();">
+                            <span class=" glyphicon glyphicon-remove"></span>
+                            Cancelar                                                                       
+                        </button>
+                    </div>
+                </form>
+                <div class="modal-subheader">
+                    <h5 class="modal-title" style="font-weight: bold;">Comentários</h5>
+                </div>
+                <div style="padding-top: 5px;">
+                    <button type="button" class="btn btn-sm btn-success" id="NovoComentarioEmProducao" onclick="NovoComentarioEmProducao();">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Comentar
+                    </button>
+                </div>
+                <div class="form-working">
+                    <form role="form" method="POST" class="form-horizontal" id="FormComentarioEmProducao">
+                    </form>
+                </div>
+                <div style="padding-top: 5px; padding-bottom: 5px;">
+                    <button type="button" class="btn btn-sm btn-info" id="ExibirComentariosEmProducao" onclick="ExibirComentariosEmProducao();">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                        Exibir Comentários
+                    </button>
+                </div>
+                <div id="ComentariosEmProducao">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function ListarFornecedoresAlterarEmProducao(id) {
+        var itens;
+        $.get('/Job/ListarJobFornecedoresJson/' + id, function (data) {
+            $.each(data, function (i, res) {
+                if (res.nome == 'null') {
+                    $('#FornecedoresAlterarEmProducao').empty();
+                    $('.selectpicker').selectpicker('refresh');
+                } else if (res.Alterado == 'null') {
+                    itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
+                } else {
+                    itens += "<option value='" + res.id + "' selected='selected'>" + res.nome + "</option>";
+                }
+            });
+            $('#FornecedoresAlterarEmProducao').html(itens);
+            $('.selectpicker').selectpicker('refresh');
+            ListarPecasEmProducao(id, $('#FornecedoresAlterarEmProducao').val().toString());
+        });
+    }
+
+    function ListarPecasEmProducao(idJob, id) {
+        var itens;
+        $.get('/Job/ListarJobPecasJson/', { idJob: idJob, id: id }, function (data) {
+            $.each(data, function (i, res) {
+                if (res.Descricao == 'null') {
+                    $('#PecasAlterarEmProducao').empty();
+                    $('.selectpicker').selectpicker('refresh');
+                } else if (res.Alterado == 'null') {
+                    itens += "<option value='" + res.id + "'>" + res.Descricao + "</option>";
+                } else {
+                    itens += "<option value='" + res.id + "' selected='selected'>" + res.Descricao + "</option>";
+                }
+            });
+            $('#PecasAlterarEmProducao').html(itens);
+            $('.selectpicker').selectpicker('refresh');
+        });
+    }
+
+    function ListarFuncionarioAlterarEmProducao(fun) {
+        var itens;
+        $.get('/Funcionario/ListarFuncionarioJson/', function (data) {
+            $.each(data, function (i, res) {
+                if (res.nome == 'null') {
+                    $('#FuncionarioAlterarEmProducao').empty();
+                    $('.selectpicker').selectpicker('refresh');
+                } else {
+                    itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
+                }
+            });
+            $('#FuncionarioAlterarEmProducao').html(itens);
+            $('.selectpicker').selectpicker('refresh');
+            $('#FuncionarioAlterarEmProducao').selectpicker('val', fun);
+        });
+    };
+
+    function ListarSituacaoJobAlterarEmProducao(sit) {
+        var itens;
+        $.get('/SituacaoJob/ListarSituacaoJobJson/', function (data) {
+            $.each(data, function (i, res) {
+                if (res.descricao == 'null') {
+                    $('#SituacaoAlterarEmProducao').empty();
+                    $('.selectpicker').selectpicker('refresh');
+                } else {
+                    itens += "<option value='" + res.id + "'>" + res.Descricao + "</option>";
+                }
+            });
+            $('#SituacaoAlterarEmProducao').html(itens);
+            $('.selectpicker').selectpicker('refresh');
+            $('#SituacaoAlterarEmProducao').selectpicker('val', sit);
+        });
+    }
+
+    function PopularModalJobEmProducao(id) {
+        $.get('/Job/ObterJobPorIdJson/' + id, function (data) {
+            $.each(data, function (i, res) {
+                if (res.Id != 'null') {
+                    $('#IdJobEmProducao').text(res.Id);
+                    $('#ClienteAlterarEmProducao').selectpicker('val', res.Cliente);
+                    $('#BriefingAlterarEmProducao').val(res.Briefing);
+                    $('#DescricaoAlterarEmProducao').val(res.Descricao);
+                    ListarFornecedoresAlterarEmProducao(id);
+                    ListarFuncionarioAlterarEmProducao(res.Funcionario);
+                    ListarSituacaoJobAlterarEmProducao(res.SituacaoJob);
+                    $('#SituacaoAlterarEmProducao').removeAttr('disabled');
+                    $('#HorasNecessariasAlterarEmProducao').val(res.HorasNecessarias);
+                    $('#DataEstimativaAlterarEmProducao').val(res.DataEstimativa);
+                    $('#DataCriacaoAlterarEmProducao').val(res.DataCriacao);
+                }
+            });
+        });
+    }
+
+    function ListarEMPRODUCAO(id) {
+        var itens;
+        $.get('/Cliente/ListarClienteJson/', function (data) {
+            $.each(data, function (i, res) {
+                if (res.nome == 'null') {
+                    $('#ClienteAlterarEmProducao').empty();
+                    $('.selectpicker').selectpicker('refresh');
+                } else {
+                    itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
+                }
+            });
+            $('#ClienteAlterarEmProducao').html(itens);
+            $('.selectpicker').selectpicker('refresh');
+            PopularModalJobEmProducao(id);
+        });
+    }
+
+    function HorasNecessariasEmProducao() {
+        var horas;
+        var hora;
+        var minuto;
+        try {
+            horas = $('#HorasNecessariasAlterarEmProducao').val().split(':');
+            hora = horas[0];
+            if (horas[1].length == 1) {
+                minuto = horas[1] + 0;
+            } else {
+                minuto = horas[1];
+            }
+            horas = hora + ":" + minuto;
+            $('#HorasNecessariasAlterarEmProducao').val(horas);
+        } catch (e) {
+            horas = 0 + $('#HorasNecessariasAlterarEmProducao').val() + ":00";
+            $('#HorasNecessariasAlterarEmProducao').val(horas);
+            return;
+        }
+    }
+
+    function diferencaDiasAlterar(data1, data2) {
+        var dif =
+            Date.UTC(data1.getYear(), data1.getMonth(), data1.getDate(), 0, 0, 0)
+                - Date.UTC(data2.getYear(), data2.getMonth(), data2.getDate(), 0, 0, 0);
+        return Math.abs((dif / 1000 / 60 / 60 / 24));
+    }
+
+    function VerificaFuncionarioAlterarEmProducao() {
+        var dias;
+        var difDias;
+        var horas;
+        var hrsNecessarias;
+        var horasFinais;
+        var horasAcumuladas = 0;
+        var minutos;
+        var dataCriacao = $('#DataCriacaoAlterarEmProducao').val().split("/");
+        var dia = dataCriacao[0];
+        var mes = dataCriacao[1];
+        var ano = dataCriacao[2];
+        var dtCriacao = new Date(ano, --mes, dia);
+        var dataEstimativa = $('#DataEstimativaAlterarEmProducao').val().split("/");
+        dia = dataEstimativa[0];
+        mes = dataEstimativa[1];
+        ano = dataEstimativa[2];
+        dataEstimativa = new Date(ano, --mes, dia);
+        var quantidadeHora = 0;
+        $.get('/Job/ListarJobsFuncionarioAlterar/', { jid: $('#IdJobEmProducao').text(), fid: $('#FuncionarioAlterarEmProducao').val(), dataInicio: dataCriacao + '', dataFim: $('#DataEstimativaAlterarEmProducao').val() + '' }, function (data) {
+            $.each(data, function (i, res) {
+                if (res.horasNecessarias != 'null') {
+                    var dtEstimativa = new Date(res.DataEstimativa);
+
+                    if (dtEstimativa > dataEstimativa) {
+                        difDias = diferencaDiasAlterar(dataEstimativa, dtCriacao);
+                    } else {
+                        difDias = diferencaDiasAlterar(dtEstimativa, dtCriacao);
+                    }
+
+                    dias = diferencaDiasAlterar(dtEstimativa, new Date(res.DataCriacao));
+                    hrsNecessarias = res.HorasNecessarias.split(":");
+                    horas = parseInt(hrsNecessarias[0]) / dias;
+                    if (parseInt(hrsNecessarias[1]) != 0) {
+                        minutos = parseInt(hrsNecessarias[1]) / dias;
+                    } else {
+                        minutos = parseInt(hrsNecessarias[1]);
+                    }
+                    if (horas.toString().indexOf('.') >= 0) {
+                        var horasSplit = horas.toString().split(".");
+                        horas = parseInt(horasSplit[0]) + (((parseInt(horasSplit[1].substr(0, 2)) / 100) * 60) / 100);
+                    }
+                    if (minutos.toString().indexOf('.') >= 0) {
+                        var minutosSplit = minutos.toString().split(".");
+                        minutos = parseInt(minutosSplit[0]) + (((parseInt(minutosSplit[1].substr(0, 2)) / 100) * 60) / 100);
+                    }
+                    horasFinais = horas + (parseInt(minutos) / 100);
+                    horasAcumuladas += horasFinais * difDias;
+                }
+
+                quantidadeHora = parseInt(res.QuantidadeHora) * (diferencaDiasAlterar(dataEstimativa, dtCriacao));
+            });
+            var horasNecessarias = $('#HorasNecessariasAlterarEmProducao').val().split(":");
+            var hora = horasNecessarias[0];
+            var minuto = horasNecessarias[1];
+            horasNecessarias = parseInt(hora) + (minuto / 100);
+
+            if ((quantidadeHora - horasAcumuladas) < horasNecessarias) {
+                if (horasAcumuladas == 0) {
+                    $('#FuncionarioAlterarEmProducao').selectpicker('setStyle', 'btn-success', 'remove');
+                    $('#FuncionarioAlterarEmProducao').selectpicker('setStyle', 'btn-danger');
+                    $('#InfoAlterarEmProducao').text("Horas necessárias muito grande para pouco tempo de trabalho para este colaborador");
+                    $('#InfoAlterarEmProducao').css('color', 'red');
+                    return;
+                } else {
+                    $('#FuncionarioAlterarEmProducao').selectpicker('setStyle', 'btn-success', 'remove');
+                    $('#FuncionarioAlterarEmProducao').selectpicker('setStyle', 'btn-danger');
+                    $('#InfoAlterarEmProducao').text("Este colaborador não tem disponibilidade neste período!");
+                    $('#InfoAlterarEmProducao').css('color', 'red');
+                    return;
+                }
+            }
+            $('#InfoAlterarEmProducao').text("Colaborador com disponibilidade para este job.");
+            $('#InfoAlterarEmProducao').css('color', 'green');
+            $('#FuncionarioAlterarEmProducao').selectpicker('setStyle', 'btn-danger', 'remove');
+            $('#FuncionarioAlterarEmProducao').selectpicker('setStyle', 'btn-success');
+        });
+    }
+
+    function AlterarJobEmProducao(idJob, dtCriacao, horas, dtEstimativa, funcionario, situacao, cliente, dtEntrega) {
+        $.ajax({
+            type: 'POST',
+            url: '/Job/AlterarAjaxProducao/',
+            data: {
+                idJob: idJob,
+                dtCriacao: dtCriacao,
+                horas: horas,
+                dtEstimativa: dtEstimativa,
+                funcionario: funcionario,
+                situacao: situacao,
+                dtEntrega: dtEntrega
+            },
+            success: function () {
+                $('#CancelarJobAlterar').click();
+                AtualizaJobs();
+                AtualizaMeusJobs();
+            },
+            error: function (xhr, status, response) { alert(response); }
+        });
+    }
+
+    function SalvarJobEmProducao() {
+        var idJob = $('#IdJobEmProducao').text();
+        var dtCriacao = $('#DataCriacaoAlterarEmProducao').val();
+        var horas = $('#HorasNecessariasAlterarEmProducao').val();
+        var dtEstimativa = $('#DataEstimativaAlterarEmProducao').val();
+        var funcionario = $('#FuncionarioAlterarEmProducao').val();
+        var situacao = $('#SituacaoAlterarEmProducao').val();
+        var cliente = $('#ClienteAlterarEmProducao').val();
+        var dtEntrega = $('#DataEntregaAlterarEmProducao').val();
+        AlterarJobEmProducao(idJob, dtCriacao, horas, dtEstimativa, funcionario, situacao, cliente, dtEntrega);
+    }
+
+    function LimparEmProducao() {
+        $('#DataEntregaAlterarEmProducao').val("");
+    }
+
+    ////////////////////////////////////
+    /////                          /////
+    ///// FUNÇÕES PARA COMENTÁRIOS /////
+    /////                          /////
+    ////////////////////////////////////
+    function NovoComentarioEmProducao() {
+        $('#FormComentarioEmProducao').append('<div>' +
+            '<textarea></textarea>' +
+            '<div><span></span></div>' +
+            '<button>Publicar</button>' +
+            '<button>Limpar</button>' +
+            '<button>Cancelar</button>' +
+            '</div>');
+        $('#FormComentarioEmProducao').children('div').attr('id', 'DivFormulario');
+        $('#FormComentarioEmProducao').children('div').addClass('form-group col-sm-12');
+        $('#FormComentarioEmProducao').children('div').css('padding-top', '10px');
+        $('#FormComentarioEmProducao').children('div').children('textarea').attr('name', 'TextareaComentario');
+        $('#FormComentarioEmProducao').children('div').children('textarea').attr('id', 'TextareaComentario');
+        $('#FormComentarioEmProducao').children('div').children('textarea').attr('onkeyup', 'AtualizarCaracterEmProducao();');
+        $('#FormComentarioEmProducao').children('div').children('textarea').attr('onkeydown', 'AtualizarCaracterEmProducao();');
+        $('#FormComentarioEmProducao').children('div').children('textarea').attr('required', 'required');
+        $('#FormComentarioEmProducao').children('div').children('textarea').css('resize', 'none');
+        $('#FormComentarioEmProducao').children('div').children('textarea').addClass('form-control');
+        $('#FormComentarioEmProducao').children('div').children('textarea').focus();
+        $('#FormComentarioEmProducao').children('div').children('div').addClass('caracteres');
+        $('#FormComentarioEmProducao').children('div').children('div').children('span').addClass('pull-right');
+        $('#FormComentarioEmProducao').children('div').children('div').children('span').attr('id', 'CaracterComentario');
+        $('#FormComentarioEmProducao').children('div').children('div').children('span').text('5000 caracteres');
+        $('#FormComentarioEmProducao').children('div').children('button').attr('type', 'button');
+        $('#FormComentarioEmProducao').children('div').children('button').attr('id', 'LimparComentario');
+        $('#FormComentarioEmProducao').children('div').children('button').attr('onclick', 'LimparComentarioEmProducao();');
+        $('#FormComentarioEmProducao').children('div').children('button').addClass('btn btn-sm');
+        $('#FormComentarioEmProducao').children('div').children('button:first').attr('type', 'button');
+        $('#FormComentarioEmProducao').children('div').children('button:first').attr('id', 'SalvarComentario');
+        $('#FormComentarioEmProducao').children('div').children('button:first').attr('onclick', 'SalvarComentarioEmProducao();');
+        $('#FormComentarioEmProducao').children('div').children('button:first').addClass('btn btn-success btn-sm');
+        $('#FormComentarioEmProducao').children('div').children('button:last').attr('type', 'button');
+        $('#FormComentarioEmProducao').children('div').children('button:last').attr('id', 'CancelarComentario');
+        $('#FormComentarioEmProducao').children('div').children('button:last').attr('onclick', 'CancelarComentarioEmProducao();');
+        $('#FormComentarioEmProducao').children('div').children('button:last').addClass('btn btn-danger btn-sm');
+        $('#FormComentarioEmProducao').removeAttr('enabled');
+        $('#FormComentarioEmProducao').attr('disabled', 'disabled');
+    }
+
+    function AtualizarCaracterEmProducao() {
+        var quant = 5000;
+        var total = $('#TextareaComentario').val().length;
+
+        if (total == 0) {
+            $('#FormComentarioEmProducao').children('div').children('div').children('#CaracterComentario').text('5000 caracteres');
+        } else if (total < quant) {
+            $('#FormComentarioEmProducao').children('div').children('div').children('#CaracterComentario').text(quant - total + " caracteres restantes");
+        } else {
+            document.getElementById('TextareaComentario').value = document.getElementById('TextareaComentario').value.substr(0, quant);
+        }
+    };
+
+    function LimparComentarioEmProducao() {
+        $('#CaracterComentario').text('5000 caracteres');
+        $('#TextareaComentario').val('');
+        $('#TextareaComentario').focus();
+    };
+
+    function CancelarComentarioEmProducao() {
+        $('#NovoComentarioEmProducao').removeAttr('disabled');
+        $('#NovoComentarioEmProducao').attr('enabled', 'enabled');
+        $('#DivFormulario').remove();
+    };
+
+    function SalvarComentarioEmProducao() {
+        var comentario = $('#TextareaComentario').val();
+
+        CadastrarTimelineJobEmProducao(comentario, $('#IdJobEmProducao').text());
+    };
+
+    function CadastrarTimelineJobEmProducao(comentario, id) {
+        $.ajax({
+            type: 'POST',
+            url: '/TimelineJob/CadastrarAjax/',
+            data: {
+                comentario: comentario,
+                idJob: id
+            },
+            success: function () {
+                $('#ComentariosEmProducao').empty();
+                LimparComentarioEmProducao();
+                if ($('#ExibirComentariosEmProducao').text() == 'Esconder Comentários') {
+                    EsconderComentariosEmProducao();
+                    ExibirComentariosEmProducao();
+                } else {
+                    ExibirComentariosEmProducao();
+                }
+            },
+            error: function (xhr, status, response) { alert(response); }
+        });
+    }
+
+    function EsconderComentariosEmProducao() {
+        $('.panel-info').each(function () {
+            $(this).remove();
+        });
+        $('#ExibirComentariosEmProducao').text('');
+        var exibir = $('<span />');
+        exibir.addClass('glyphicon glyphicon-eye-open');
+        $('#ExibirComentariosEmProducao').append(exibir);
+        $('#ExibirComentariosEmProducao').append('Exibir Comentários');
+        $('#ExibirComentariosEmProducao').removeAttr('onclick');
+        $('#ExibirComentariosEmProducao').attr('onclick', 'ExibirComentariosEmProducao();');
+    }
+
+    function ExibirComentariosEmProducao() {
+        $.get('/TimelineJob/ListarTimelineJobJson/' + $('#IdJobEmProducao').text(), function (data) {
+            if (data.length != 0) {
+                $.each(data, function (i, res) {
+                    if (res.Alterado != 'null') {
+                        var divPanel = $('<div />');
+                        divPanel.addClass('panel panel-info');
+
+                        var h3Title = $('<h3></h3>');
+                        h3Title.addClass('panel-title');
+                        h3Title.text(res.Alterado.toString());
+
+                        var date = $('<span/>');
+                        date.addClass('glyphicon glyphicon-calendar');
+
+                        var divPanelHeading = $('<div />');
+                        divPanelHeading.addClass('panel-heading');
+                        divPanelHeading.append(h3Title);
+                        divPanelHeading.append(date);
+                        divPanelHeading.append(res.Data);
+
+                        if (res.idFuncionario == res.IdLogado) {
+                            var horas = new Date(res.Hora);
+                            var dtSplit = res.Data.split('/');
+                            var dt = new Date(dtSplit[2], dtSplit[1] - 1, dtSplit[0]);
+                            var hoje = new Date();
+                            if (dt.getFullYear() == hoje.getFullYear()) {
+                                if (dt.getMonth() == hoje.getMonth()) {
+                                    if (dt.getDate() == hoje.getDate()) {
+                                        if (horas.getHours() == hoje.getHours()) {
+                                            if (horas.getMinutes() <= hoje.getMinutes()) {
+                                                var minutos = hoje.getMinutes() - horas.getMinutes();
+                                                if (minutos < 15) {
+                                                    var alterar = $('<a/>');
+                                                    alterar.addClass('glyphicon glyphicon-pencil pull-right');
+                                                    alterar.css('cursor', 'pointer');
+                                                    alterar.attr('onclick', 'CriarAlterarComentarioEmProducao(' + res.id + ');');
+
+                                                    var excluir = $('<a/>');
+                                                    excluir.addClass('glyphicon glyphicon-remove pull-right');
+                                                    excluir.css('cursor', 'pointer');
+                                                    excluir.attr('onclick', 'ExcluirComentarioEmProducao(' + res.id + ');');
+
+                                                    divPanelHeading.append(excluir);
+                                                    divPanelHeading.append(alterar);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        var divPanelBody = $('<div />');
+                        divPanelBody.addClass('panel-body');
+                        divPanelBody.text(res.Descricao.toString());
+                        divPanelBody.attr('id', res.id + "panelBodyEmProducao");
+
+                        divPanel.append(divPanelHeading);
+                        divPanel.append(divPanelBody);
+                        $('#ComentariosEmProducao').append(divPanel);
+                    }
+                });
+                $('#ExibirComentariosEmProducao').text('');
+                var esconder = $('<span />');
+                esconder.addClass('glyphicon glyphicon-eye-close');
+                $('#ExibirComentariosEmProducao').append(esconder);
+                $('#ExibirComentariosEmProducao').append('Esconder Comentários');
+                $('#ExibirComentariosEmProducao').removeAttr('onclick');
+                $('#ExibirComentariosEmProducao').attr('onclick', 'EsconderComentariosEmProducao();');
+            } else {
+                $('#ComentariosEmProducao').append('Nenhum comentário encontrado.');
+            }
+        });
+    }
+
+    function ExcluirComentarioEmProducao(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/TimelineJob/ExcluirComentario/',
+            data: {
+                id: id
+            },
+            success: function () {
+                EsconderComentariosEmProducao();
+                ExibirComentariosEmProducao();
+            },
+            error: function (xhr, status, response) { alert(response); }
+        });
+    }
+
+    function CriarAlterarComentarioEmProducao(id) {
+        var texto = $('#' + id + 'panelBodyEmProducao').text();
+        $('#' + id + 'panelBodyEmProducao').empty();
+        $('#' + id + 'panelBodyEmProducao').append("<textarea class='form-control' id='" + id + "ComentarioAlterarEmProducao' style='resize: none; border: none;'></textarea>");
+        $('#' + id + 'panelBodyEmProducao').append("<button type='button' class='btn btn-success' onclick='AlterarComentarioEmProducao(" + id + ");'>Alterar</button>");
+        $('#' + id + 'panelBodyEmProducao').append("<button type='button' class='btn btn-danger'>Cancelar</button>");
+        $('#' + id + 'panelBodyEmProducao button:last-child').on('click', function () { CancelarComentarioEmProducao(id, texto); });
+        $('#' + id + 'ComentarioAlterarEmProducao').val(texto);
+        $('#' + id + 'ComentarioAlterarEmProducao').focus().select();
+    }
+
+    function AlterarComentarioEmProducao(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/TimelineJob/AlterarComentario/',
+            data: {
+                id: id,
+                texto: $('#' + id + 'ComentarioAlterarEmProducao').val()
+            },
+            success: function () {
+                EsconderComentariosEmProducao();
+                ExibirComentariosEmProducao();
+            },
+            error: function (xhr, status, response) { alert(response); }
+        });
+    }
+
+    function CancelarComentarioEmProducao(id, texto) {
+        $('#' + id + 'panelBodyEmProducao').empty();
+        $('#' + id + 'panelBodyEmProducao').text(texto);
+    }
+</script>

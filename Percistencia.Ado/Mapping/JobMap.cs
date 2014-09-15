@@ -74,6 +74,13 @@ namespace Percistencia.Ado.Mapping
                 c.Fetch(CollectionFetchMode.Join);
                 c.Key(k=>k.Column("ID_JOB"));
             }, map => map.ManyToMany(p=>p.Column("ID_FORNECEDOR")));
+            this.ManyToOne(p=>p.Contrato, m =>
+            {
+                m.Column("CONTRATO");
+                m.Lazy(LazyRelation.Proxy);
+                m.Fetch(FetchKind.Join);
+                m.Cascade(Cascade.None);
+            });
         }
     }
 }

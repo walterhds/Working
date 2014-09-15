@@ -22,5 +22,6 @@ namespace Dominio.Entidades
         public virtual IList<Fornecedor> Fornecedor { get; set; } 
         public virtual string Fase { get; set; }
         public virtual string Nome { get; set; }
+        public virtual Contrato Contrato { get; set; }
     }
 }

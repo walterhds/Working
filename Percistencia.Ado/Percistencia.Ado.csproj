@@ -51,6 +51,7 @@
     <Compile Include="Mapping\CargoMap.cs" />
     <Compile Include="Mapping\ClienteMap.cs" />
     <Compile Include="Mapping\CompromissoMap.cs" />
+    <Compile Include="Mapping\ContratoMap.cs" />
     <Compile Include="Mapping\FornecedorMap.cs" />
     <Compile Include="Mapping\FuncionalidadeMap.cs" />
     <Compile Include="Mapping\FuncionarioMap.cs" />
@@ -59,12 +60,14 @@
     <Compile Include="Mapping\PecaMap.cs" />
     <Compile Include="Mapping\SituacaoJobMap.cs" />
     <Compile Include="Mapping\TimelineJobMap.cs" />
+    <Compile Include="Mapping\TipoContaMap.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\AcessoRepositorio.cs" />
     <Compile Include="Repositorio\CargoRepositorio.cs" />
     <Compile Include="Repositorio\ClienteRepositorio.cs" />
     <Compile Include="Repositorio\CompromissoRepositorio.cs" />
+    <Compile Include="Repositorio\ContratoRepositorio.cs" />
     <Compile Include="Repositorio\FornecedorRepositorio.cs" />
     <Compile Include="Repositorio\FuncionalidadeRepositorio.cs" />
     <Compile Include="Repositorio\FuncionarioRepositorio.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="Repositorio\PecaRepositorio.cs" />
     <Compile Include="Repositorio\SituacaoJobRepositorio.cs" />
     <Compile Include="Repositorio\TimelineJobRepositorio.cs" />
+    <Compile Include="Repositorio\TipoContaRepositorio.cs" />
     <Compile Include="SituacaoHelper.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -1,0 +1,37 @@
+﻿@using NHibernate.Type
+@model IEnumerable<Dominio.Entidades.Contrato>
+@{
+    ViewBag.Title = "Financeiro";
+}
+
+<div class="form-working col-md-9">
+    <div class="titulo1">
+        <h1>Contratos</h1>
+    </div>
+
+    <div style="padding-top: 10px; padding-bottom: 10px;">
+        <button class="btn btn-success" onclick="location.href='/Contrato/Cadastrar'">
+            <span class="glyphicon glyphicon-plus"></span>
+            Cadastrar
+        </button>
+    </div>
+
+    <table class="table table-bordered table-hover table-working" id="situacaoTabela">
+        <tr>
+            <th>Cliente</th>
+            <th>Contrato</th>
+            <th>Vencimento</th>
+            <th>Valor</th>
+        </tr>
+        
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.Cliente.Nome</td>
+                <td class="text-center">@i.NumeroContrato</td>
+                <td class="text-center">@i.DataVencimento.ToShortDateString()</td>
+                <td>@i.Valor</td>
+            </tr>
+        }
+    </table>
+</div>

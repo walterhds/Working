@@ -54,7 +54,7 @@
         <div class="form-group">
             <label for="Cargo" class="col-sm-3 text-right control-label">Cargo:</label>
             <div class="col-sm-9">
-                <select class="form-control" name="Cargo" required>
+                <select class="form-control selectpicker" name="Cargo" required>
                     @foreach (var i in Model)
                     {
                         <option value="@i.Id">@i.Nome</option>       
@@ -74,7 +74,7 @@
         <div class="form-group">
             <label for="Situacao" class="col-sm-3 text-right control-label">Situação:</label>
             <div class="col-sm-9">
-                <select class="form-control" name="Situacao" required>
+                <select class="form-control selectpicker" name="Situacao" required>
                     <option value="Ativo">Ativo</option>
                     <option value="Ferias">Férias</option>
                     <option value="LicencaMaternidade">Licença Maternidade</option>
