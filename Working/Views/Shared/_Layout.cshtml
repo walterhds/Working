@@ -324,7 +324,7 @@
                 @if (funcionario.TemAcesso("FINANCEIRO"))
                 {
                     <li>
-                        <a href="~/Contrato/Index/">
+                        <a href="~/Contrato/Index">
                             <span class="glyphicon glyphicon-usd"></span>
                             Financeiro
                         </a>
@@ -387,6 +387,7 @@
         <script src="~/Scripts/bootstrap-select.js"></script>
         <script src="~/Scripts/jquery-ui-timepicker-addon.js"></script>
         <script>
+            $('.inputNumber').mask('#', { maxlength: false });
             $(".currency").mask("#.##0,00", { reverse: true, maxlength: false });
             $(".draggable").draggable();
             $(".selectpicker").selectpicker({
@@ -397,7 +398,8 @@
 
             $(".timepicker").mask('00:00', { placeholder: '__:__' });
             $(".timepicker").timepicker();
-            $('#DataEntregaAlterarEmProducao').datepicker({
+
+            $('.datepickerMaxDate').datepicker({
                 dateFormat: 'dd/mm/yy',
                 dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
                 dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],

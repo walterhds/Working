@@ -183,7 +183,6 @@
     <Compile Include="Controllers\CargoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\CompromissoController.cs" />
-    <Compile Include="Controllers\ConducaoController.cs" />
     <Compile Include="Controllers\ContratoController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
@@ -191,6 +190,7 @@
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MuralController.cs" />
+    <Compile Include="Controllers\ParcelasReceberController.cs" />
     <Compile Include="Controllers\PecaController.cs" />
     <Compile Include="Controllers\SituacaoJobController.cs" />
     <Compile Include="Controllers\TimelineJobController.cs" />
@@ -203,6 +203,7 @@
     <Compile Include="Models\Autorizar.cs" />
     <Compile Include="Models\HelpClass.cs" />
     <Compile Include="Models\Objeto.cs" />
+    <Compile Include="Models\ObjetoParcela.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewsModels\DadosFuncionario.cs" />
     <Compile Include="ViewsModels\DadosIndex.cs" />
@@ -276,6 +277,7 @@
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Properties\PublishProfiles\Working.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Images\bg.png" />
     <Content Include="Images\glyphicons\png\glyphicons_000_glass.png" />

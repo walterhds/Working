@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Dominio.Entidades.Cliente>
+﻿@using System.Collections.Specialized
+@model IEnumerable<Dominio.Entidades.Cliente>
 @{
     ViewBag.Title = "Cadastrar Contrato";
 }
@@ -14,10 +15,11 @@
     </div>
 
     <form role="form" method="post" class="form-horizontal col-md-6" style="padding-top: 10px;">
-        <div class="form-group">
+        <div class="form-group" id="divNumeroContrato">
             <label for="NumeroContrato" class="col-sm-3 text-right control-label">Número Contrato:</label>
             <div class="col-sm-9">
-                <input class="form-control" type="number" name="NumeroContrato" required autofocus />
+                <input class="form-control inputNumber" type="text" name="NumeroContrato" id="NumeroContrato" required autofocus />
+                <span id="SpanNumeroContrato" style="color: transparent;"></span>
             </div>
         </div>
         <div class="form-group">
@@ -34,13 +36,13 @@
         <div class="form-group">
             <label for="DataContrato" class="col-sm-3 text-right control-label">Data Contrato:</label>
             <div class="col-sm-9">
-                <input class="form-control datepicker" type="text" name="DataContrato" readonly="readonly" required />
+                <input class="form-control datepicker datepickerMaxDate" type="text" name="DataContrato" id="DataContrato" readonly="readonly" required />
             </div>
         </div>
         <div class="form-group">
             <label for="DataVencimento" class="col-sm-3 text-right control-label">Vencimento:</label>
             <div class="col-sm-9">
-                <input class="form-control datepicker" type="text" name="DataVencimento" readonly="readonly" required />
+                <input class="form-control datepicker" type="text" name="DataVencimento" id="DataVencimento" readonly="readonly" required />
             </div>
         </div>
         <div class="form-group">
@@ -52,7 +54,13 @@
         <div class="form-group">
             <label for="NumeroParcelas" class="col-sm-3 text-right control-label">Parcelas:</label>
             <div class="col-sm-9">
-                <input class="form-control" type="number" name="NumeroParcelas" required />
+                <input class="form-control inputNumber" type="number" name="NumeroParcelas" required />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="DataPrimeiraParcela" class="col-sm-3 text-right control-label">Primeira Parcela:</label>
+            <div class="col-sm-9">
+                <input class="form-control datepicker" type="text" name="DataPrimeiraParcela" id="DataPrimeiraParcela" readonly="readonly" required />
             </div>
         </div>
         <div class="form-group">
@@ -70,5 +78,28 @@
 
 @section Scripts{
     <script>
+        $('#NumeroContrato').on('blur', function () {
+            var id = $('#NumeroContrato').val();
+            $.get('/Contrato/VerificarCadastroContrato/' + id, function (data) {
+                if (data == "existente") {
+                    $('#NumeroContrato').focus().select();
+                    $('#divNumeroContrato').addClass('has-error');
+                    $('#SpanNumeroContrato').css('color', '#b94a48');
+                    $('#SpanNumeroContrato').text('Contrato já cadastrado.');
+                } else {
+                    $('#divNumeroContrato').removeClass('has-error').addClass('has-success');
+                    $('#SpanNumeroContrato').css('color', '#468847');
+                    $('#SpanNumeroContrato').text('Número de contrato disponível.');
+                }
+            });
+        });
+
+        $('#NumeroContrato').on('keypress', function () {
+            if ($('#SpanNumeroContrato').text() != '') {
+                $('#divNumeroContrato').removeClass('has-error has-success');
+                $('#SpanNumeroContrato').css('color', 'transparent');
+                $('#SpanNumeroContrato').text('');
+            }
+        });
     </script>
 }

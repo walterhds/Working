@@ -57,6 +57,7 @@
     <Compile Include="Mapping\FuncionarioMap.cs" />
     <Compile Include="Mapping\JobMap.cs" />
     <Compile Include="Mapping\MuralMap.cs" />
+    <Compile Include="Mapping\ParcelasReceberMap.cs" />
     <Compile Include="Mapping\PecaMap.cs" />
     <Compile Include="Mapping\SituacaoJobMap.cs" />
     <Compile Include="Mapping\TimelineJobMap.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Repositorio\FuncionarioRepositorio.cs" />
     <Compile Include="Repositorio\JobRepositorio.cs" />
     <Compile Include="Repositorio\MuralRepositorio.cs" />
+    <Compile Include="Repositorio\ParcelasReceberRepositorio.cs" />
     <Compile Include="Repositorio\PecaRepositorio.cs" />
     <Compile Include="Repositorio\SituacaoJobRepositorio.cs" />
     <Compile Include="Repositorio\TimelineJobRepositorio.cs" />

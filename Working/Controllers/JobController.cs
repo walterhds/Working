@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
+using Castle.MicroKernel.ModelBuilder.Descriptors;
 using Dependencias;
 using Dominio.Entidades;
 using Dominio.Servicos;
@@ -109,9 +110,10 @@ namespace Working.Controllers
             }
 
             IList<Peca> listaPeca = new List<Peca>();
+            var listaPecas = _pecaService.Listar(e => true);
             foreach (var i in pecasId)
             {
-                var peca = _pecaService.ObterPorId(Convert.ToInt16(i));
+                var peca = listaPecas.FirstOrDefault(e => e.Id == Convert.ToInt16(i));
                 listaPeca.Add(peca);
                 job.Peca = listaPeca;
             }
@@ -303,7 +305,8 @@ namespace Working.Controllers
                     Descricao = job.Descricao,
                     Cliente = job.Cliente.Id.ToString(),
                     DataRegistro = job.DataRegistro.ToShortDateString(),
-                    Fase = job.Fase
+                    Fase = job.Fase,
+                    Nome = job.Nome
                 });
             }
             else
@@ -322,7 +325,8 @@ namespace Working.Controllers
                     DataCriacao = job.DataCriacao.ToShortDateString(),
                     DataEstimativa = job.DataEstimativa.ToShortDateString(),
                     HorasNecessarias = job.HorasNecessarias,
-                    Funcionario = job.Funcionario.Id.ToString()
+                    Funcionario = job.Funcionario.Id.ToString(),
+                    Nome = job.Nome
                 });
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
@@ -365,10 +369,14 @@ namespace Working.Controllers
             var job = _jobService.ObterPorId(idJob);
             var lista = new List<Objeto>();
             var cont = 0;
+            var fornecedores = _fornecedorService.Listar(e => true);
+            var pecas = _pecaService.Listar(e => true);
             foreach (var i in fornecedoresId)
             {
-                var fornecedor = _fornecedorService.ObterPorId(Convert.ToInt16(i));
-                var pecasFornecedor = _pecaService.Listar(e => e.Fornecedor.Contains(fornecedor));
+                //Estava buscando o fornecedor conforme o 'i' do foreach
+                var fornecedor = fornecedores.FirstOrDefault(e => e.Id == Convert.ToInt16(i));
+                //estava buscando as peças que continham o fornecedor acima
+                var pecasFornecedor = pecas.Where(e => e.Fornecedor.Any(x => x.Id == Convert.ToInt16(i))).ToList();
 
                 if (cont == 0)
                 {
@@ -422,6 +430,23 @@ namespace Working.Controllers
                         }
                     }
                 }
+            }
+
+            return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ListarJobsSemContrato()
+        {
+            var listajobs = _jobService.Listar(e => e.Contrato == null);
+            var lista = new List<Objeto>();
+
+            foreach (var i in listajobs)
+            {
+                lista.Add(new Objeto
+                {
+                    nome = i.Nome,
+                    id = i.Id
+                });
             }
 
             return Json(lista, JsonRequestBehavior.AllowGet);

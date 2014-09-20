@@ -50,6 +50,7 @@
     <Compile Include="Entidades\Funcionario.cs" />
     <Compile Include="Entidades\Job.cs" />
     <Compile Include="Entidades\Mural.cs" />
+    <Compile Include="Entidades\ParcelasReceber.cs" />
     <Compile Include="Entidades\Peca.cs" />
     <Compile Include="Entidades\Situacao.cs" />
     <Compile Include="Entidades\SituacaoJob.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Repositorios\IFuncionarioRepositorio.cs" />
     <Compile Include="Repositorios\IJobRepositorio.cs" />
     <Compile Include="Repositorios\IMuralRepositorio.cs" />
+    <Compile Include="Repositorios\IParcelasReceberRepositorio.cs" />
     <Compile Include="Repositorios\IPecaRepositorio.cs" />
     <Compile Include="Repositorios\ISituacaoJobRepositorio.cs" />
     <Compile Include="Repositorios\ITimelineJobRepositorio.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Servicos\FuncionarioService.cs" />
     <Compile Include="Servicos\JobService.cs" />
     <Compile Include="Servicos\MuralService.cs" />
+    <Compile Include="Servicos\ParcelasReceberService.cs" />
     <Compile Include="Servicos\PecaService.cs" />
     <Compile Include="Servicos\SituacaoJobService.cs" />
     <Compile Include="Servicos\TimelineJobService.cs" />

@@ -54,5 +54,10 @@ namespace Percistencia.Ado
                 return false;
             }
         }
+
+        public T ObterPorFiltro(Expression<Func<T, bool>> filtro)
+        {
+            return this.Sessao.Query<T>().FirstOrDefault(filtro);
+        }
     }
 }

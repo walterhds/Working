@@ -4,6 +4,61 @@
     ViewBag.Title = "Financeiro";
 }
 
+<div class="modal fade" id="ParcelasContrato">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="FecharParcelas" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Parcelas do Contrato</h4>
+            </div>
+            <table class="table table-bordered table-hover table-working" id="TabelaParcelasContrato">
+                <tr>
+                    <th>Parcela</th>
+                    <th>Data Vencimento</th>
+                    <th>Valor</th>
+                    <th>Situação</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="JobsContrato">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="document.getElementById('CancelarJobsContrato').click();" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Jobs do Contrato</h4>
+            </div>
+            <div class="modal-body form-working">
+                <form role="form" method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="SelectJobs" class="control-label col-sm-2">Jobs:</label>
+                        <div class="col-sm-10">
+                            <select class="selectpicker show-tick form-control" name="SelectJobs" id="SelectJobs" multiple data-header="Resultados Encontrados" data-live-search="true"></select>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" id="SalvarJobsContrato">
+                        <span class="glyphicon glyphicon-floppy-saved"></span>
+                        Cadastrar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="CancelarJobsContrato" data-dismiss="modal">
+                        <span class=" glyphicon glyphicon-remove"></span>
+                        Cancelar
+                    </button>
+                </form>
+            </div>
+            <table class="table table-bordered table-hover table-working" id="TabelaJobsContrato">
+                <tr>
+                    <th>Nome</th>
+                    <th>Data Estimativa</th>
+                    <th>Situação</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div class="form-working col-md-9">
     <div class="titulo1">
         <h1>Contratos</h1>
@@ -16,22 +71,147 @@
         </button>
     </div>
 
-    <table class="table table-bordered table-hover table-working" id="situacaoTabela">
+    <table class="table table-bordered table-hover table-working" id="TabelaContratos">
         <tr>
             <th>Cliente</th>
             <th>Contrato</th>
             <th>Vencimento</th>
             <th>Valor</th>
+            <th>Operações</th>
         </tr>
-        
+
         @foreach (var i in Model)
         {
             <tr>
                 <td>@i.Cliente.Nome</td>
                 <td class="text-center">@i.NumeroContrato</td>
                 <td class="text-center">@i.DataVencimento.ToShortDateString()</td>
-                <td>@i.Valor</td>
+                <td>R$ <span class="currency">@i.Valor</span></td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-xs" id="BotaoJobsContrato" data-toggle="modal" data-target="#JobsContrato" onclick="ListarJobsContrato(@i.Id);">
+                            <span class="glyphicon glyphicon-folder-open"></span>
+                        </button>
+                        <button type="button" class="btn btn-xs btn-success" id="BotaoParcelasContrato" data-toggle="modal" data-target="#ParcelasContrato" onclick="DeletarTabelaParcelasContrato(@i.Id);">
+                            <span class="glyphicon glyphicon-usd"></span>
+                        </button>
+                        <button type="button" class="btn btn-group btn-xs">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </div>
+                </td>
             </tr>
         }
     </table>
 </div>
+
+@section Scripts{
+    <script>
+        function DeletarTabelaJobsContrato(id) {
+            var numeroLinhas = $("#TabelaJobsContrato > tbody > tr").length;
+            for (var i = 1; i < numeroLinhas; i++) {
+                document.getElementById("TabelaJobsContrato").deleteRow(1);
+            }
+            PreencherTabelaJobsContrato(id);
+        }
+
+        function PreencherTabelaJobsContrato(id) {
+            var tabela = document.getElementById('TabelaJobsContrato');
+            $.get('/Contrato/ListarJobsContrato/' + id, function(data) {
+                $.each(data, function(i, res) {
+                    if (res.nome != null) {
+                        var linha = tabela.insertRow(1);
+                        var nome = document.createElement('td');
+                        var dataEstimativa = document.createElement('td');
+                        var situacao = document.createElement('td');
+
+                        nome.innerHTML = '<td>' + res.nome + '</td>';
+                        dataEstimativa.innerHTML = '<td>' + res.DataEstimativa + '</td>';
+                        if (res.Situacao == null) {
+                            situacao.innerHTML = '<td>' + res.Fase + '</td>';
+                        } else {
+                            situacao.innerHTML = '<td>' + res.Situacao.Descricao + '</td>';
+                        }
+
+                        linha.appendChild(nome);
+                        linha.appendChild(dataEstimativa);
+                        linha.appendChild(situacao);
+                    }
+                });
+            });
+        }
+
+        function ListarJobsContrato(id) {
+            var itens;
+            $.get('/Job/ListarJobsSemContrato/', function(data) {
+                $.each(data, function(i, res) {
+                    if (res.nome != null) {
+                        itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
+                    }
+                });
+                $('#SelectJobs').html(itens);
+                $('#SelectJobs').selectpicker('refresh');
+            });
+            PreencherTabelaJobsContrato(id);
+            $('#SalvarJobsContrato').on('click', function() {
+                var jobs = $('#SelectJobs').val().toString();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Contrato/CadastrarJobsContrato/',
+                    data: {
+                        jobsid: jobs,
+                        id: id
+                    },
+                    success: function() {
+                        DeletarTabelaJobsContrato(id);
+                    },
+                    error: function(xhr, status, response) { alert(response); }
+                });
+            });
+        }
+
+        $('#CancelarJobsContrato').on('click', function() {
+            DeletarTabelaJobsContrato();
+        });
+
+        function DeletarTabelaParcelasContrato(id) {
+            var numeroLinhas = $("#TabelaParcelasContrato > tbody > tr").length;
+            for (var i = 1; i < numeroLinhas; i++) {
+                document.getElementById("TabelaParcelasContrato").deleteRow(1);
+            }
+            PreencherTabelaParcelasContrato(id);
+        }
+
+        function PreencherTabelaParcelasContrato(id) {
+            var tabela = document.getElementById('TabelaParcelasContrato');
+            $.get('/ParcelasReceber/ListarParcelasContrato/' + id, function (data) {
+                var len = data.length + 1;
+                $.each(data, function(i, res) {
+                    if (res.Id != null) {
+                        var linha = tabela.insertRow(1);
+
+                        var parcela = document.createElement('td');
+                        var dataVencimento = document.createElement('td');
+                        var valor = document.createElement('td');
+                        var span = document.createElement('span');
+                        var situacao = document.createElement('td');
+                        len--;
+                        parcela.innerHTML = '<td>' + len + '</td>';
+                        dataVencimento.innerHTML = '<td>' + res.DataVencimento + '</td>';
+                        valor.innerHTML = "<td>R$ </td>";
+                        span.innerHTML = res.Valor;
+                        situacao.innerHTML = '<td>' + res.Situacao + '</td>';
+
+                        linha.appendChild(parcela);
+                        linha.appendChild(dataVencimento);
+                        valor.appendChild(span);
+                        linha.appendChild(valor);
+                        linha.appendChild(situacao);
+                        $('#TabelaParcelasContrato > tbody > tr > td > span').addClass('currency');
+                    }
+                });
+            });
+        }
+    </script>
+}

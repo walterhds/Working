@@ -49,7 +49,6 @@ namespace Working.Controllers
                     nome = i.Nome
                 });
             }
-
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
         

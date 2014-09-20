@@ -77,7 +77,6 @@ namespace Working.Controllers
             return View(lista);
         }
 
-        
         public ActionResult TornarAtivo(int id)
         {
             var funcionario = _funcionarioService.ObterPorId(id);
@@ -113,6 +112,16 @@ namespace Working.Controllers
                 }
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult VerificarCadastroLogin(string id)
+        {
+            var listaFuncionario = _funcionarioService.Listar(e => true);
+            if (listaFuncionario.Any(e => e.Login == id))
+            {
+                return Json("existente",JsonRequestBehavior.AllowGet);
+            }
+            return Json("valido",JsonRequestBehavior.AllowGet);
         }
     }
 }

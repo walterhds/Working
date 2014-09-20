@@ -37,5 +37,10 @@ namespace Dominio.Servicos
         {
             return _contratoRepositorio.ObterPorId(id);
         }
+
+        public Contrato ObterPorFiltro(Expression<Func<Contrato, bool>> filtro)
+        {
+            return _contratoRepositorio.ObterPorFiltro(filtro);
+        }
     }
 }

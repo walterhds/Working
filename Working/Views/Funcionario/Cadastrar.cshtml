@@ -87,10 +87,11 @@
         <div class="titulo2">
             <h2>Acesso ao sistema</h2>
         </div>
-        <div class="form-group" style="padding-top: 10px;">
+        <div class="form-group" id="divLogin" style="padding-top: 10px;">
             <label for="Login" class="col-sm-3 control-label text-right">Login:</label>
             <div class="col-sm-9">
-                <input class="form-control" autocomplete="off" type="text" name="Login" required />
+                <input class="form-control" autocomplete="off" type="text" name="Login" id="LoginCadastro" required />
+                <span id="SpanLogin" style="color: transparent;"></span>
             </div>
         </div>
         <div class="form-group">
@@ -108,6 +109,28 @@
 
 @section Scripts{
     <script>
-        $("input[required]").tooltip();
+        $('#LoginCadastro').on('blur', function () {
+            var id = $('#LoginCadastro').val();
+            $.get('/Funcionario/VerificarCadastroLogin/' + id, function (data) {
+                if (data == "existente") {
+                    $('#LoginCadastro').focus().select();
+                    $('#divLogin').addClass('has-error');
+                    $('#SpanLogin').css('color', '#b94a48');
+                    $('#SpanLogin').text('Login Existente.');
+                } else {
+                    $('#divLogin').removeClass('has-error').addClass('has-success');
+                    $('#SpanLogin').css('color', '#468847');
+                    $('#SpanLogin').text('Login Disponível.');
+                }
+            });
+        });
+
+        $('#LoginCadastro').on('keypress', function() {
+            if ($('#SpanLogin').text() != '') {
+                $('#divLogin').removeClass('has-error has-success');
+                $('#SpanLogin').css('color', 'transparent');
+                $('#SpanLogin').text('');
+            }
+        });
     </script>
 }
