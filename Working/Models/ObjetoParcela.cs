@@ -11,5 +11,7 @@ namespace Working.Models
         public string DataVencimento { get; set; }
         public decimal Valor { get; set; }
         public string Situacao { get; set; }
+        public int NumeroParcela { get; set; }
+        public DateTime DataRegistro { get; set; }
     }
 }

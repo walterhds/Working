@@ -7,6 +7,7 @@ using Dependencias;
 using Dominio.Entidades;
 using Dominio.Servicos;
 using Working.Models;
+using Working.ViewsModels;
 
 namespace Working.Controllers
 {
@@ -16,6 +17,8 @@ namespace Working.Controllers
         private readonly ClienteService _clienteService;
         private readonly ParcelasReceberService _parcelasReceberService;
         private readonly JobService _jobService;
+        private readonly AlteracaoContratoService _alteracaoContratoService;
+        private DadosContratoIndex _dadosContratoIndex;
 
         public ContratoController()
         {
@@ -23,11 +26,17 @@ namespace Working.Controllers
             _clienteService = Dependencia.Resolver<ClienteService>();
             _parcelasReceberService = Dependencia.Resolver<ParcelasReceberService>();
             _jobService = Dependencia.Resolver<JobService>();
+            _alteracaoContratoService = Dependencia.Resolver<AlteracaoContratoService>();
         }
 
         public ActionResult Index()
         {
-            return View(_contratoService.Listar(e => true));
+            _dadosContratoIndex = new DadosContratoIndex
+            {
+                Contratos = _contratoService.Listar(e => true),
+                Alteracoes = _alteracaoContratoService.Listar(e => true)
+            };
+            return View(_dadosContratoIndex);
         }
 
         public ActionResult Cadastrar()
@@ -54,7 +63,7 @@ namespace Working.Controllers
             for (var i = 1; i <= contrato.NumeroParcelas; i++)
             {
                 var centavos = contrato.Valor -
-                               (Math.Round(contrato.Valor / contrato.NumeroParcelas,2) * contrato.NumeroParcelas);
+                               (Math.Round(contrato.Valor / contrato.NumeroParcelas, 2) * contrato.NumeroParcelas);
                 var parcela = new ParcelasReceber
                 {
                     Contrato = contrato,
@@ -63,7 +72,8 @@ namespace Working.Controllers
                     Valor = i != contrato.NumeroParcelas ? Math.Round(contrato.Valor / contrato.NumeroParcelas, 2) : Math.Round(contrato.Valor / contrato.NumeroParcelas, 2) + centavos,
                     DataVencimento =
                         i == 1 ? contrato.DataPrimeiraParcela : contrato.DataPrimeiraParcela.AddMonths(i - 1),
-                    Situacao = "Aberta"
+                    Situacao = "Aberta",
+                    DataRecebida = Convert.ToDateTime("01/01/01")
                 };
                 _parcelasReceberService.Cadastrar(parcela);
             }

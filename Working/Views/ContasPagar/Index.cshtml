@@ -1,0 +1,231 @@
+﻿@model Working.ViewsModels.DadosContasPagarIndex
+@{
+    ViewBag.Title = "Contas a Pagar";
+}
+
+<div class="modal fade" id="ParcelasContaPagar">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" id="FecharParcelas" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Parcelas da Conta</h4>
+            </div>
+            <table class="table table-bordered table-hover table-working" id="TabelaParcelasContaPagar">
+                <tr>
+                    <th>Parcela</th>
+                    <th>Data Vencimento</th>
+                    <th>Valor</th>
+                    <th>Situação</th>
+                    <th>Operações</th>
+                </tr>
+            </table>
+            <div id="FormPagarParcelas" class="form-horizontal form-working">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-working col-sm-9" style="padding-bottom: 10px;">
+    <button type="button" class="btn" onclick="location.href='/Contrato/Index'">Contas a Receber</button>
+    <button type="button" class="btn" disabled="disabled">Contas a Pagar</button>
+</div>
+
+<div class="form-working col-md-9">
+    <div class="titulo1">
+        <h1>Contas a Pagar</h1>
+    </div>
+
+    <div style="padding-top: 10px; padding-bottom: 10px;">
+        <button class="btn btn-success" onclick="location.href='/ContasPagar/Cadastrar'">
+            <span class="glyphicon glyphicon-plus"></span>
+            Cadastrar
+        </button>
+    </div>
+
+    <table class="table table-bordered table-hover table-working" id="TabelaContratos">
+        <tr>
+            <th>Tipo</th>
+            <th>Valor Total</th>
+            <th>Próxima Parcela</th>
+            <th>Valor Parcela</th>
+            <th>Situação</th>
+            <th>Operações</th>
+        </tr>
+
+        @foreach (var i in Model.ContasPagar)
+        {
+            var parcelaConta = Model.ParcelasPagar.Where(e => e.Conta == i);
+            <tr>
+                <td>@i.TipoConta.Descricao</td>
+                <td>R$ <span class="currency">@i.Valor</span></td>
+                <td class="text-center">@parcelaConta.FirstOrDefault().DataVencimento.ToShortDateString()</td>
+                <td>R$ <span class="currency">@parcelaConta.FirstOrDefault().Valor</span></td>
+                <td>@parcelaConta.FirstOrDefault().Situacao</td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-xs btn-success" id="BotaoParcelasContaAPagar" data-toggle="modal" data-target="#ParcelasContaPagar" onclick="DeletarTabelaParcelasContaPagar(@i.Id);">
+                            <span class="glyphicon glyphicon-usd"></span>
+                            Parcelas
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        function DeletarTabelaParcelasContaPagar(id) {
+            var numeroLinhas = $("#TabelaParcelasContaPagar > tbody > tr").length;
+            for (var i = 1; i < numeroLinhas; i++) {
+                document.getElementById("TabelaParcelasContaPagar").deleteRow(1);
+            }
+            PreencherTabelaParcelasContaPagar(id);
+        }
+
+        function PreencherTabelaParcelasContaPagar(id) {
+            var tabela = document.getElementById('TabelaParcelasContaPagar');
+            $.get('/ParcelasPagar/ListarParcelasContaPagar/' + id, function (data) {
+                $.each(data, function (i, res) {
+                    if (res.Id != null) {
+                        var linha = tabela.insertRow(1);
+
+                        var parcela = document.createElement('td');
+                        var dataVencimento = document.createElement('td');
+                        var valor = document.createElement('td');
+                        var span = document.createElement('span');
+                        var situacao = document.createElement('td');
+                        var operacoes = document.createElement('td');
+                        var btn = document.createElement('button');
+
+                        parcela.innerHTML = '<td>' + res.NumeroParcela + '</td>';
+                        dataVencimento.innerHTML = '<td>' + res.DataVencimento + '</td>';
+                        valor.innerHTML = "<td>R$ </td>";
+                        span.innerHTML = res.Valor;
+                        situacao.innerHTML = '<td>' + res.Situacao + '</td>';
+                        operacoes.innerHTML = '<td></td>';
+
+                        linha.appendChild(parcela);
+                        linha.appendChild(dataVencimento);
+                        valor.appendChild(span);
+                        linha.appendChild(valor);
+                        linha.appendChild(situacao);
+                        if (res.Situacao == 'Aberta') {
+                            btn.innerHTML = "Pagar";
+                            $(btn).addClass('btn btn-success btn-sm');
+                            $(btn).on('click', function () {
+                                $('#ParcelasContaPagar .btn-success').attr('disabled', 'disabled');
+                                CriarFormularioPagarParcelas(res.Id, res.NumeroParcela, id);
+                            });
+                            operacoes.appendChild(btn);
+                        }
+                        linha.appendChild(operacoes);
+                        $('#TabelaParcelasContaPagar > tbody > tr > td > span').addClass('currency');
+                    }
+                });
+            });
+        }
+
+        function PagarParcela(id, valor) {
+            $.ajax({
+                url: '/ParcelasPagar/Pagar/',
+                data: {
+                    id: id,
+                    valor: valor
+                },
+                error: function (xhr, status, response) { alert(response); }
+            });
+        }
+
+        function CriarFormularioPagarParcelas(id, numeroParcela, idContrato) {
+            var divTitulo = $('<div/>');
+            var h3 = $('<h3></h3>');
+            h3.text('Pagar parcela nº: ' + numeroParcela);
+
+            divTitulo.append(h3);
+
+            var divDataRecebimento = $('<div/>');
+            divDataRecebimento.addClass('form-group');
+
+            var labelDataRecebimento = $('<label></label>');
+            labelDataRecebimento.addClass('col-sm-3 text-right control-label');
+            labelDataRecebimento.attr('for', 'DataPagamento');
+            labelDataRecebimento.text('Data Pagamento:');
+
+            var divInputDataRecebimento = $('<div/>');
+            divInputDataRecebimento.addClass('col-sm-8');
+
+            var inputDataRecebimento = $('<input/>');
+            inputDataRecebimento.attr('type', 'text');
+            inputDataRecebimento.attr('name', 'DataPagamento');
+            inputDataRecebimento.attr('id', 'DataPagamentoParcela');
+            inputDataRecebimento.attr('readonly', 'readonly');
+            inputDataRecebimento.addClass('form-control datepickerMaxDate');
+            inputDataRecebimento.datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                maxDate: 0
+            });
+
+            divInputDataRecebimento.append(inputDataRecebimento);
+            divDataRecebimento.append(labelDataRecebimento);
+            divDataRecebimento.append(divInputDataRecebimento);
+
+            var divValorRecebido = $('<div/>');
+            divValorRecebido.addClass('form-group');
+
+            var labelValorRecebido = $('<label></label>');
+            labelValorRecebido.addClass('col-sm-3 text-right control-label');
+            labelValorRecebido.attr('for', 'ValorPago');
+            labelValorRecebido.text('Valor Pago:');
+
+            var divInputValorRecebido = $('<div/>');
+            divInputValorRecebido.addClass('col-sm-8');
+
+            var inputValorRecebido = $('<input/>');
+            inputValorRecebido.attr('type', 'text');
+            inputValorRecebido.attr('name', 'ValorPago');
+            inputValorRecebido.attr('id', 'ValorPagoParcela');
+            inputValorRecebido.addClass('form-control');
+            inputValorRecebido.mask("#.##0,00", { reverse: true, maxlength: false });
+
+            divInputValorRecebido.append(inputValorRecebido);
+            divValorRecebido.append(labelValorRecebido);
+            divValorRecebido.append(divInputValorRecebido);
+
+            var btnOk = $('<button/>');
+            btnOk.addClass('btn btn-success btn-sm');
+            btnOk.text('Pagar Parcela');
+            $(btnOk).on('click', function () {
+                PagarParcela(id, $('#ValorPagoParcela').val());
+                $('#ParcelasContaPagar .btn-success').removeAttr('disabled');
+                $('#FormPagarParcelas').empty();
+                DeletarTabelaParcelasContaPagar(idContrato);
+            });
+
+            var btnCancelar = $('<button/>');
+            btnCancelar.addClass('btn btn-danger btn-sm');
+            btnCancelar.text('Cancelar');
+            $(btnCancelar).on('click', function () {
+                $('#FormPagarParcelas').empty();
+                $('#ParcelasContaPagar .btn-success').removeAttr('disabled');
+            });
+
+            $('#FormPagarParcelas').append(divTitulo);
+            $('#FormPagarParcelas').append(divDataRecebimento);
+            $('#FormPagarParcelas').append(divValorRecebido);
+            $('#FormPagarParcelas').append(btnOk);
+            $('#FormPagarParcelas').append(btnCancelar);
+        }
+
+        $('#FecharParcelas').on('click', function () {
+            $('#FormPagarParcelas').empty();
+        });
+    </script>
+}

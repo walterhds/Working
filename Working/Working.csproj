@@ -180,9 +180,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AlteracaoContratoController.cs" />
     <Compile Include="Controllers\CargoController.cs" />
     <Compile Include="Controllers\ClienteController.cs" />
     <Compile Include="Controllers\CompromissoController.cs" />
+    <Compile Include="Controllers\ContasPagarController.cs" />
     <Compile Include="Controllers\ContratoController.cs" />
     <Compile Include="Controllers\FornecedorController.cs" />
     <Compile Include="Controllers\FuncionarioController.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MuralController.cs" />
+    <Compile Include="Controllers\ParcelasPagarController.cs" />
     <Compile Include="Controllers\ParcelasReceberController.cs" />
     <Compile Include="Controllers\PecaController.cs" />
     <Compile Include="Controllers\SituacaoJobController.cs" />
@@ -205,6 +208,8 @@
     <Compile Include="Models\Objeto.cs" />
     <Compile Include="Models\ObjetoParcela.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewsModels\DadosContasPagarIndex.cs" />
+    <Compile Include="ViewsModels\DadosContratoIndex.cs" />
     <Compile Include="ViewsModels\DadosFuncionario.cs" />
     <Compile Include="ViewsModels\DadosIndex.cs" />
     <Compile Include="ViewsModels\Lista.cs" />
@@ -894,6 +899,9 @@
     <Content Include="Views\Contrato\Index.cshtml" />
     <Content Include="Views\Contrato\Cadastrar.cshtml" />
     <Content Include="Views\Shared\_MenuCadastrosDiretorFinanceiro.cshtml" />
+    <Content Include="Views\AlteracaoContrato\Cadastrar.cshtml" />
+    <Content Include="Views\ContasPagar\Cadastrar.cshtml" />
+    <Content Include="Views\ContasPagar\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

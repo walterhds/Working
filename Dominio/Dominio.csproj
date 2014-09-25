@@ -40,9 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entidades\Acesso.cs" />
+    <Compile Include="Entidades\AlteracaoContrato.cs" />
     <Compile Include="Entidades\Cargo.cs" />
     <Compile Include="Entidades\Cliente.cs" />
     <Compile Include="Entidades\Compromisso.cs" />
+    <Compile Include="Entidades\ContasPagar.cs" />
     <Compile Include="Entidades\Contrato.cs" />
     <Compile Include="Entidades\EntidadeBase.cs" />
     <Compile Include="Entidades\Fornecedor.cs" />
@@ -50,6 +52,7 @@
     <Compile Include="Entidades\Funcionario.cs" />
     <Compile Include="Entidades\Job.cs" />
     <Compile Include="Entidades\Mural.cs" />
+    <Compile Include="Entidades\ParcelasPagar.cs" />
     <Compile Include="Entidades\ParcelasReceber.cs" />
     <Compile Include="Entidades\Peca.cs" />
     <Compile Include="Entidades\Situacao.cs" />
@@ -58,31 +61,37 @@
     <Compile Include="Entidades\TipoConta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\IAcessoRepositorio.cs" />
+    <Compile Include="Repositorios\IAlteracaoContratoRepositorio.cs" />
     <Compile Include="Repositorios\IBaseRepositorio.cs" />
     <Compile Include="Repositorios\ICargoRepositorio.cs" />
     <Compile Include="Repositorios\IClienteRepositorio.cs" />
     <Compile Include="Repositorios\ICompromissoRepositorio.cs" />
+    <Compile Include="Repositorios\IContasPagarRepositorio.cs" />
     <Compile Include="Repositorios\IContratoRepositorio.cs" />
     <Compile Include="Repositorios\IFornecedorRepositorio.cs" />
     <Compile Include="Repositorios\IFuncionalidadeRepositorio.cs" />
     <Compile Include="Repositorios\IFuncionarioRepositorio.cs" />
     <Compile Include="Repositorios\IJobRepositorio.cs" />
     <Compile Include="Repositorios\IMuralRepositorio.cs" />
+    <Compile Include="Repositorios\IParcelasPagarRepositorio.cs" />
     <Compile Include="Repositorios\IParcelasReceberRepositorio.cs" />
     <Compile Include="Repositorios\IPecaRepositorio.cs" />
     <Compile Include="Repositorios\ISituacaoJobRepositorio.cs" />
     <Compile Include="Repositorios\ITimelineJobRepositorio.cs" />
     <Compile Include="Repositorios\ITipoContaRepositorio.cs" />
     <Compile Include="Servicos\AcessoService.cs" />
+    <Compile Include="Servicos\AlteracaoContratoService.cs" />
     <Compile Include="Servicos\CargoService.cs" />
     <Compile Include="Servicos\ClienteService.cs" />
     <Compile Include="Servicos\CompromissoService.cs" />
+    <Compile Include="Servicos\ContasPagarService.cs" />
     <Compile Include="Servicos\ContratoService.cs" />
     <Compile Include="Servicos\FornecedorService.cs" />
     <Compile Include="Servicos\FuncionalidadeService.cs" />
     <Compile Include="Servicos\FuncionarioService.cs" />
     <Compile Include="Servicos\JobService.cs" />
     <Compile Include="Servicos\MuralService.cs" />
+    <Compile Include="Servicos\ParcelasPagarService.cs" />
     <Compile Include="Servicos\ParcelasReceberService.cs" />
     <Compile Include="Servicos\PecaService.cs" />
     <Compile Include="Servicos\SituacaoJobService.cs" />

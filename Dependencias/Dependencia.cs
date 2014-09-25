@@ -36,6 +36,9 @@ namespace Dependencias
             _container.Register(Component.For<ContratoService>().ImplementedBy<ContratoService>());
             _container.Register(Component.For<TipoContaService>().ImplementedBy<TipoContaService>());
             _container.Register(Component.For<ParcelasReceberService>().ImplementedBy<ParcelasReceberService>());
+            _container.Register(Component.For<AlteracaoContratoService>().ImplementedBy<AlteracaoContratoService>());
+            _container.Register(Component.For<ContasPagarService>().ImplementedBy<ContasPagarService>());
+            _container.Register(Component.For<ParcelasPagarService>().ImplementedBy<ParcelasPagarService>());
 
             //Repositorios
             _container.Register(Component.For<ICargoRepositorio>().ImplementedBy<CargoRepositorio>());
@@ -53,6 +56,10 @@ namespace Dependencias
             _container.Register(Component.For<IContratoRepositorio>().ImplementedBy<ContratoRepositorio>());
             _container.Register(Component.For<ITipoContaRepositorio>().ImplementedBy<TipoContaRepositorio>());
             _container.Register(Component.For<IParcelasReceberRepositorio>().ImplementedBy<ParcelasReceberRepositorio>());
+            _container.Register(
+                Component.For<IAlteracaoContratoRepositorio>().ImplementedBy<AlteracaoContratoRepositorio>());
+            _container.Register(Component.For<IContasPagarRepositorio>().ImplementedBy<ContasPagarRepositorio>());
+            _container.Register(Component.For<IParcelasPagarRepositorio>().ImplementedBy<ParcelasPagarRepositorio>());
         }
 
         public static T Resolver<T>()

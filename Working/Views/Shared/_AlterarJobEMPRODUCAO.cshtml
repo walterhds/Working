@@ -34,27 +34,27 @@
                         </div>
                         <div class="form-group">
                             <label for="FornecedoresAlterar" class="control-label col-sm-2" style="margin-left: -10px;">Fornecedores:</label>
-                            <div class="col-sm-8" style="padding-left: 30px;">
+                            <div class="col-sm-10" style="padding-left: 30px;">
                                 <select class="selectpicker show-tick form-control" multiple name="FornecedoresAlterar" id="FornecedoresAlterarEmProducao" data-live-search="true" disabled="disabled">
                                 </select>
                             </div>
-                            <div class="col-sm-2">
+                            @*<div class="col-sm-2">
                                 <button type="button" class="btn btn-info AdicionarFornecedor" data-dismiss="modal" data-toggle="modal" data-target="#CadastrarFornecedor" disabled="disabled">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="form-group">
                             <label for="PecasAlterar" class="control-label col-sm-2">Peças:</label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-10">
                                 <select class="selectpicker show-tick form-control" multiple name="PecasAlterar" id="PecasAlterarEmProducao" data-live-search="true" disabled="disabled">
                                 </select>
                             </div>
-                            <div class="col-sm-2">
+                            @*<div class="col-sm-2">
                                 <button type="button" class="btn btn-info AdicionarPeca" data-dismiss="modal" data-toggle="modal" data-target="#CadastrarPeca" disabled="disabled">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="form-group">
                             <label for="DescricaoAlterar" class="control-label col-sm-2">Descrição:</label>
@@ -169,6 +169,7 @@
             });
             $('#FornecedoresAlterarEmProducao').html(itens);
             $('.selectpicker').selectpicker('refresh');
+            $('#FornecedoresAlterarEmProducao').attr('disabled', 'disabled');
             ListarPecasEmProducao(id, $('#FornecedoresAlterarEmProducao').val().toString());
         });
     }
@@ -188,6 +189,7 @@
             });
             $('#PecasAlterarEmProducao').html(itens);
             $('.selectpicker').selectpicker('refresh');
+            $('#PecasAlterarEmProducao').attr('disabled', 'disabled');
         });
     }
 

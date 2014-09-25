@@ -4,21 +4,20 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Dependencias;
-using Dominio.Entidades;
 using Dominio.Servicos;
 using Working.Models;
 
 namespace Working.Controllers
 {
-    public class ParcelasReceberController : Controller
+    public class ParcelasPagarController : Controller
     {
-        private readonly ParcelasReceberService _parcelasReceberService;
-        private readonly ContratoService _contratoService;
+        private readonly ParcelasPagarService _parcelasPagarService;
+        private readonly ContasPagarService _contasPagarService;
 
-        public ParcelasReceberController()
+        public ParcelasPagarController()
         {
-            _parcelasReceberService = Dependencia.Resolver<ParcelasReceberService>();
-            _contratoService = Dependencia.Resolver<ContratoService>();
+            _parcelasPagarService = Dependencia.Resolver<ParcelasPagarService>();
+            _contasPagarService = Dependencia.Resolver<ContasPagarService>();
         }
 
         public ActionResult Index()
@@ -26,10 +25,10 @@ namespace Working.Controllers
             return View();
         }
 
-        public JsonResult ListarParcelasContrato(int id)
+        public JsonResult ListarParcelasContaPagar(int id)
         {
-            var contrato = _contratoService.ObterPorId(id);
-            var parcelas = _parcelasReceberService.Listar(e => e.Contrato == contrato);
+            var conta = _contasPagarService.ObterPorId(id);
+            var parcelas = _parcelasPagarService.Listar(e => e.Conta == conta);
             var lista = parcelas.Select(i => new ObjetoParcela
             {
                 Id = i.Id,
@@ -39,20 +38,23 @@ namespace Working.Controllers
                 NumeroParcela = i.NumeroParcela,
                 DataRegistro = i.DataRegistro
             })
+                .Where(e => e.Situacao != "Cancelada")
                 .OrderByDescending(e => e.NumeroParcela)
+                .ThenByDescending(e => e.DataRegistro)
                 .ToList();
 
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
 
-        public void Receber(int id, string valor)
+        public void Pagar(int id, string valor)
         {
             var decimalValor = Convert.ToDouble(valor);
-            var parcela = _parcelasReceberService.ObterPorId(id);
-            parcela.Situacao = "Recebida";
-            parcela.ValorRecebido = Convert.ToDecimal(decimalValor);
+            var parcela = _parcelasPagarService.ObterPorId(id);
+            parcela.Situacao = "Paga";
+            parcela.ValorPago = Convert.ToDecimal(decimalValor);
             parcela.DataRegistro = DateTime.Now;
-            _parcelasReceberService.Cadastrar(parcela);
+            _parcelasPagarService.Cadastrar(parcela);
         }
+
     }
 }

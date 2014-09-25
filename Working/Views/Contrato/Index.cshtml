@@ -1,5 +1,6 @@
-﻿@using NHibernate.Type
-@model IEnumerable<Dominio.Entidades.Contrato>
+﻿@using Dominio.Entidades
+@using NHibernate.Type
+@model Working.ViewsModels.DadosContratoIndex
 @{
     ViewBag.Title = "Financeiro";
 }
@@ -17,8 +18,11 @@
                     <th>Data Vencimento</th>
                     <th>Valor</th>
                     <th>Situação</th>
+                    <th>Operações</th>
                 </tr>
             </table>
+            <div id="FormReceberParcela" class="form-horizontal form-working">
+            </div>
         </div>
     </div>
 </div>
@@ -59,6 +63,11 @@
     </div>
 </div>
 
+<div class="form-working col-sm-9" style="padding-bottom: 10px;">
+    <button type="button" class="btn" disabled="disabled">Contas a Receber</button>
+    <button type="button" class="btn" onclick="location.href = '/ContasPagar/Index'">Contas a Pagar</button>
+</div>
+
 <div class="form-working col-md-9">
     <div class="titulo1">
         <h1>Contratos</h1>
@@ -80,13 +89,21 @@
             <th>Operações</th>
         </tr>
 
-        @foreach (var i in Model)
+        @foreach (var i in Model.Contratos)
         {
             <tr>
                 <td>@i.Cliente.Nome</td>
                 <td class="text-center">@i.NumeroContrato</td>
-                <td class="text-center">@i.DataVencimento.ToShortDateString()</td>
-                <td>R$ <span class="currency">@i.Valor</span></td>
+                @if (Model.Alteracoes.LastOrDefault(e => e.Contrato == i) != null)
+                {
+                    <td class="text-center">@Model.Alteracoes.LastOrDefault(e => e.Contrato == i).DataVencimento.ToShortDateString()</td>
+                    <td>R$ <span class="currency">@Model.Alteracoes.LastOrDefault(e => e.Contrato == i).Valor</span></td>
+                }
+                else
+                {
+                    <td class="text-center">@i.DataVencimento.ToShortDateString()</td>
+                    <td>R$ <span class="currency">@i.Valor</span></td>
+                }
                 <td class="text-center">
                     <div class="btn-group">
                         <button type="button" class="btn btn-xs" id="BotaoJobsContrato" data-toggle="modal" data-target="#JobsContrato" onclick="ListarJobsContrato(@i.Id);">
@@ -95,7 +112,7 @@
                         <button type="button" class="btn btn-xs btn-success" id="BotaoParcelasContrato" data-toggle="modal" data-target="#ParcelasContrato" onclick="DeletarTabelaParcelasContrato(@i.Id);">
                             <span class="glyphicon glyphicon-usd"></span>
                         </button>
-                        <button type="button" class="btn btn-group btn-xs">
+                        <button type="button" class="btn btn-group btn-xs" onclick="location.href='/AlteracaoContrato/Cadastrar/' + @i.Id;">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </button>
                     </div>
@@ -107,6 +124,14 @@
 
 @section Scripts{
     <script>
+        $('#ParcelasContrato').on('hidden.bs.modal', function (e) {
+            $('#FormReceberParcela').empty();
+        });
+
+        $('#JobsContrato').on('hidden.bs.modal', function (e) {
+            DeletarTabelaJobsContrato();
+        });
+
         function DeletarTabelaJobsContrato(id) {
             var numeroLinhas = $("#TabelaJobsContrato > tbody > tr").length;
             for (var i = 1; i < numeroLinhas; i++) {
@@ -117,8 +142,8 @@
 
         function PreencherTabelaJobsContrato(id) {
             var tabela = document.getElementById('TabelaJobsContrato');
-            $.get('/Contrato/ListarJobsContrato/' + id, function(data) {
-                $.each(data, function(i, res) {
+            $.get('/Contrato/ListarJobsContrato/' + id, function (data) {
+                $.each(data, function (i, res) {
                     if (res.nome != null) {
                         var linha = tabela.insertRow(1);
                         var nome = document.createElement('td');
@@ -143,8 +168,8 @@
 
         function ListarJobsContrato(id) {
             var itens;
-            $.get('/Job/ListarJobsSemContrato/', function(data) {
-                $.each(data, function(i, res) {
+            $.get('/Job/ListarJobsSemContrato/', function (data) {
+                $.each(data, function (i, res) {
                     if (res.nome != null) {
                         itens += "<option value='" + res.id + "'>" + res.nome + "</option>";
                     }
@@ -153,7 +178,7 @@
                 $('#SelectJobs').selectpicker('refresh');
             });
             PreencherTabelaJobsContrato(id);
-            $('#SalvarJobsContrato').on('click', function() {
+            $('#SalvarJobsContrato').on('click', function () {
                 var jobs = $('#SelectJobs').val().toString();
 
                 $.ajax({
@@ -163,15 +188,15 @@
                         jobsid: jobs,
                         id: id
                     },
-                    success: function() {
+                    success: function () {
                         DeletarTabelaJobsContrato(id);
                     },
-                    error: function(xhr, status, response) { alert(response); }
+                    error: function (xhr, status, response) { alert(response); }
                 });
             });
         }
 
-        $('#CancelarJobsContrato').on('click', function() {
+        $('#CancelarJobsContrato').on('click', function () {
             DeletarTabelaJobsContrato();
         });
 
@@ -186,8 +211,7 @@
         function PreencherTabelaParcelasContrato(id) {
             var tabela = document.getElementById('TabelaParcelasContrato');
             $.get('/ParcelasReceber/ListarParcelasContrato/' + id, function (data) {
-                var len = data.length + 1;
-                $.each(data, function(i, res) {
+                $.each(data, function (i, res) {
                     if (res.Id != null) {
                         var linha = tabela.insertRow(1);
 
@@ -196,22 +220,137 @@
                         var valor = document.createElement('td');
                         var span = document.createElement('span');
                         var situacao = document.createElement('td');
-                        len--;
-                        parcela.innerHTML = '<td>' + len + '</td>';
+                        var operacoes = document.createElement('td');
+                        var btn = document.createElement('button');
+
+                        parcela.innerHTML = '<td>' + res.NumeroParcela + '</td>';
                         dataVencimento.innerHTML = '<td>' + res.DataVencimento + '</td>';
                         valor.innerHTML = "<td>R$ </td>";
                         span.innerHTML = res.Valor;
                         situacao.innerHTML = '<td>' + res.Situacao + '</td>';
+                        operacoes.innerHTML = '<td></td>';
 
                         linha.appendChild(parcela);
                         linha.appendChild(dataVencimento);
                         valor.appendChild(span);
                         linha.appendChild(valor);
                         linha.appendChild(situacao);
+                        if (res.Situacao == 'Aberta') {
+                            btn.innerHTML = "Receber";
+                            $(btn).addClass('btn btn-success btn-sm');
+                            $(btn).on('click', function () {
+                                $('#ParcelasContrato .btn-success').attr('disabled', 'disabled');
+                                CriarFormularioReceberParcelas(res.Id, res.NumeroParcela, id);
+                            });
+                            operacoes.appendChild(btn);
+                        }
+                        linha.appendChild(operacoes);
                         $('#TabelaParcelasContrato > tbody > tr > td > span').addClass('currency');
                     }
                 });
             });
         }
+
+        function ReceberParcela(id, valor) {
+            $.ajax({
+                url: '/ParcelasReceber/Receber/',
+                data: {
+                    id: id,
+                    valor: valor
+                },
+                error: function (xhr, status, response) { alert(response); }
+            });
+        }
+
+        function CriarFormularioReceberParcelas(id, numeroParcela, idContrato) {
+            var divTitulo = $('<div/>');
+            var h3 = $('<h3></h3>');
+            h3.text('Receber parcela nº: ' + numeroParcela);
+
+            divTitulo.append(h3);
+
+            var divDataRecebimento = $('<div/>');
+            divDataRecebimento.addClass('form-group');
+
+            var labelDataRecebimento = $('<label></label>');
+            labelDataRecebimento.addClass('col-sm-3 text-right control-label');
+            labelDataRecebimento.attr('for', 'DataRecebimento');
+            labelDataRecebimento.text('Data Recebimento:');
+
+            var divInputDataRecebimento = $('<div/>');
+            divInputDataRecebimento.addClass('col-sm-8');
+
+            var inputDataRecebimento = $('<input/>');
+            inputDataRecebimento.attr('type', 'text');
+            inputDataRecebimento.attr('name', 'DataRecebimento');
+            inputDataRecebimento.attr('id', 'DataRecebimentoParcela');
+            inputDataRecebimento.attr('readonly', 'readonly');
+            inputDataRecebimento.addClass('form-control datepickerMaxDate');
+            inputDataRecebimento.datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                maxDate: 0
+            });
+
+            divInputDataRecebimento.append(inputDataRecebimento);
+            divDataRecebimento.append(labelDataRecebimento);
+            divDataRecebimento.append(divInputDataRecebimento);
+
+            var divValorRecebido = $('<div/>');
+            divValorRecebido.addClass('form-group');
+
+            var labelValorRecebido = $('<label></label>');
+            labelValorRecebido.addClass('col-sm-3 text-right control-label');
+            labelValorRecebido.attr('for', 'ValorRecebido');
+            labelValorRecebido.text('Valor Recebido:');
+
+            var divInputValorRecebido = $('<div/>');
+            divInputValorRecebido.addClass('col-sm-8');
+
+            var inputValorRecebido = $('<input/>');
+            inputValorRecebido.attr('type', 'text');
+            inputValorRecebido.attr('name', 'ValorRecebido');
+            inputValorRecebido.attr('id', 'ValorRecebidoParcela');
+            inputValorRecebido.addClass('form-control');
+            inputValorRecebido.mask("#.##0,00", { reverse: true, maxlength: false });
+
+            divInputValorRecebido.append(inputValorRecebido);
+            divValorRecebido.append(labelValorRecebido);
+            divValorRecebido.append(divInputValorRecebido);
+
+            var btnOk = $('<button/>');
+            btnOk.addClass('btn btn-success btn-sm');
+            btnOk.text('Receber Parcela');
+            $(btnOk).on('click', function () {
+                ReceberParcela(id, $('#ValorRecebidoParcela').val());
+                $('#ParcelasContrato .btn-success').removeAttr('disabled');
+                $('#FormReceberParcela').empty();
+                DeletarTabelaParcelasContrato(idContrato);
+            });
+
+            var btnCancelar = $('<button/>');
+            btnCancelar.addClass('btn btn-danger btn-sm');
+            btnCancelar.text('Cancelar');
+            $(btnCancelar).on('click', function () {
+                $('#FormReceberParcela').empty();
+                $('#ParcelasContrato .btn-success').removeAttr('disabled');
+            });
+
+            $('#FormReceberParcela').append(divTitulo);
+            $('#FormReceberParcela').append(divDataRecebimento);
+            $('#FormReceberParcela').append(divValorRecebido);
+            $('#FormReceberParcela').append(btnOk);
+            $('#FormReceberParcela').append(btnCancelar);
+        }
+
+        $('#FecharParcelas').on('click', function () {
+            $('#FormReceberParcela').empty();
+        });
     </script>
 }

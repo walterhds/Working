@@ -386,6 +386,7 @@
         <script src="~/Scripts/jquery.mask.min.js"></script>
         <script src="~/Scripts/bootstrap-select.js"></script>
         <script src="~/Scripts/jquery-ui-timepicker-addon.js"></script>
+        <script src="~/Scripts/compromisso.js"></script>
         <script>
             $('.inputNumber').mask('#', { maxlength: false });
             $(".currency").mask("#.##0,00", { reverse: true, maxlength: false });
@@ -650,6 +651,7 @@
                     $('#ClienteCadastro').html(itens);
                     $('.selectpicker').selectpicker('refresh');
                 });
+                ListarFornecedores();
             };
 
             function ListarFornecedores() {
@@ -749,6 +751,11 @@
                                             "<span class='glyphicon glyphicon-comment'></span></button><button type='button' class='btn btn-default' id='" + res.id + "' data-toggle='modal' data-target='#AlterarJob" + res.Fase + "' onclick='Listar" + res.Fase + "(" + res.id + ");'>" +
                                             "<span class='glyphicon glyphicon-pencil'></span></button></div></td>";
                                     }
+                                } else {
+                                    operacoes.innerHTML = "<td><div class='btn-group btn-group-xs'>" +
+                                            "<button type='button' class='btn btn-success' data-toggle='modal' data-target='#Timeline' onclick='ListarComentarios(" + res.id + ");'>" +
+                                            "<span class='glyphicon glyphicon-comment'></span></button><button type='button' class='btn btn-default' id='" + res.id + "' data-toggle='modal' data-target='#AlterarJob" + res.Fase + "' onclick='Listar" + res.Fase + "(" + res.id + ");'>" +
+                                            "<span class='glyphicon glyphicon-pencil'></span></button></div></td>";
                                 }
                             }
                             linha.appendChild(cliente);

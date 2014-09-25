@@ -65,13 +65,14 @@ function Cadastrar(date, hour, description, job) {
     });
 }
 
-function CadastrarAjax(date, hour, description) {
+function CadastrarAjax(date, hour, description, job) {
     $.ajax({
         url: '/Compromisso/CadastrarAjax/',
         data: {
             data: date,
             hora: hour,
-            descricao: description
+            descricao: description,
+            idJob: job
         },
         type: 'post',
         success: function () {
@@ -96,16 +97,14 @@ $("#Salvar").click(function () {
     var data = $("#Data").val();
     var hora = $("#Hora").val();
     var descricao = $("#Descricao").val();
-
-    Cadastrar(data, hora, descricao,null);
+    Cadastrar(data, hora, descricao, 0);
 });
 
 $("#SalvarAjax").click(function () {
     var data = $("#Data").val();
     var hora = $("#Hora").val();
     var descricao = $("#Descricao").val();
-    
-    CadastrarAjax(data, hora, descricao);
+    CadastrarAjax(data, hora, descricao, 0);
 });
 
 function PopularModal(id) {

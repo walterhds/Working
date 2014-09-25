@@ -48,15 +48,18 @@
   <ItemGroup>
     <Compile Include="BaseRepositorio.cs" />
     <Compile Include="Mapping\AcessoMap.cs" />
+    <Compile Include="Mapping\AlteracaoContratoMap.cs" />
     <Compile Include="Mapping\CargoMap.cs" />
     <Compile Include="Mapping\ClienteMap.cs" />
     <Compile Include="Mapping\CompromissoMap.cs" />
+    <Compile Include="Mapping\ContasPagarMap.cs" />
     <Compile Include="Mapping\ContratoMap.cs" />
     <Compile Include="Mapping\FornecedorMap.cs" />
     <Compile Include="Mapping\FuncionalidadeMap.cs" />
     <Compile Include="Mapping\FuncionarioMap.cs" />
     <Compile Include="Mapping\JobMap.cs" />
     <Compile Include="Mapping\MuralMap.cs" />
+    <Compile Include="Mapping\ParcelasPagarMap.cs" />
     <Compile Include="Mapping\ParcelasReceberMap.cs" />
     <Compile Include="Mapping\PecaMap.cs" />
     <Compile Include="Mapping\SituacaoJobMap.cs" />
@@ -65,15 +68,18 @@
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorio\AcessoRepositorio.cs" />
+    <Compile Include="Repositorio\AlteracaoContratoRepositorio.cs" />
     <Compile Include="Repositorio\CargoRepositorio.cs" />
     <Compile Include="Repositorio\ClienteRepositorio.cs" />
     <Compile Include="Repositorio\CompromissoRepositorio.cs" />
+    <Compile Include="Repositorio\ContasPagarRepositorio.cs" />
     <Compile Include="Repositorio\ContratoRepositorio.cs" />
     <Compile Include="Repositorio\FornecedorRepositorio.cs" />
     <Compile Include="Repositorio\FuncionalidadeRepositorio.cs" />
     <Compile Include="Repositorio\FuncionarioRepositorio.cs" />
     <Compile Include="Repositorio\JobRepositorio.cs" />
     <Compile Include="Repositorio\MuralRepositorio.cs" />
+    <Compile Include="Repositorio\ParcelasPagarRepositorio.cs" />
     <Compile Include="Repositorio\ParcelasReceberRepositorio.cs" />
     <Compile Include="Repositorio\PecaRepositorio.cs" />
     <Compile Include="Repositorio\SituacaoJobRepositorio.cs" />
