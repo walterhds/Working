@@ -26,13 +26,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="NomeAlterar" class="control-label col-sm-2">Nome:</label>
+                            <label for="NomeAlterar" class="control-label col-sm-2">*Nome:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="NomeAlterar" id="NomeAlterarAnalise"/>
+                                <input type="text" class="form-control" name="NomeAlterar" id="NomeAlterarAnalise" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="FornecedoresAlterar" class="control-label col-sm-2" style="margin-left: -10px;">Fornecedores:</label>
+                            <label for="FornecedoresAlterar" class="control-label col-sm-2" style="margin-left: -10px;">*Fornecedores:</label>
                             <div class="col-sm-10" style="padding-left: 30px;">
                                 <select class="selectpicker show-tick form-control" multiple name="FornecedoresAlterar" id="FornecedoresAlterarAnalise" onchange="ListarPecas($(this).val().toString());" data-live-search="true">
                                 </select>
@@ -44,7 +44,7 @@
                             </div>*@
                         </div>
                         <div class="form-group">
-                            <label for="PecasAlterar" class="control-label col-sm-2">Peças:</label>
+                            <label for="PecasAlterar" class="control-label col-sm-2">*Peças:</label>
                             <div class="col-sm-10">
                                 <select class="selectpicker show-tick form-control" multiple name="PecasAlterar" id="PecasAlterarAnalise" data-live-search="true">
                                 </select>
@@ -56,9 +56,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="DescricaoAlterar" class="control-label col-sm-2">Descrição:</label>
+                            <label for="DescricaoAlterar" class="control-label col-sm-2">*Descrição:</label>
                             <div class="col-sm-10">
-                                <textarea class="form-control" name="DescricaoAlterar" id="DescricaoAlterarAnalise" style="resize: none;"></textarea>
+                                <textarea class="form-control" name="DescricaoAlterar" id="DescricaoAlterarAnalise" onkeyup="CaracterDescricao();" onkeydown="CaracterDescricao();" style="resize: none;"></textarea>
                             </div>
                             <div class="caracteres">
                                 <span id="CaracterDescricaoAlterar" class="pull-right">5000 caracteres</span>
@@ -166,14 +166,32 @@
     }
 
     function BtnAlterarJobAnalise() {
-        var descricao = $('#DescricaoAlterarAnalise').val();
-        var fornecedores = $('#FornecedoresAlterarAnalise').val().toString();
-        var pecas = $('#PecasAlterarAnalise').val().toString();
         var idJob = $('#IdJob').text();
-        var nome = $('#NomeAlterarAnalise').val();
-        AlterarJobAnalise(idJob, fornecedores, pecas, descricao, nome);
-        AtualizaMeusJobs();
-        AtualizaJobs();
+        if ($('#NomeAlterarAnalise').val() == '') {
+            $('#NomeAlterarAnalise').focus();
+            alert('Campo nome vazio.');
+        } else {
+            var nome = $('#NomeAlterarAnalise').val();
+        }
+        if ($('#FornecedoresAlterarAnalise').val().toString() == '') {
+            alert('Campo fornecedores vazio.');
+        } else {
+            var fornecedores = $('#FornecedoresAlterarAnalise').val().toString();
+        }
+        if ($('#PecasAlterarAnalise').val().toString() == '') {
+            alert('Campo peças vazio.');
+        } else {
+            var pecas = $('#PecasAlterarAnalise').val().toString();
+        }
+        if ($('#DescricaoAlterarAnalise').val() == '') {
+            $('#DescricaoAlterarAnalise').focus();
+            alert('Campo descrição vazio.');
+        } else {
+            var descricao = $('#DescricaoAlterarAnalise').val();
+            AlterarJobAnalise(idJob, fornecedores, pecas, descricao, nome);
+            AtualizaMeusJobs();
+            AtualizaJobs();
+        }
     };
 
     function ListarPecas(id) {
@@ -208,6 +226,19 @@
         $('#CancelarComentario').click();
         EsconderComentariosAnalise();
     };
+
+    function CaracterDescricao() {
+        var quant = 5000;
+        var total = document.getElementById("DescricaoAlterarAnalise").value.length;
+
+        if (total == 0) {
+            $('#CaracterDescricaoAlterar').text('5000 caracteres');
+        } else if (total < quant) {
+            $("#CaracterDescricaoAlterar").text(quant - total + " caracteres restantes");
+        } else {
+            document.getElementById('DescricaoAlterarAnalise').value = document.getElementById("DescricaoAlterarAnalise").value.substr(0, quant);
+        }
+    }
 
     ////////////////////////////////////
     /////                          /////
@@ -250,7 +281,7 @@
         $('#FormComentarioAnalise').children('div').children('button:last').attr('onclick', 'CancelarComentarioAnalise();');
         $('#FormComentarioAnalise').children('div').children('button:last').addClass('btn btn-danger btn-sm');
         $('#FormComentarioAnalise').removeAttr('enabled');
-        $('#FormComentarioAnalise').attr('disabled', 'disabled');
+        $('#NovoComentarioAnalise').attr('disabled', 'disabled');
     }
 
     function AtualizarCaracterAnalise() {
@@ -281,7 +312,8 @@
     function SalvarComentarioAnalise() {
         var comentario = $('#TextareaComentario').val();
 
-        CadastrarTimelineJobAnalise(comentario, $('#IdJob').text());
+        if (comentario != '') CadastrarTimelineJobAnalise(comentario, $('#IdJob').text());
+        else $('#TextareaComentario').focus();
     };
 
     function CadastrarTimelineJobAnalise(comentario, id) {
@@ -356,7 +388,7 @@
                                                     alterar.addClass('glyphicon glyphicon-pencil pull-right');
                                                     alterar.css('cursor', 'pointer');
                                                     alterar.attr('onclick', 'CriarAlterarComentario(' + res.id + ');');
-                                                    
+
                                                     var excluir = $('<a/>');
                                                     excluir.addClass('glyphicon glyphicon-remove pull-right');
                                                     excluir.css('cursor', 'pointer');
@@ -416,7 +448,7 @@
         $('#' + id + 'panelBody').append("<textarea class='form-control' id='" + id + "ComentarioAlterar' style='resize: none; border: none;'></textarea>");
         $('#' + id + 'panelBody').append("<button type='button' class='btn btn-success' onclick='AlterarComentario(" + id + ");'>Alterar</button>");
         $('#' + id + 'panelBody').append("<button type='button' class='btn btn-danger'>Cancelar</button>");
-        $('#' + id + 'panelBody button:last-child').on('click', function() { CancelarComentario(id, texto); });
+        $('#' + id + 'panelBody button:last-child').on('click', function () { CancelarComentario(id, texto); });
         $('#' + id + 'ComentarioAlterar').val(texto);
         $('#' + id + 'ComentarioAlterar').focus().select();
     }

@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Disponibilidade";
+}
+
+<div class="form-working col-md-9">
+    <div class="titulo1">
+        <h1>Disponibilidade</h1>
+    </div>
+
+    <div class="form-horizontal" style="padding-top: 10px; padding-bottom: 10px;">
+        <div class="form-horizontal">
+            <label for="PrimeiraData" class="control-label col-sm-2">1ª Data:</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" name="PrimeiraData" id="PrimeiraData" readonly="readonly" />
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <label for="SegundaData" class="control-label col-sm-2">2ª Data:</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" name="SegundaData" id="SegundaData" readonly="readonly" />
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm col-sm-2" onclick="DeletarTabelaDisponibilidade($('#PrimeiraData').val(),$('#SegundaData').val());">
+            <span class="glyphicon glyphicon-search"></span>
+            Verificar
+        </button>
+    </div>
+
+    <table class="table table-bordered table-hover table-working" id="TabelaDisponibilidade">
+        <tr>
+            <th>Colaborador</th>
+            <th>Horas Disponíveis</th>
+        </tr>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#PrimeiraData").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                onClose: function (selectedDate) {
+                    $("#SegundaData").datepicker("option", "minDate", selectedDate);
+                }
+            });
+            $("#SegundaData").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                onClose: function (selectedDate) {
+                    $("#PrimeiraData").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+        });
+        function DeletarTabelaDisponibilidade(primeiraData,segundaData) {
+            var numeroLinhas = $("#TabelaDisponibilidade >tbody >tr").length;
+            for (var i = 1; i < numeroLinhas; i++) {
+                document.getElementById("TabelaDisponibilidade").deleteRow(1);
+            }
+            Disponibilidade(primeiraData, segundaData);
+        }
+
+        function Disponibilidade(primeiraData, segundaData) {
+            var tabela = document.getElementById('TabelaDisponibilidade');
+            $.get('/Funcionario/DisponibilidadeJson/', { primeiraData: primeiraData, segundaData: segundaData }, function (data) {
+                $.each(data, function (i, res) {
+                    if (res.Nome != null) {
+                        var linha = tabela.insertRow(1);
+
+                        var nome = document.createElement('td');
+                        var horas = document.createElement('td');
+
+                        nome.innerHTML = '<td>' + res.Nome + '</td>';
+                        if (res.HorasDouble <= 0) {
+                            horas.innerHTML = '<td>0:00</td>';
+                        } else {
+                            horas.innerHTML = '<td>' + res.HorasDisponiveis + '</td>';
+                        }
+                        $(horas).addClass('text-center');
+                        $(nome).addClass('text-center');
+                        if (res.HorasDouble < 2) {
+                            $(linha).css('background-color', 'lightcoral');
+                        } else if (res.HorasDouble > 2 && res.HorasDouble < 4) {
+                            $(linha).css('background-color', 'lightyellow');
+                        }
+
+                        linha.appendChild(nome);
+                        linha.appendChild(horas);
+                    }
+                });
+            });
+        }
+    </script>
+}

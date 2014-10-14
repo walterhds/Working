@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Dominio.Entidades.Cliente>
+@{
+    ViewBag.Title = "Relatório de Clientes";
+    Layout = "~/Views/Shared/_LayoutRelatorio.cshtml";
+}
+
+<table class="table table-bordered table-working">
+    <tr>
+        <th>Nome</th>
+        <th>Telefone</th>
+        <th>Contato</th>
+        <th>Telefone Contato</th>
+        <th>E-mail</th>
+    </tr>
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Nome</td>
+            <td>@i.Telefone</td>
+            <td>@i.Contato</td>
+            <td>@i.Celular</td>
+            <td>@i.Email</td>
+        </tr>
+    }
+</table>

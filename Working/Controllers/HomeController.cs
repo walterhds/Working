@@ -23,6 +23,12 @@ namespace Working.Controllers
             _funcionarioService = Dependencia.Resolver<FuncionarioService>();
         }
 
+        public ActionResult ClienteIndex(Cliente cliente)
+        {
+            var lista = _jobService.Listar(e => e.Cliente == cliente && e.Fase != "ENTREGUE" && e.Fase != "ANALISE");
+            return View(lista);
+        }
+
         public ActionResult Index()
         {
             _dadosIndex = new DadosIndex

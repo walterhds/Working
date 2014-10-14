@@ -9,6 +9,7 @@ using Dominio.Entidades;
 using Dominio.Servicos;
 using Microsoft.Ajax.Utilities;
 using NHibernate.Hql.Ast.ANTLR;
+using Rotativa;
 using Working.Models;
 using Working.ViewsModels;
 
@@ -104,6 +105,12 @@ namespace Working.Controllers
             }
 
             return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RelatorioPecas()
+        {
+            var pdf = new ViewAsPdf(_pecaService.Listar(e => true));
+            return pdf;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Working.Controllers
             }
             cargo.Acessos = lista;
             _cargoService.Cadastrar(cargo);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index","Home");
         }
 
         public ActionResult Remover(int id)

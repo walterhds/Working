@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Working.Models.ObjetoFuncionarioDisponibilidade>
+@{
+    ViewBag.Title = "Relatório de Disponibilidades";
+    Layout = "~/Views/Shared/_LayoutRelatorio.cshtml";
+}
+<h5>Filtro: @Model.FirstOrDefault().PrimeiraData - @Model.FirstOrDefault().SegundaData</h5>
+<table class="table table-bordered table-working text-center">
+    <tr>
+        <th>Colaborador</th>
+        <th>Horas Disponíveis</th>
+    </tr>
+    @foreach (var i in Model)
+    {
+        if (i.HorasDouble < 2 && i.HorasDouble > 0)
+        {
+        <tr style="background-color: lightcoral">
+            <td>@i.Nome</td>
+            <td>@i.HorasDisponiveis</td>
+        </tr>
+        }
+        else if (i.HorasDouble > 2 && i.HorasDouble < 4)
+        {
+        <tr style="background-color: lightgoldenrodyellow">
+            <td>@i.Nome</td>
+            <td>@i.HorasDisponiveis</td>
+        </tr>
+        }
+        else if (i.HorasDouble <= 0)
+        {
+        <tr style="background-color: lightcoral">
+            <td>@i.Nome</td>
+            <td>0:00</td>
+        </tr>
+        }
+        else
+        {
+        <tr>
+            <td>@i.Nome</td>
+            <td>@i.HorasDisponiveis</td>
+        </tr>
+        }
+    }
+</table>

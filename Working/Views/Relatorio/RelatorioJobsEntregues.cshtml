@@ -1,0 +1,40 @@
+﻿@model Working.ViewsModels.ObjetoJobRelatorios
+@{
+    ViewBag.Title = "Relatório de Jobs Entregues";
+    Layout = "~/Views/Shared/_LayoutRelatorio.cshtml";
+}
+<h5>Filtro: @Model.PrimeiraData - @Model.SegundaData</h5>
+<table class="table table-bordered table-hover table-working" id="TabelaMeusJobs">
+    <tr>
+        <th>Cliente</th>
+        <th>Nome</th>
+        <th>Peças</th>
+        <th>Data Criação</th>
+        <th>Data Estimativa</th>
+        <th>Data Entrega</th>
+    </tr>
+
+    @foreach (var i in Model.Jobs)
+    {
+        <tr>
+            <td>@i.Cliente.Nome</td>
+            <td>@i.Nome</td>
+            <td>
+                @foreach (var j in i.Peca)
+                {
+                    if (i.Peca.Last().Id == j.Id)
+                    {
+                    <span>@j.Descricao</span>
+                    }
+                    else
+                    {
+                    <span>@j.Descricao,</span>
+                    }
+                }
+            </td>
+            <td>@i.DataCriacao.ToShortDateString()</td>
+            <td>@i.DataEstimativa.ToShortDateString()</td>
+            <td>@i.DataEntrega.ToShortDateString()</td>
+        </tr>
+    }
+</table>

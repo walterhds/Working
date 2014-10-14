@@ -15,31 +15,31 @@
     
     <form role="form" method="post" class="form-horizontal col-md-6" style="padding-top: 10px;">
         <div class="form-group">
-            <label for="Nome" class="col-sm-2 control-label">Nome:</label>
+            <label for="Nome" class="col-sm-2 control-label">*Nome:</label>
             <div class="col-sm-10">
                 <input class="form-control" type="text" name="Nome" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Telefone" class="col-sm-2 control-label">Telefone:</label>
+            <label for="Telefone" class="col-sm-2 control-label">*Telefone:</label>
             <div class="col-sm-10">
-                <input class="form-control" type="text" name="Telefone" required />
+                <input class="form-control telefone" type="text" name="Telefone" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Contato" class="col-sm-2 control-label">Contato:</label>
+            <label for="Contato" class="col-sm-2 control-label">*Contato:</label>
             <div class="col-sm-10">
                 <input class="form-control" type="text" name="Contato" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Celular" class="col-sm-2 control-label">Celular:</label>
+            <label for="Celular" class="col-sm-2 control-label">*Celular:</label>
             <div class="col-sm-10">
-                <input class="form-control" type="text" name="Celular" required />
+                <input class="form-control telefone" type="text" name="Celular" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Email" class="col-sm-2 control-label">Email:</label>
+            <label for="Email" class="col-sm-2 control-label">*Email:</label>
             <div class="col-sm-10">
                 <input class="form-control" type="text" name="Email" required />
             </div>
@@ -47,14 +47,15 @@
         <div class="titulo2">
             <h2>Acesso ao sistema</h2>
         </div>
-        <div class="form-group" style="padding-top: 10px;">
-            <label for="Login" class="col-sm-2 control-label">Login:</label>
+        <div class="form-group" style="padding-top: 10px;" id="divLoginCliente">
+            <label for="Login" class="col-sm-2 control-label">*Login:</label>
             <div class="col-sm-10">
-                <input class="form-control" autocomplete="off" type="text" name="Login" required />
+                <input class="form-control" autocomplete="off" type="text" name="Login" id="LoginCadastroCliente" required />
+                <span id="SpanLoginCliente" style="color: transparent;"></span>
             </div>
         </div>
         <div class="form-group">
-            <label for="Senha" class="col-sm-2 control-label">Senha:</label>
+            <label for="Senha" class="col-sm-2 control-label">*Senha:</label>
             <div class="col-sm-10">
                 <input class="form-control" type="password" name="Senha" required />
             </div>
@@ -65,3 +66,30 @@
         </button>
     </form>
 </div>
+
+@section Scripts{
+    <script>
+        $('#LoginCadastroCliente').on('blur', function () {
+            var id = $('#LoginCadastroCliente').val();
+            $.get('/Cliente/VerificarCadastroLoginCliente/' + id, function(data) {
+                if (data == "existente") {
+                    $('#LoginCadastroCliente').focus().select();
+                    $('#divLoginCliente').addClass('has-error');
+                    $('#SpanLoginCliente').css('color', '#b94a48');
+                    $('#SpanLoginCliente').text('Login Existente.');
+                } else {
+                    $('#divLoginCliente').removeClass('has-error').addClass('has-success');
+                    $('#SpanLoginCliente').css('color', '#468847');
+                    $('#SpanLoginCliente').text('Login Disponível.');
+                }
+            });
+        });
+        $('#LoginCadastroCliente').on('keypress', function() {
+            if ($('#SpanLoginCliente').text() != '') {
+                $('#divLoginCliente').removeClass('has-error has-success');
+                $('#SpanLoginCliente').css('color', 'transparent');
+                $('#SpanLoginCliente').text('');
+            }
+        });
+    </script>
+}

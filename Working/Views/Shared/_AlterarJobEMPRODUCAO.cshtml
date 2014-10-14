@@ -243,6 +243,10 @@
                     $('#HorasNecessariasAlterarEmProducao').val(res.HorasNecessarias);
                     $('#DataEstimativaAlterarEmProducao').val(res.DataEstimativa);
                     $('#DataCriacaoAlterarEmProducao').val(res.DataCriacao);
+                    $('#ClienteAlterarEmProducao').attr('disabled', 'disabled');
+                    $('#FornecedoresAlterarEmProducao').attr('disabled', 'disabled');
+                    $('#PecasAlterarEmProducao').attr('disabled', 'disabled');
+                    $('#FuncionarioAlterarEmProducao').attr('disabled', 'disabled');
                 }
             });
         });
@@ -423,11 +427,11 @@
             '<button>Limpar</button>' +
             '<button>Cancelar</button>' +
             '</div>');
-        $('#FormComentarioEmProducao').children('div').attr('id', 'DivFormulario');
+        $('#FormComentarioEmProducao').children('div').attr('id', 'DivFormularioEmProducao');
         $('#FormComentarioEmProducao').children('div').addClass('form-group col-sm-12');
         $('#FormComentarioEmProducao').children('div').css('padding-top', '10px');
         $('#FormComentarioEmProducao').children('div').children('textarea').attr('name', 'TextareaComentario');
-        $('#FormComentarioEmProducao').children('div').children('textarea').attr('id', 'TextareaComentario');
+        $('#FormComentarioEmProducao').children('div').children('textarea').attr('id', 'TextareaComentarioEmProducao');
         $('#FormComentarioEmProducao').children('div').children('textarea').attr('onkeyup', 'AtualizarCaracterEmProducao();');
         $('#FormComentarioEmProducao').children('div').children('textarea').attr('onkeydown', 'AtualizarCaracterEmProducao();');
         $('#FormComentarioEmProducao').children('div').children('textarea').attr('required', 'required');
@@ -439,50 +443,47 @@
         $('#FormComentarioEmProducao').children('div').children('div').children('span').attr('id', 'CaracterComentario');
         $('#FormComentarioEmProducao').children('div').children('div').children('span').text('5000 caracteres');
         $('#FormComentarioEmProducao').children('div').children('button').attr('type', 'button');
-        $('#FormComentarioEmProducao').children('div').children('button').attr('id', 'LimparComentario');
-        $('#FormComentarioEmProducao').children('div').children('button').attr('onclick', 'LimparComentarioEmProducao();');
+        $('#FormComentarioEmProducao').children('div').children('button').attr('id', 'LimparComentarioEmProducao');
+        $('#LimparComentarioEmProducao').on('click', function() {
+            $('#CaracterComentario').text('5000 caracteres');
+            $('#TextareaComentarioEmProducao').val('');
+            $('#TextareaComentarioEmProducao').focus();
+        });
         $('#FormComentarioEmProducao').children('div').children('button').addClass('btn btn-sm');
         $('#FormComentarioEmProducao').children('div').children('button:first').attr('type', 'button');
         $('#FormComentarioEmProducao').children('div').children('button:first').attr('id', 'SalvarComentario');
         $('#FormComentarioEmProducao').children('div').children('button:first').attr('onclick', 'SalvarComentarioEmProducao();');
         $('#FormComentarioEmProducao').children('div').children('button:first').addClass('btn btn-success btn-sm');
         $('#FormComentarioEmProducao').children('div').children('button:last').attr('type', 'button');
-        $('#FormComentarioEmProducao').children('div').children('button:last').attr('id', 'CancelarComentario');
-        $('#FormComentarioEmProducao').children('div').children('button:last').attr('onclick', 'CancelarComentarioEmProducao();');
+        $('#FormComentarioEmProducao').children('div').children('button:last').attr('id', 'CancelarComentarioEmProducao');
+        $('#CancelarComentarioEmProducao').on('click', function() {
+            $('#NovoComentarioEmProducao').removeAttr('disabled');
+            $('#NovoComentarioEmProducao').attr('enabled', 'enabled');
+            $('#DivFormularioEmProducao').remove();
+        });
         $('#FormComentarioEmProducao').children('div').children('button:last').addClass('btn btn-danger btn-sm');
         $('#FormComentarioEmProducao').removeAttr('enabled');
-        $('#FormComentarioEmProducao').attr('disabled', 'disabled');
+        $('#NovoComentarioEmProducao').attr('disabled', 'disabled');
     }
 
     function AtualizarCaracterEmProducao() {
         var quant = 5000;
-        var total = $('#TextareaComentario').val().length;
+        var total = $('#TextareaComentarioEmProducao').val().length;
 
         if (total == 0) {
             $('#FormComentarioEmProducao').children('div').children('div').children('#CaracterComentario').text('5000 caracteres');
         } else if (total < quant) {
             $('#FormComentarioEmProducao').children('div').children('div').children('#CaracterComentario').text(quant - total + " caracteres restantes");
         } else {
-            document.getElementById('TextareaComentario').value = document.getElementById('TextareaComentario').value.substr(0, quant);
+            document.getElementById('TextareaComentarioEmProducao').value = document.getElementById('TextareaComentarioEmProducao').value.substr(0, quant);
         }
     };
 
-    function LimparComentarioEmProducao() {
-        $('#CaracterComentario').text('5000 caracteres');
-        $('#TextareaComentario').val('');
-        $('#TextareaComentario').focus();
-    };
-
-    function CancelarComentarioEmProducao() {
-        $('#NovoComentarioEmProducao').removeAttr('disabled');
-        $('#NovoComentarioEmProducao').attr('enabled', 'enabled');
-        $('#DivFormulario').remove();
-    };
-
     function SalvarComentarioEmProducao() {
-        var comentario = $('#TextareaComentario').val();
+        var comentario = $('#TextareaComentarioEmProducao').val();
 
-        CadastrarTimelineJobEmProducao(comentario, $('#IdJobEmProducao').text());
+        if (comentario != '') CadastrarTimelineJobEmProducao(comentario, $('#IdJobEmProducao').text());
+        else $('#TextareaComentarioEmProducao').focus();
     };
 
     function CadastrarTimelineJobEmProducao(comentario, id) {
@@ -617,7 +618,7 @@
         $('#' + id + 'panelBodyEmProducao').append("<textarea class='form-control' id='" + id + "ComentarioAlterarEmProducao' style='resize: none; border: none;'></textarea>");
         $('#' + id + 'panelBodyEmProducao').append("<button type='button' class='btn btn-success' onclick='AlterarComentarioEmProducao(" + id + ");'>Alterar</button>");
         $('#' + id + 'panelBodyEmProducao').append("<button type='button' class='btn btn-danger'>Cancelar</button>");
-        $('#' + id + 'panelBodyEmProducao button:last-child').on('click', function () { CancelarComentarioEmProducao(id, texto); });
+        $('#' + id + 'panelBodyEmProducao button:last-child').on('click', function () { CancelarAlterarComentarioEmProducao(id, texto); });
         $('#' + id + 'ComentarioAlterarEmProducao').val(texto);
         $('#' + id + 'ComentarioAlterarEmProducao').focus().select();
     }
@@ -638,7 +639,7 @@
         });
     }
 
-    function CancelarComentarioEmProducao(id, texto) {
+    function CancelarAlterarComentarioEmProducao(id, texto) {
         $('#' + id + 'panelBodyEmProducao').empty();
         $('#' + id + 'panelBodyEmProducao').text(texto);
     }

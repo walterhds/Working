@@ -66,6 +66,7 @@
 <div class="form-working col-sm-9" style="padding-bottom: 10px;">
     <button type="button" class="btn" disabled="disabled">Contas a Receber</button>
     <button type="button" class="btn" onclick="location.href = '/ContasPagar/Index'">Contas a Pagar</button>
+    <button type="button" class="btn" onclick="location.href = '/TipoConta/Index'">Tipos de Conta</button>
 </div>
 
 <div class="form-working col-md-9">
@@ -89,7 +90,7 @@
             <th>Operações</th>
         </tr>
 
-        @foreach (var i in Model.Contratos)
+        @foreach (var i in Model.Contratos.OrderByDescending(e=>e.Id).Take(5))
         {
             <tr>
                 <td>@i.Cliente.Nome</td>

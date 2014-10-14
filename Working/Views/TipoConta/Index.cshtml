@@ -1,0 +1,35 @@
+﻿@model IList<Dominio.Entidades.TipoConta>
+@{
+    ViewBag.Title = "Tipos de Conta";
+}
+
+<div class="form-working col-sm-9" style="padding-bottom: 10px;">
+    <button type="button" class="btn" onclick="location.href='/Contrato/Index'">Contas a Receber</button>
+    <button type="button" class="btn" onclick="location.href='/ContasPagar/Index'">Contas a Pagar</button>
+    <button type="button" class="btn" disabled="disabled">Tipos de Conta</button>
+</div>
+<div class="form-working col-md-9">
+    <div class="titulo1">
+        <h1>Tipos de Conta</h1>
+    </div>
+
+    <div style="padding-top: 10px; padding-bottom: 10px;">
+        <button class="btn btn-success" onclick="location.href='/TipoConta/Cadastrar'">
+            <span class="glyphicon glyphicon-plus"></span>
+            Cadastrar
+        </button>
+    </div>
+
+    <table class="table table-bordered table-hover table-working text-center">
+        <tr>
+            <th>Nome</th>
+        </tr>
+
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.Descricao</td>
+            </tr>
+        }
+    </table>
+</div>

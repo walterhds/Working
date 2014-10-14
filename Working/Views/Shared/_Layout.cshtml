@@ -10,7 +10,8 @@
     <link href="~/Bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="~/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
     <link href="~/Bootstrap/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    @*<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">*@
+    <link href="~/Bootstrap/css/jquery-ui.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -25,19 +26,19 @@
                 <div class="modal-body form-working">
                     <form role="form" method="post" class="form-horizontal">
                         <div class="form-group">
-                            <label for="Data" class="control-label col-sm-2">Data:</label>
+                            <label for="Data" class="control-label col-sm-2">*Data:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control datepicker" name="Data" id="Data" onchange="document.getElementById('Hora').focus(),document.getElementById('Hora').enter()" readonly="readonly" required />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="Hora" class="control-label col-sm-2">Hora:</label>
+                            <label for="Hora" class="control-label col-sm-2">*Hora:</label>
                             <div class="col-sm-10">
                                 <input type="text" name="Hora" class="form-control timepicker" required title="Digite o horario: HH:MM" id="Hora" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="Descricao" class="control-label col-sm-2">Descrição:</label>
+                            <label for="Descricao" class="control-label col-sm-2">*Descrição:</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" name="Descricao" id="Descricao" style="resize: none;" required></textarea>
                             </div>
@@ -132,7 +133,7 @@
                 <div class="modal-body form-working">
                     <form role="form" method="POST" class="form-horizontal">
                         <div class="form-group">
-                            <label for="DescricaoSituacaoJob" class="control-label col-sm-2">Descrição:</label>
+                            <label for="DescricaoSituacaoJob" class="control-label col-sm-2">*Descrição:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="DescricaoSituacaoJob" id="DescricaoSituacaoJob" required />
                             </div>
@@ -169,31 +170,31 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="NomeFornecedor" class="control-label col-sm-2">Nome:</label>
+                            <label for="NomeFornecedor" class="control-label col-sm-2">*Nome:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="NomeFornecedor" id="NomeFornecedor" required />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="TelefoneFornecedor" class="control-label col-sm-2">Telefone:</label>
+                            <label for="TelefoneFornecedor" class="control-label col-sm-2">*Telefone:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="TelefoneFornecedor" id="TelefoneFornecedor" required />
+                                <input type="text" class="form-control telefone" name="TelefoneFornecedor" id="TelefoneFornecedor" required />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="ContatoFornecedor" class="control-label col-sm-2">Contato:</label>
+                            <label for="ContatoFornecedor" class="control-label col-sm-2">*Contato:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="ContatoFornecedor" id="ContatoFornecedor" required />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="CelularFornecedor" class="control-label col-sm-2">Celular:</label>
+                            <label for="CelularFornecedor" class="control-label col-sm-2">*Celular:</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="CelularFornecedor" id="CelularFornecedor" required />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="EmailFornecedor" class="control-label col-sm-2">Email:</label>
+                            <label for="EmailFornecedor" class="control-label col-sm-2">*Email:</label>
                             <div class="col-sm-10">
                                 <input type="email" class="form-control" name="EmailFornecedor" id="EmailFornecedor" required />
                             </div>
@@ -230,13 +231,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="DescricaoPeca" class="control-label col-sm-2">Descrição:</label>
+                            <label for="DescricaoPeca" class="control-label col-sm-2">*Descrição:</label>
                             <div class="col-sm-10">
                                 <textarea class="form-control" name="DescricaoPeca" id="DescricaoPeca" style="resize: none;" required></textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="FornecedoresPecas" class="control-label col-sm-3">Fornecedores:</label>
+                            <label for="FornecedoresPecas" class="control-label col-sm-3">*Fornecedores:</label>
                             <div class="col-sm-7">
                                 <select class="selectpicker show-tick form-control" multiple name="FornecedoresPecas" id="FornecedoresPecas" data-live-search="true" required>
                                 </select>
@@ -284,7 +285,7 @@
                         </a>
                     </div>
                     <div>
-                        <a href="#" class="pull-right" style="padding-left: 10px;">
+                        <a href="~/Funcionario/AlterarPerfil" class="pull-right" style="padding-left: 10px;">
                             <span class="glyphicon glyphicon-cog"></span>
                         </a>
                     </div>
@@ -342,12 +343,15 @@
                         Agenda
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <span class="glyphicon glyphicon-time glyphicon-working"></span>
-                        Disponibilidade
-                    </a>
-                </li>
+                @if (funcionario.TemAcesso("DISPONIBILIDADE"))
+                {
+                    <li>
+                        <a href="~/Funcionario/Disponibilidade">
+                            <span class="glyphicon glyphicon-time glyphicon-working"></span>
+                            Disponibilidade
+                        </a>
+                    </li>
+                }
                 <li>
                     <a href="~/Cliente/Index">
                         <span class="glyphicon glyphicon-star glyphicon-working"></span>
@@ -355,7 +359,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="~/Relatorio/Index">
                         <span class="glyphicon glyphicon-file glyphicon-working"></span>
                         Relatórios
                     </a>
@@ -366,7 +370,6 @@
             @RenderSection("featured", required: false)
             <section>
                 @RenderBody()
-                
             </section>
         </div>
         <footer class="footer">
@@ -382,12 +385,14 @@
         @RenderSection("scripts", required: false)
         <script src="~/Bootstrap/js/bootstrap.js"></script>
         <script src="~/Scripts/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+        @*<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>*@
+        <script src="~/Scripts/jquery-ui-1.10.4.js"></script>
         <script src="~/Scripts/jquery.mask.min.js"></script>
         <script src="~/Scripts/bootstrap-select.js"></script>
         <script src="~/Scripts/jquery-ui-timepicker-addon.js"></script>
         <script src="~/Scripts/compromisso.js"></script>
         <script>
+            $('.telefone').mask('(##)####-####', { maxlength: false });
             $('.inputNumber').mask('#', { maxlength: false });
             $(".currency").mask("#.##0,00", { reverse: true, maxlength: false });
             $(".draggable").draggable();
@@ -409,7 +414,8 @@
                 monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
                 nextText: 'Próximo',
                 prevText: 'Anterior',
-                maxDate: 0
+                maxDate: 0,
+                changeMonth: true
             });
 
             $('.datepicker').datepicker({
@@ -421,7 +427,8 @@
                 monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
                 nextText: 'Próximo',
                 prevText: 'Anterior',
-                minDate: 0
+                minDate: 0,
+                changeMonth: true
             });
 
             $('#CadastrarPeca').on('hidden.bs.modal', function (e) {
@@ -753,9 +760,9 @@
                                     }
                                 } else {
                                     operacoes.innerHTML = "<td><div class='btn-group btn-group-xs'>" +
-                                            "<button type='button' class='btn btn-success' data-toggle='modal' data-target='#Timeline' onclick='ListarComentarios(" + res.id + ");'>" +
-                                            "<span class='glyphicon glyphicon-comment'></span></button><button type='button' class='btn btn-default' id='" + res.id + "' data-toggle='modal' data-target='#AlterarJob" + res.Fase + "' onclick='Listar" + res.Fase + "(" + res.id + ");'>" +
-                                            "<span class='glyphicon glyphicon-pencil'></span></button></div></td>";
+                                        "<button type='button' class='btn btn-success' data-toggle='modal' data-target='#Timeline' onclick='ListarComentarios(" + res.id + ");'>" +
+                                        "<span class='glyphicon glyphicon-comment'></span></button><button type='button' class='btn btn-default' id='" + res.id + "' data-toggle='modal' data-target='#AlterarJob" + res.Fase + "' onclick='Listar" + res.Fase + "(" + res.id + ");'>" +
+                                        "<span class='glyphicon glyphicon-pencil'></span></button></div></td>";
                                 }
                             }
                             linha.appendChild(cliente);

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Dominio.Entidades.Peca>
+@{
+    ViewBag.Title = "Relatóriode Peças";
+    Layout = "~/Views/Shared/_LayoutRelatorio.cshtml";
+}
+
+<table class="table table-bordered table-working">
+    <tr>
+        <th>Nome</th>
+        <th>Fornecedores</th>
+    </tr>
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Descricao</td>
+            <td>
+                @foreach (var j in i.Fornecedor)
+                {
+                    if (i.Fornecedor.Last().Id == j.Id)
+                    {
+                    <span>@j.Nome</span>
+                    }
+                    else
+                    {
+                    <span>@j.Nome,</span>
+                    }
+                }
+            </td>
+        </tr>
+    }
+</table>

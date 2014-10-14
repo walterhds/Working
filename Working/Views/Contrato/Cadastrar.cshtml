@@ -16,14 +16,14 @@
 
     <form role="form" method="post" class="form-horizontal col-md-6" style="padding-top: 10px;">
         <div class="form-group" id="divNumeroContrato">
-            <label for="NumeroContrato" class="col-sm-3 text-right control-label">Número Contrato:</label>
+            <label for="NumeroContrato" class="col-sm-3 text-right control-label">*Número Contrato:</label>
             <div class="col-sm-9">
                 <input class="form-control inputNumber" type="text" name="NumeroContrato" id="NumeroContrato" required autofocus />
                 <span id="SpanNumeroContrato" style="color: transparent;"></span>
             </div>
         </div>
         <div class="form-group">
-            <label for="Cliente" class="col-sm-3 text-right control-label">Cliente:</label>
+            <label for="Cliente" class="col-sm-3 text-right control-label">*Cliente:</label>
             <div class="col-sm-9">
                 <select class="form-control selectpicker" name="Cliente" required="">
                     @foreach (var i in Model)
@@ -34,37 +34,37 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="DataContrato" class="col-sm-3 text-right control-label">Data Contrato:</label>
+            <label for="DataContrato" class="col-sm-3 text-right control-label">*Data Contrato:</label>
             <div class="col-sm-9">
                 <input class="form-control datepicker datepickerMaxDate" type="text" name="DataContrato" id="DataContrato" readonly="readonly" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="DataVencimento" class="col-sm-3 text-right control-label">Vencimento:</label>
+            <label for="DataVencimento" class="col-sm-3 text-right control-label">*Vencimento:</label>
             <div class="col-sm-9">
                 <input class="form-control datepicker" type="text" name="DataVencimento" id="DataVencimento" readonly="readonly" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Valor" class="col-sm-3 text-right control-label">Valor:</label>
+            <label for="Valor" class="col-sm-3 text-right control-label">*Valor:</label>
             <div class="col-sm-9">
                 <input class="form-control currency" type="text" name="Valor" id="Valor" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="NumeroParcelas" class="col-sm-3 text-right control-label">Parcelas:</label>
+            <label for="NumeroParcelas" class="col-sm-3 text-right control-label">*Parcelas:</label>
             <div class="col-sm-9">
-                <input class="form-control inputNumber" type="number" name="NumeroParcelas" required />
+                <input class="form-control inputNumber" type="text" name="NumeroParcelas" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="DataPrimeiraParcela" class="col-sm-3 text-right control-label">Primeira Parcela:</label>
+            <label for="DataPrimeiraParcela" class="col-sm-3 text-right control-label">*Primeira Parcela:</label>
             <div class="col-sm-9">
                 <input class="form-control datepicker" type="text" name="DataPrimeiraParcela" id="DataPrimeiraParcela" readonly="readonly" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Descricao" class="col-sm-3 text-right control-label">Descrição:</label>
+            <label for="Descricao" class="col-sm-3 text-right control-label">*Descrição:</label>
             <div class="col-sm-9">
                 <textarea class="form-control" name="Descricao" style="resize: none;" required></textarea>
             </div>

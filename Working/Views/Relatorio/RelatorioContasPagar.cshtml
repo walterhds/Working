@@ -1,0 +1,22 @@
+﻿@model IList<Dominio.Entidades.ParcelasPagar>
+@{
+    ViewBag.Title = "Relatório de Contas a Pagar";
+    Layout = "~/Views/Shared/_LayoutRelatorio.cshtml";
+}
+
+<table class="table table-bordered table-hover table-working" id="TabelaContratos">
+    <tr>
+        <th>Tipo</th>
+        <th>Valor</th>
+        <th>Data Vencimento</th>
+    </tr>
+
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Conta.TipoConta.Descricao</td>
+            <td>R$ <span class="currency">@i.Valor</span></td>
+            <td class="text-center">@i.DataVencimento.ToShortDateString()</td>
+        </tr>
+    }
+</table>

@@ -16,7 +16,7 @@
 
     <form role="form" method="post" class="form-horizontal col-md-6" style="padding-top: 10px;">
         <div class="form-group">
-            <label for="TipoConta" class="col-sm-3 text-right control-label">Tipo Conta:</label>
+            <label for="TipoConta" class="col-sm-3 text-right control-label">*Tipo Conta:</label>
             <div class="col-sm-8">
                 <select class="form-control selectpicker" name="TipoConta" required="">
                     @foreach (var i in Model)
@@ -27,25 +27,25 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="Valor" class="col-sm-3 text-right control-label">Valor:</label>
+            <label for="Valor" class="col-sm-3 text-right control-label">*Valor:</label>
             <div class="col-sm-8">
                 <input class="form-control currency" type="text" name="Valor" id="Valor" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="NumeroParcelas" class="col-sm-3 text-right control-label">Parcelas:</label>
+            <label for="NumeroParcelas" class="col-sm-3 text-right control-label">*Parcelas:</label>
             <div class="col-sm-8">
                 <input class="form-control inputNumber" type="number" name="NumeroParcelas" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="DataPrimeiraParcela" class="col-sm-3 text-right control-label">Primeira Parcela:</label>
+            <label for="DataPrimeiraParcela" class="col-sm-3 text-right control-label">*Primeira Parcela:</label>
             <div class="col-sm-8">
                 <input class="form-control datepicker" type="text" name="DataPrimeiraParcela" id="DataPrimeiraParcela" readonly="readonly" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Descricao" class="col-sm-3 text-right control-label">Descrição:</label>
+            <label for="Descricao" class="col-sm-3 text-right control-label">*Descrição:</label>
             <div class="col-sm-8">
                 <textarea class="form-control" name="Descricao" style="resize: none;" required></textarea>
             </div>

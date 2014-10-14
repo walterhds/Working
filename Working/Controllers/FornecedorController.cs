@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Dependencias;
 using Dominio.Entidades;
 using Dominio.Servicos;
+using Rotativa;
 using Working.Models;
 
 namespace Working.Controllers
@@ -63,6 +64,12 @@ namespace Working.Controllers
             lista.Celular = fornecedor.Celular;
             lista.Email = fornecedor.Email;
             return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RelatorioFornecedores()
+        {
+            var pdf = new ViewAsPdf(_fornecedorService.Listar(e => true));
+            return pdf;
         }
     }
 }

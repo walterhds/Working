@@ -7,6 +7,7 @@ using Dependencias;
 using Dominio.Entidades;
 using Dominio.Servicos;
 using Microsoft.Ajax.Utilities;
+using Rotativa;
 using Working.Models;
 
 namespace Working.Controllers
@@ -14,10 +15,12 @@ namespace Working.Controllers
     public class ClienteController : Controller
     {
         private readonly ClienteService _clienteService;
+        private readonly FuncionarioService _funcionarioService;
 
         public ClienteController()
         {
             _clienteService = Dependencia.Resolver<ClienteService>();
+            _funcionarioService = Dependencia.Resolver<FuncionarioService>();
         }
 
         public ActionResult Index()
@@ -68,6 +71,23 @@ namespace Working.Controllers
                 lista.Add(new Objeto { id = i.Id, nome = i.Nome });
             }
             return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RelatorioClientes()
+        {
+            var pdf = new ViewAsPdf(_clienteService.Listar(e => true));
+            return pdf;
+        }
+
+        public JsonResult VerificarCadastroLoginCliente(string id)
+        {
+            var listaFuncionario = _funcionarioService.Listar(e => true);
+            var listaClientes = _clienteService.Listar(e => true);
+            if (listaFuncionario.Any(e => e.Login == id) || listaClientes.Any(e => e.Login == id))
+            {
+                return Json("existente", JsonRequestBehavior.AllowGet);
+            }
+            return Json("valido", JsonRequestBehavior.AllowGet);
         }
     }
 }

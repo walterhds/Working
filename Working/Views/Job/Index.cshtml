@@ -1,5 +1,4 @@
-﻿
-@model IList<Dominio.Entidades.Job>
+﻿@model IList<Dominio.Entidades.Job>
 
 @{
     ViewBag.Title = "Meus Jobs";
@@ -21,8 +20,43 @@
                 <th>Operações</th>
             </tr>
 
-            @foreach (var i in Model.Where(e => e.Fase != "ENTREGUE"))
+            @foreach (var i in Model.Where(e => e.Fase != "ENTREGUE").OrderBy(e => e.DataEstimativa))
             {
+                if (i.DataEstimativa < DateTime.Now)
+                {
+                <tr style="background-color: lightcoral">
+                    <td>@i.Cliente.Nome</td>
+                    <td>@i.Nome</td>
+                    <td>
+                        @foreach (var j in i.Peca)
+                        {
+                            if (i.Peca.Last().Id == j.Id)
+                            {
+                            <span>@j.Descricao</span>
+                            }
+                            else
+                            {
+                            <span>@j.Descricao,</span>
+                            }
+                        }
+                    </td>
+                    <td>@i.DataCriacao.ToShortDateString()</td>
+                    <td>@i.DataEstimativa.ToShortDateString()</td>
+                    <td>@i.Situacao.Descricao</td>
+                    <td class="col-md-1">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" id="@i.Id" onclick=" ListarEMPRODUCAO(@i.Id) " data-toggle="modal" data-target="#AlterarJobEMPRODUCAO">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#Timeline" onclick=" ListarComentarios(@i.Id) ">
+                                <span class="glyphicon glyphicon-comment"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                }
+                else
+                {
                 <tr>
                     <td>@i.Cliente.Nome</td>
                     <td>@i.Nome</td>
@@ -44,15 +78,16 @@
                     <td>@i.Situacao.Descricao</td>
                     <td class="col-md-1">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" id="@i.Id" onclick="ListarEMPRODUCAO(@i.Id)" data-toggle="modal" data-target="#AlterarJobEMPRODUCAO">
+                            <button class="btn btn-default" id="@i.Id" onclick=" ListarEMPRODUCAO(@i.Id) " data-toggle="modal" data-target="#AlterarJobEMPRODUCAO">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
-                            <button class="btn btn-success" data-toggle="modal" data-target="#Timeline" onclick="ListarComentarios(@i.Id)">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#Timeline" onclick=" ListarComentarios(@i.Id) ">
                                 <span class="glyphicon glyphicon-comment"></span>
                             </button>
                         </div>
                     </td>
                 </tr>
+                }
             }
         </table>
     </div>

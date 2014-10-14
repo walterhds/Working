@@ -56,6 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="Rotativa">
+      <HintPath>..\packages\RotativaW7.1.5.4\lib\Rotativa.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -195,6 +198,7 @@
     <Compile Include="Controllers\ParcelasPagarController.cs" />
     <Compile Include="Controllers\ParcelasReceberController.cs" />
     <Compile Include="Controllers\PecaController.cs" />
+    <Compile Include="Controllers\RelatorioController.cs" />
     <Compile Include="Controllers\SituacaoJobController.cs" />
     <Compile Include="Controllers\TimelineJobController.cs" />
     <Compile Include="Controllers\TipoContaController.cs" />
@@ -206,6 +210,7 @@
     <Compile Include="Models\Autorizar.cs" />
     <Compile Include="Models\HelpClass.cs" />
     <Compile Include="Models\Objeto.cs" />
+    <Compile Include="Models\ObjetoFuncionarioDisponibilidade.cs" />
     <Compile Include="Models\ObjetoParcela.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewsModels\DadosContasPagarIndex.cs" />
@@ -214,10 +219,13 @@
     <Compile Include="ViewsModels\DadosIndex.cs" />
     <Compile Include="ViewsModels\Lista.cs" />
     <Compile Include="ViewsModels\ObjetoJob.cs" />
+    <Compile Include="ViewsModels\ObjetoJobRelatorios.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bootstrap\css\bootstrap.css" />
     <Content Include="Bootstrap\css\bootstrap.min.css" />
+    <Content Include="Bootstrap\css\jquery-ui.css" />
+    <Content Include="Bootstrap\css\jquery.ui.datepicker.css" />
     <Content Include="Bootstrap\css\signin.css" />
     <Content Include="Bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Bootstrap\css\jquery-ui-timepicker-addon.css" />
@@ -809,6 +817,12 @@
     <Content Include="Images\logobranco.png" />
     <Content Include="Images\logosimples.png" />
     <Content Include="Bootstrap\css\bootstrap-select.css" />
+    <Content Include="Rotativa\libeay32.dll" />
+    <Content Include="Rotativa\libgcc_s_dw2-1.dll" />
+    <Content Include="Rotativa\mingwm10.dll" />
+    <Content Include="Rotativa\README.txt" />
+    <Content Include="Rotativa\ssleay32.dll" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
     <Content Include="Scripts\bootstrap-progressbar.js" />
     <Content Include="Scripts\bootstrap-select.js" />
     <Content Include="Scripts\compromisso.js" />
@@ -818,6 +832,7 @@
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.10.4.custom.js" />
+    <Content Include="Scripts\jquery-ui-1.10.4.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
     <Content Include="Scripts\jquery-ui-timepicker-addon.js" />
     <Content Include="Scripts\jquery.mask.js" />
@@ -831,7 +846,9 @@
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -902,6 +919,24 @@
     <Content Include="Views\AlteracaoContrato\Cadastrar.cshtml" />
     <Content Include="Views\ContasPagar\Cadastrar.cshtml" />
     <Content Include="Views\ContasPagar\Index.cshtml" />
+    <Content Include="Views\Funcionario\Disponibilidade.cshtml" />
+    <Content Include="Views\Funcionario\AlterarPerfil.cshtml" />
+    <Content Include="Views\Shared\_LayoutRelatorio.cshtml" />
+    <Content Include="Views\Fornecedor\RelatorioFornecedores.cshtml" />
+    <Content Include="Views\Peca\RelatorioPecas.cshtml" />
+    <Content Include="Views\Cliente\RelatorioClientes.cshtml" />
+    <Content Include="Views\Relatorio\Index.cshtml" />
+    <Content Include="Views\Relatorio\RelatorioDisponibilidades.cshtml" />
+    <Content Include="Views\Relatorio\RelatorioJobsAbertos.cshtml" />
+    <Content Include="Views\Relatorio\RelatorioJobsEntregues.cshtml" />
+    <Content Include="Views\Relatorio\RelatorioContasPagar.cshtml" />
+    <Content Include="Views\Relatorio\RelatorioContasReceber.cshtml" />
+    <Content Include="Views\Relatorio\RelatorioMeusJobs.cshtml" />
+    <Content Include="Views\Job\RelatorioMeusJobs.cshtml" />
+    <Content Include="Views\TipoConta\Index.cshtml" />
+    <Content Include="Views\TipoConta\Cadastrar.cshtml" />
+    <Content Include="Views\Shared\_LayoutCliente.cshtml" />
+    <Content Include="Views\Home\ClienteIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

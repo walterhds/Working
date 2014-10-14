@@ -112,7 +112,6 @@
                                 }
                                 else
                                 {
-                                    @RenderPage("~/Views/Shared/_AlterarJob" + i.Fase + ".cshtml")
                                     var target = "#AlterarJob" + i.Fase;
                                     var listar = "Listar" + i.Fase + "(" + i.Id + ")";
                                     <button class="btn btn-default btn-xs" data-toggle="modal" data-target="@target" onclick="@listar">

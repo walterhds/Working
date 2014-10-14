@@ -13,11 +13,18 @@ namespace Working.Models
     public static class HelpClass
     {
         private static FuncionarioService _funcionarioService;
+        private static ClienteService _clienteService;
 
         public static Funcionario UsuarioLogado()
         {
             _funcionarioService = Dependencia.Resolver<FuncionarioService>();
             return _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
+        }
+
+        public static Cliente ClienteLogado()
+        {
+            _clienteService = Dependencia.Resolver<ClienteService>();
+            return _clienteService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]);
         }
 
         public static string RemoverAcentos(string texto)

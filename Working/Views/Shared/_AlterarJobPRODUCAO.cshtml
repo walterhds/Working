@@ -72,20 +72,20 @@
                                 </div>
                             </div>
                             <div>
-                                <label for="HorasNecessariasAlterar" class="control-label col-sm-2">Horas:</label>
+                                <label for="HorasNecessariasAlterar" class="control-label col-sm-2">*Horas:</label>
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" name="HorasNecessariasAlterarProducao" id="HorasNecessariasAlterarProducao" onchange="VerificaFuncionarioAlterar();" onblur="HorasNecessarias();" autofocus />
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="DataEstimativaAlterar" class="control-label col-sm-2">Estimativa:</label>
+                            <label for="DataEstimativaAlterar" class="control-label col-sm-2">*Estimativa:</label>
                             <div class="col-sm-3">
                                 <input type="text" class="form-control datepicker" name="DataEstimativaAlterar" id="DataEstimativaAlterarProducao" onchange="VerificaFuncionarioAlterar();" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="FuncionarioAlterar" class="control-label col-sm-2">Colaborador:</label>
+                            <label for="FuncionarioAlterar" class="control-label col-sm-2">*Colaborador:</label>
                             <div class="col-sm-10">
                                 <select class="selectpicker show-tick form-control" name="FuncionarioAlterar" id="FuncionarioAlterarProducao" data-live-search="true" onchange="VerificaFuncionarioAlterar();">
                                 </select>
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="SituacaoAlterar" class="control-label col-sm-2">Situação:</label>
+                            <label for="SituacaoAlterar" class="control-label col-sm-2">*Situação:</label>
                             <div class="col-sm-10">
                                 <select class="selectpicker show-tick form-control" name="SituacaoAlterar" id="SituacaoAlterarProducao" data-live-search="true" disabled="disabled">
                                 </select>
@@ -404,11 +404,11 @@
             '<button>Limpar</button>' +
             '<button>Cancelar</button>' +
             '</div>');
-        $('#FormComentarioProducao').children('div').attr('id', 'DivFormulario');
+        $('#FormComentarioProducao').children('div').attr('id', 'DivFormularioProducao');
         $('#FormComentarioProducao').children('div').addClass('form-group col-sm-12');
         $('#FormComentarioProducao').children('div').css('padding-top', '10px');
         $('#FormComentarioProducao').children('div').children('textarea').attr('name', 'TextareaComentario');
-        $('#FormComentarioProducao').children('div').children('textarea').attr('id', 'TextareaComentario');
+        $('#FormComentarioProducao').children('div').children('textarea').attr('id', 'TextareaComentarioProducao');
         $('#FormComentarioProducao').children('div').children('textarea').attr('onkeyup', 'AtualizarCaracterProducao();');
         $('#FormComentarioProducao').children('div').children('textarea').attr('onkeydown', 'AtualizarCaracterProducao();');
         $('#FormComentarioProducao').children('div').children('textarea').attr('required', 'required');
@@ -420,51 +420,49 @@
         $('#FormComentarioProducao').children('div').children('div').children('span').attr('id', 'CaracterComentario');
         $('#FormComentarioProducao').children('div').children('div').children('span').text('5000 caracteres');
         $('#FormComentarioProducao').children('div').children('button').attr('type', 'button');
-        $('#FormComentarioProducao').children('div').children('button').attr('id', 'LimparComentario');
-        $('#FormComentarioProducao').children('div').children('button').attr('onclick', 'LimparComentarioProducao();');
+        $('#FormComentarioProducao').children('div').children('button').attr('id', 'LimparComentarioProducao');
         $('#FormComentarioProducao').children('div').children('button').addClass('btn btn-sm');
         $('#FormComentarioProducao').children('div').children('button:first').attr('type', 'button');
         $('#FormComentarioProducao').children('div').children('button:first').attr('id', 'SalvarComentario');
         $('#FormComentarioProducao').children('div').children('button:first').attr('onclick', 'SalvarComentarioProducao();');
         $('#FormComentarioProducao').children('div').children('button:first').addClass('btn btn-success btn-sm');
         $('#FormComentarioProducao').children('div').children('button:last').attr('type', 'button');
-        $('#FormComentarioProducao').children('div').children('button:last').attr('id', 'CancelarComentario');
-        $('#FormComentarioProducao').children('div').children('button:last').attr('onclick', 'CancelarComentarioProducao();');
+        $('#FormComentarioProducao').children('div').children('button:last').attr('id', 'CancelarComentarioProducao');
+        $('#CancelarComentarioProducao').on('click', function() {
+            $('#NovoComentarioProducao').removeAttr('disabled');
+            $('#NovoComentarioProducao').attr('enabled', 'enabled');
+            $('#DivFormularioProducao').remove();
+        });
         $('#FormComentarioProducao').children('div').children('button:last').addClass('btn btn-danger btn-sm');
         $('#FormComentarioProducao').removeAttr('enabled');
-        $('#FormComentarioProducao').attr('disabled', 'disabled');
+        $('#NovoComentarioProducao').attr('disabled', 'disabled');
     }
 
     function AtualizarCaracterProducao() {
         var quant = 5000;
-        var total = $('#TextareaComentario').val().length;
+        var total = $('#TextareaComentarioProducao').val().length;
 
         if (total == 0) {
             $('#FormComentarioProducao').children('div').children('div').children('#CaracterComentario').text('5000 caracteres');
         } else if (total < quant) {
             $('#FormComentarioProducao').children('div').children('div').children('#CaracterComentario').text(quant - total + " caracteres restantes");
         } else {
-            document.getElementById('TextareaComentario').value = document.getElementById('TextareaComentario').value.substr(0, quant);
+            document.getElementById('TextareaComentarioProducao').value = document.getElementById('TextareaComentarioProducao').value.substr(0, quant);
         }
     };
 
-    function LimparComentarioProducao() {
-        $('#CaracterComentario').text('5000 caracteres');
-        $('#TextareaComentario').val('');
-        $('#TextareaComentario').focus();
-    };
-
-    function CancelarComentarioProducao() {
-        $('#NovoComentarioProducao').removeAttr('disabled');
-        $('#NovoComentarioProducao').attr('enabled', 'enabled');
-        $('#DivFormulario').remove();
-    };
-
     function SalvarComentarioProducao() {
-        var comentario = $('#TextareaComentario').val();
+        var comentario = $('#TextareaComentarioProducao').val();
 
-        CadastrarTimelineJobProducao(comentario, $('#IdJobProducao').text());
+        if (comentario != '') CadastrarTimelineJobProducao(comentario, $('#IdJobProducao').text());
+        else $('#TextareaComentarioProducao').focus();
     };
+
+    $('#LimparComentarioProducao').on('click', function () {
+        $('#CaracterComentario').text('5000 caracteres');
+        $('#TextareaComentarioProducao').val('');
+        $('#TextareaComentarioProducao').focus();
+    });
 
     function CadastrarTimelineJobProducao(comentario, id) {
         $.ajax({
@@ -598,7 +596,7 @@
         $('#' + id + 'panelBodyProducao').append("<textarea class='form-control' id='" + id + "ComentarioAlterarProducao' style='resize: none; border: none;'></textarea>");
         $('#' + id + 'panelBodyProducao').append("<button type='button' class='btn btn-success' onclick='AlterarComentarioProducao(" + id + ");'>Alterar</button>");
         $('#' + id + 'panelBodyProducao').append("<button type='button' class='btn btn-danger'>Cancelar</button>");
-        $('#' + id + 'panelBodyProducao button:last-child').on('click', function () { CancelarComentarioProducao(id, texto); });
+        $('#' + id + 'panelBodyProducao button:last-child').on('click', function () { CancelarAlterarComentarioProducao(id, texto); });
         $('#' + id + 'ComentarioAlterarProducao').val(texto);
         $('#' + id + 'ComentarioAlterarProducao').focus().select();
     }
@@ -619,7 +617,7 @@
         });
     }
 
-    function CancelarComentarioProducao(id, texto) {
+    function CancelarAlterarComentarioProducao(id, texto) {
         $('#' + id + 'panelBodyProducao').empty();
         $('#' + id + 'panelBodyProducao').text(texto);
     }

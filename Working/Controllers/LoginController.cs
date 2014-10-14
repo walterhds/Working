@@ -30,7 +30,7 @@ namespace Working.Controllers
         public ActionResult Logon(FormCollection form)
         {
             Funcionario funcionario = _funcionarioService.ObterPorLogin(form["login"]);
-            Cliente cliente = _clienteService.ObterPorLogin(form["senha"]);
+            Cliente cliente = _clienteService.ObterPorLogin(form["login"]);
 
             if (funcionario != null && funcionario.Senha == form["senha"])
             {
@@ -42,7 +42,7 @@ namespace Working.Controllers
             {
                 System.Web.Security.FormsAuthentication.SetAuthCookie(cliente.Nome, false);
                 Session.Add("usuario", cliente.Login);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("ClienteIndex", "Home", cliente);
             }
             return View();
         }

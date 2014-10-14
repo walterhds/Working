@@ -16,43 +16,43 @@
 
     <form role="form" method="post" class="form-horizontal col-md-6" style="padding-top: 10px;">
         <div class="form-group">
-            <label for="Nome" class="col-sm-3 text-right control-label">Nome:</label>
+            <label for="Nome" class="col-sm-3 text-right control-label">*Nome:</label>
             <div class="col-sm-9">
                 <input class="form-control" type="text" title="Deu certo!" name="Nome" required autofocus />
             </div>
         </div>
         <div class="form-group">
-            <label for="Telefone" class="col-sm-3 text-right control-label">Telefone:</label>
+            <label for="Telefone" class="col-sm-3 text-right control-label">*Telefone:</label>
             <div class="col-sm-9">
-                <input class="form-control" type="text" name="Telefone" required />
+                <input class="form-control telefone" type="text" name="Telefone" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Celular" class="col-sm-3 text-right control-label">Celular:</label>
+            <label for="Celular" class="col-sm-3 text-right control-label">*Celular:</label>
             <div class="col-sm-9">
-                <input class="form-control" type="text" name="Celular" required />
+                <input class="form-control telefone" type="text" name="Celular" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Endereco" class="col-sm-3 text-right control-label">Endereço:</label>
+            <label for="Endereco" class="col-sm-3 text-right control-label">*Endereço:</label>
             <div class="col-sm-9">
                 <input class="form-control" type="text" name="Endereco" required />
             </div>
         </div>
-        <div class="form-group">
-            <label for="Cpf" class="col-sm-3 text-right control-label">CPF:</label>
+        <div class="form-group" id="DivCpf">
+            <label for="Cpf" class="col-sm-3 text-right control-label">*CPF:</label>
             <div class="col-sm-9">
-                <input class="form-control" type="text" name="Cpf" required />
+                <input class="form-control inputNumber" type="text" name="Cpf" id="CpfFuncionario" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Email" class="col-sm-3 text-right control-label">Email:</label>
+            <label for="Email" class="col-sm-3 text-right control-label">*Email:</label>
             <div class="col-sm-9">
                 <input class="form-control" type="email" name="Email" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Cargo" class="col-sm-3 text-right control-label">Cargo:</label>
+            <label for="Cargo" class="col-sm-3 text-right control-label">*Cargo:</label>
             <div class="col-sm-9">
                 <select class="form-control selectpicker" name="Cargo" required>
                     @foreach (var i in Model)
@@ -65,14 +65,14 @@
         <div class="form-group">
             <div class="col-sm-3 text-right">
                 <span class="glyphicon glyphicon-question-sign help" title="Carga horária diária"></span>
-                <label for="QuantidadeHora" class="control-label">Jornada:</label>
+                <label for="QuantidadeHora" class="control-label">*Jornada:</label>
             </div>
             <div class="col-sm-9">
-                <input class="form-control" type="text" name="QuantidadeHora" required />
+                <input class="form-control" type="number" max="12" min="0" name="QuantidadeHora" required />
             </div>
         </div>
         <div class="form-group">
-            <label for="Situacao" class="col-sm-3 text-right control-label">Situação:</label>
+            <label for="Situacao" class="col-sm-3 text-right control-label">*Situação:</label>
             <div class="col-sm-9">
                 <select class="form-control selectpicker" name="Situacao" required>
                     <option value="Ativo">Ativo</option>
@@ -88,14 +88,14 @@
             <h2>Acesso ao sistema</h2>
         </div>
         <div class="form-group" id="divLogin" style="padding-top: 10px;">
-            <label for="Login" class="col-sm-3 control-label text-right">Login:</label>
+            <label for="Login" class="col-sm-3 control-label text-right">*Login:</label>
             <div class="col-sm-9">
                 <input class="form-control" autocomplete="off" type="text" name="Login" id="LoginCadastro" required />
                 <span id="SpanLogin" style="color: transparent;"></span>
             </div>
         </div>
         <div class="form-group">
-            <label for="Senha" class="col-sm-3 text-right control-label">Senha:</label>
+            <label for="Senha" class="col-sm-3 text-right control-label">*Senha:</label>
             <div class="col-sm-9">
                 <input class="form-control" type="password" name="Senha" required />
             </div>
@@ -109,9 +109,55 @@
 
 @section Scripts{
     <script>
-        $('#LoginCadastro').on('blur', function () {
+        $('#CpfFuncionario').on('blur', function() {
+            if (!TestaCPF($(this).val())) {
+                $('#DivCpf').removeClass('has-success');
+                $('#DivCpf').addClass('has-error');
+                setTimeout(function() {
+                    $('#CpfFuncionario').focus().select();
+                }, 0);
+            } else {
+                $('#DivCpf').removeClass('has-error');
+                $('#DivCpf').addClass('has-success');
+            }
+        });
+
+        $('#Cpf').on('keypress', function() {
+            $('#DivCpf').removeClass('has-error has-success');
+        });
+
+        function TestaCPF(strCPF) {
+            var rtrn;
+            var id = strCPF;
+            var Soma = 0;
+            var Resto;
+            if (strCPF == "00000000000" || strCPF == "01234567890") return false;
+
+            for (i = 1; i <= 9; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+            Resto = (Soma * 10) % 11;
+
+            if ((Resto == 10) || (Resto == 11)) Resto = 0;
+            if (Resto != parseInt(strCPF.substring(9, 10))) return false;
+
+            Soma = 0;
+            for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+            Resto = (Soma * 10) % 11;
+
+            if ((Resto == 10) || (Resto == 11)) Resto = 0;
+            if (Resto != parseInt(strCPF.substring(10, 11))) return false;
+            $.get('/Funcionario/ValidaCpf/' + id, function(data) {
+                if (data == "existente") {
+                    rtrn = false;
+                } else {
+                    rtrn = true;
+                }
+            });
+            return rtrn;
+        }
+
+        $('#LoginCadastro').on('blur', function() {
             var id = $('#LoginCadastro').val();
-            $.get('/Funcionario/VerificarCadastroLogin/' + id, function (data) {
+            $.get('/Funcionario/VerificarCadastroLogin/' + id, function(data) {
                 if (data == "existente") {
                     $('#LoginCadastro').focus().select();
                     $('#divLogin').addClass('has-error');

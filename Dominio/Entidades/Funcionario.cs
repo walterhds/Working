@@ -4,7 +4,7 @@ namespace Dominio.Entidades
     public class Funcionario : EntidadeBase
     {  
         public virtual string Nome { get; set; }
-        public virtual int Telefone { get; set; }
+        public virtual string Telefone { get; set; }
         public virtual Cargo Cargo { get; set; }
         public virtual string Senha { get; set; }
         public virtual string Login { get; set; }

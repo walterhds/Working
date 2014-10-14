@@ -1,0 +1,55 @@
+﻿@using Working.Models
+@{ var cliente = HelpClass.ClienteLogado();}
+@model IList<Dominio.Entidades.Job>
+@{
+    ViewBag.Title = "ClienteIndex";
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
+}
+
+<div class="panel-default col-md-8">
+    <div class="panel-heading">
+        <span class="glyphicon glyphicon-folder-open pull-left"></span>
+        Jobs
+    </div>
+    <table class="table table-bordered" id="TabelaJobs">
+        <tbody>
+            <tr>
+                <th>Nome</th>
+                <th>Criação</th>
+                <th>Estimativa</th>
+                <th>Situação</th>
+            </tr>
+            @foreach (var i in Model.OrderBy(e => e.DataEstimativa).ThenBy(e => e.DataCriacao).ThenBy(e => e.Id))
+            {
+                <tr>
+                    @if (i.Fase == "PRODUCAO" || i.Fase == "EMPRODUCAO")
+                    {
+                        <td>@i.Nome</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    @if (i.Fase == "EMPRODUCAO")
+                    {
+                        <td>@i.DataCriacao.Day.ToString("D2")/@i.DataCriacao.ToString("MMM")</td>
+                        <td>@i.DataEstimativa.Day.ToString("D2")/@i.DataEstimativa.ToString("MMM")</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                    @if (i.Situacao != null)
+                    {
+                        <td>@i.Situacao.Descricao</td>
+                    }
+                    else
+                    {
+                        <td>@i.Fase</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

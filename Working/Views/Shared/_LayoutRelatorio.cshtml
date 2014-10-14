@@ -1,0 +1,62 @@
+﻿@using Working.Models
+@{var funcionario = HelpClass.UsuarioLogado();}
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Bootstrap/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/Bootstrap/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="geral">
+        <header>
+            <div class="nav navbar-fixed-top">
+                <div class="container">
+                    <div class="col-sm-2">
+                        <img class="img-circle img-thumbnail pull-left navbar-img-logo" src="~/Images/logosimples.png" />
+                    </div>
+                    <h1>@ViewBag.Title</h1>
+                    <h4 class="pull-right">@DateTime.Now</h4>
+                    <h4 class="pull-right" style="padding-right:10px;">Usuário: @funcionario.Nome</h4>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div class="container" style="padding-bottom: 10px; padding-top: 30px;">
+        @RenderSection("featured", required: false)
+        <section>
+            @RenderBody()
+
+        </section>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="pull-left">
+                <img src="~/Images/logo.png" style="height: 80px;" />
+                <p>&copy; @DateTime.Now.Year - Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+    <script src="~/Bootstrap/js/bootstrap.js"></script>
+    <script src="~/Bootstrap/js/bootstrap.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.mask.min.js"></script>
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <script src="~/Scripts/jquery-ui-timepicker-addon.js"></script>
+</body>
+</html>

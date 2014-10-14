@@ -11,6 +11,7 @@ using Dominio.Entidades;
 using Dominio.Servicos;
 using Microsoft.Ajax.Utilities;
 using NHibernate.Criterion;
+using Rotativa;
 using Working.Models;
 using Working.ViewsModels;
 
@@ -253,7 +254,7 @@ namespace Working.Controllers
             {
                 if (i.DataEstimativa > Convert.ToDateTime(dataInicio))
                 {
-                    if (i.Id != jid)
+                    if (i.Id != jid && i.Situacao.Descricao != "Entregue")
                     {
                         lista.Add(new Objeto
                         {
@@ -450,6 +451,16 @@ namespace Working.Controllers
             }
 
             return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RelatorioMeusJobs()
+        {
+            var pdf = new ViewAsPdf(_jobService.Listar(
+                    e =>
+                        e.Funcionario ==
+                        _funcionarioService.ObterPorLogin((string) System.Web.HttpContext.Current.Session["usuario"]) &&
+                        e.Fase != "ENTREGUE"));
+            return pdf;
         }
     }
 }

@@ -28,13 +28,13 @@
         <div class="form-group">
             <label for="Telefone" class="col-sm-2 control-label">Telefone:</label>
             <div class="col-sm-10">
-                <input class="form-control" type="text" name="Telefone" value="@Model.Funcionario.Telefone" required/>
+                <input class="form-control telefone" type="text" name="Telefone" value="@Model.Funcionario.Telefone" required/>
             </div>
         </div>
         <div class="form-group">
             <label for="Cargo" class="col-sm-2 control-label">Cargo:</label>
             <div class="col-sm-10">
-                <select name="Cargo" class="form-control" required>
+                <select name="Cargo" class="form-control selectpicker" required>
                     @foreach (var i in Model.ListaCargo)
                     {
                         if (Model.Funcionario.Cargo.Nome == i.Nome)
@@ -61,7 +61,7 @@
         <div class="form-group">
             <label for="Situacao" class="col-sm-2 control-label">Situação:</label>
             <div class="col-sm-10">
-                <select name="Situacao" class="form-control" required>
+                <select name="Situacao" class="form-control selectpicker" required>
                     @{
                         if (Model.Funcionario.Situacao.GetHashCode() == 0)
                         {
